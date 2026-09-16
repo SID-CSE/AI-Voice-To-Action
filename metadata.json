@@ -1,0 +1,6 @@
+{
+  "name": "AI Voice-to-Action Assistant",
+  "description": "Turn spoken instructions and meeting discussions into structured tasks, summaries, and action items with safety guardrails and audit history.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
