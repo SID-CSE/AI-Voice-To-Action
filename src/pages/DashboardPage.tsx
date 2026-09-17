@@ -2,8 +2,8 @@ import React from 'react';
 import { 
   CheckSquare, 
   Clock, 
-  ShieldAlert, 
-  Sparkles, 
+  ShieldAlert,
+  Sparkles,
   Mic, 
   FileText, 
   ArrowRight, 
@@ -144,10 +144,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({
               End-to-end execution path with RAG grounding and mandatory confirmation guardrails
             </p>
           </div>
-          <button
-            onClick={onTryDemo}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-colors cursor-pointer"
-          >
+          <button onClick={onTryDemo} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-colors cursor-pointer">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Try Demo Flow</span>
           </button>
@@ -208,11 +205,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({
               <FileText className="w-4 h-4" />
               <span>Enter Text</span>
             </button>
-            <button
-              id="empty-try-demo-btn"
-              onClick={onTryDemo}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-md transition-all cursor-pointer"
-            >
+            <button onClick={onTryDemo} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold shadow-md transition-all cursor-pointer">
               <Sparkles className="w-4 h-4" />
               <span>Try Demo</span>
             </button>

@@ -101,6 +101,8 @@ export interface KnowledgeDocument {
   tags: string[];
   createdAt: string;
   updatedAt: string;
+  sourceUrl?: string;
+  sourceType?: string;
 }
 
 export interface EvaluationResult {

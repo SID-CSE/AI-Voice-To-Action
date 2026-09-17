@@ -2,7 +2,8 @@ import { GoogleGenAI } from '@google/genai';
 import { 
   AIAnalysisOutput, 
   WorkflowStage, 
-  StructuredTask, 
+  StructuredTask,
+  ActionItem,
   ProposedAction 
 } from '../src/types.js';
 import { 
@@ -273,6 +274,21 @@ function generateHeuristicAnalysis(
   };
 }
 
+function normalizeConfidence(value: unknown, fallback = 85): number {
+  const parsed = typeof value === 'number' ? value : Number(value);
+  return Number.isFinite(parsed) ? Math.max(0, Math.min(100, Math.round(parsed))) : fallback;
+}
+
+function normalizeActionItems(items: unknown): ActionItem[] {
+  return Array.isArray(items) ? items.map((item: any) => ({
+    action: String(item?.action || 'Untitled action'),
+    owner: item?.owner ? String(item.owner) : 'Not specified',
+    deadline: item?.deadline ? String(item.deadline) : 'Not specified',
+    confidence: normalizeConfidence(item?.confidence),
+    evidence: String(item?.evidence || ''),
+  })) : [];
+}
+
 export class GeminiService {
   /**
    * Run full ReAct analysis workflow with progress stages
@@ -399,7 +415,7 @@ export class GeminiService {
           summary: String(parsed.summary || 'Summary generated.'),
           intent: String(parsed.intent || 'Task Planning'),
           tasks,
-          action_items: Array.isArray(parsed.action_items) ? parsed.action_items : [],
+          action_items: normalizeActionItems(parsed.action_items),
           uncertainties: Array.isArray(parsed.uncertainties) ? parsed.uncertainties : [],
           assumptions: Array.isArray(parsed.assumptions) ? parsed.assumptions : [],
           unsupported_requests: Array.isArray(parsed.unsupported_requests) ? parsed.unsupported_requests : [],
@@ -504,10 +520,17 @@ export class GeminiService {
         return {
           ...currentOutput,
           ...parsed,
+          grounded_sources: Array.isArray(parsed.grounded_sources)
+            ? parsed.grounded_sources
+            : currentOutput.grounded_sources,
           tasks: Array.isArray(parsed.tasks) ? parsed.tasks.map((t: any) => ({
             ...t,
+            confidence: normalizeConfidence(t?.confidence),
             userEdited: true,
           })) : currentOutput.tasks,
+          action_items: normalizeActionItems(
+            Array.isArray(parsed.action_items) ? parsed.action_items : currentOutput.action_items,
+          ),
         };
       } catch (err) {
         console.error('Refinement with Gemini failed across model pool, applying local refinement filter:', err);

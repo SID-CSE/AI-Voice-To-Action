@@ -6,3 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Local project explanation and presentation materials
+PROJECT_GUIDE.md
+PRESENTATION_PROMPT.md
+PRESENTATION_SCRIPT.md

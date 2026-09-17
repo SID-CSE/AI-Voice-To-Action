@@ -311,9 +311,9 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({
                         <Clock className="w-3.5 h-3.5 text-slate-400" />
                         <span className="text-slate-300">{task.deadline}</span>
                       </span>
-                      {task.confidence && (
+                      {typeof task.confidence === 'number' && (
                         <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-1.5 py-0.5 rounded">
-                          {task.confidence}% match
+                          {task.confidence}% confidence
                         </span>
                       )}
                     </div>
@@ -411,7 +411,9 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({
                         {task.priority || 'Medium'}
                       </span>
                     </td>
-                    <td className="py-3 px-4 font-mono text-emerald-400">{task.confidence}%</td>
+                    <td className="py-3 px-4 font-mono text-emerald-400">
+                      {typeof task.confidence === 'number' ? `${task.confidence}%` : '—'}
+                    </td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${getStatusBadgeClass(task.status)}`}>
                         {task.status || 'Pending'}
@@ -448,9 +450,16 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({
                   <span className="text-slate-600">→</span>
                   <span className="text-slate-300">{act.deadline}</span>
                 </div>
-                <p className="text-xs text-white font-medium">
-                  {act.action}
-                </p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs text-white font-medium">
+                    {act.action}
+                  </p>
+                  {typeof act.confidence === 'number' && (
+                    <span className="shrink-0 text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-1.5 py-0.5 rounded">
+                      {act.confidence}% confidence
+                    </span>
+                  )}
+                </div>
                 {act.evidence && (
                   <p className="text-[10px] text-slate-500 italic line-clamp-1">
                     "{act.evidence}"

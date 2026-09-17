@@ -183,6 +183,15 @@ export const api = {
     return res.json();
   },
 
+  async clearAuditLogs() {
+    const res = await fetch(`${BASE_URL}/audit-logs`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ confirm: true }),
+    });
+    return res.json();
+  },
+
   async getAuditLogs(params?: {
     riskLevel?: string;
     confirmationStatus?: string;
@@ -194,11 +203,6 @@ export const api = {
     if (params?.search) query.append('search', params.search);
 
     const res = await fetch(`${BASE_URL}/audit-logs?${query.toString()}`);
-    return res.json();
-  },
-
-  async clearAuditLogs() {
-    const res = await fetch(`${BASE_URL}/audit-logs`, { method: 'DELETE' });
     return res.json();
   },
 
@@ -234,6 +238,28 @@ export const api = {
     return this.addKnowledge(data);
   },
 
+  async uploadDocument(file: File, category = 'General', tags: string[] = []): Promise<KnowledgeDocument> {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    let binary = '';
+    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+    const res = await fetch(`${BASE_URL}/knowledge/upload`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        filename: file.name,
+        contentType: file.type || 'text/plain',
+        contentBase64: btoa(binary),
+        category,
+        tags,
+      }),
+    });
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ error: 'File upload failed' }));
+      throw new Error(error.error || 'File upload failed');
+    }
+    return res.json();
+  },
+
   async deleteKnowledge(id: string) {
     const res = await fetch(`${BASE_URL}/knowledge/${id}`, { method: 'DELETE' });
     return res.json();
@@ -256,18 +282,27 @@ export const api = {
     return this.searchKnowledge(query);
   },
 
+  async resetData() {
+    const res = await fetch(`${BASE_URL}/reset`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ confirm: true }),
+    });
+    return res.json();
+  },
+
   async getSettings(): Promise<SystemSettings> {
     const res = await fetch(`${BASE_URL}/settings`);
     const data = await res.json();
-    const model = data.model || 'gemini-3.6-flash';
+    const model = data.model || 'standard';
     return {
       model,
       modelName: model,
-      promptVersion: data.promptVersion || 'v1.0-react',
+      promptVersion: 'current',
       groundingEnabled: data.groundingEnabled !== false,
       guardrailsStrict: data.guardrailsStrict !== false,
       defaultWorkflow: data.defaultWorkflow || 'react',
-      demoModeEnabled: true,
+      demoModeEnabled: false,
       confidenceThreshold: data.confidenceThreshold || 75,
       audioSensitivity: data.audioSensitivity || 'Normal',
     };
@@ -280,22 +315,18 @@ export const api = {
       body: JSON.stringify(updates),
     });
     const data = await res.json();
-    const model = data.model || 'gemini-3.6-flash';
+    const model = data.model || 'standard';
     return {
       model,
       modelName: model,
-      promptVersion: data.promptVersion || 'v1.0-react',
+      promptVersion: 'current',
       groundingEnabled: data.groundingEnabled !== false,
       guardrailsStrict: data.guardrailsStrict !== false,
       defaultWorkflow: data.defaultWorkflow || 'react',
-      demoModeEnabled: true,
+      demoModeEnabled: false,
       confidenceThreshold: data.confidenceThreshold || 75,
       audioSensitivity: data.audioSensitivity || 'Normal',
     };
   },
 
-  async resetData() {
-    const res = await fetch(`${BASE_URL}/reset`, { method: 'POST' });
-    return res.json();
-  },
 };

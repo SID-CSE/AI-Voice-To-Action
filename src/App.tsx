@@ -20,13 +20,10 @@ import {
   SystemSettings 
 } from './types';
 
-const DEMO_TRANSCRIPT = 
-  "We discussed the SmartPay project today. Rahul will finish the frontend dashboard by Friday. Ankit needs to complete the backend API by Monday. I will improve the salary prediction model. Let's review the complete system next Tuesday. The exact meeting time will be decided later.";
-
 export default function App() {
   const [currentTab, setCurrentTab] = useState<string>('dashboard');
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [apiConnected, setApiConnected] = useState(true);
+  const [apiConnected, setApiConnected] = useState(false);
 
   // Voice Assistant input state
   const [currentTabInput, setCurrentTabInput] = useState<'voice' | 'text'>('voice');
@@ -47,7 +44,7 @@ export default function App() {
   const [evalResults, setEvalResults] = useState<Record<string, EvalResult>>({});
   const [isRunningAllEvals, setIsRunningAllEvals] = useState(false);
   const [settings, setSettings] = useState<SystemSettings>({
-    modelName: 'gemini-2.5-flash',
+    modelName: 'standard',
     confidenceThreshold: 75,
     groundingEnabled: true,
     guardrailsStrict: true,
@@ -57,13 +54,14 @@ export default function App() {
   // Load initial data from backend
   const refreshAllData = useCallback(async () => {
     try {
-      const [tasksRes, logsRes, analysesRes, docsRes, evalCasesRes, settingsRes] = await Promise.all([
+      const [tasksRes, logsRes, analysesRes, docsRes, evalCasesRes, settingsRes, healthRes] = await Promise.all([
         api.getTasks().catch(() => []),
         api.getAuditLogs().catch(() => []),
         api.getAnalyses().catch(() => []),
         api.getDocuments().catch(() => []),
         api.getEvaluationTestCases().catch(() => []),
         api.getSettings().catch(() => settings),
+        api.getHealth().catch(() => null),
       ]);
 
       setTasks(tasksRes);
@@ -72,7 +70,7 @@ export default function App() {
       setDocuments(docsRes);
       setEvalTestCases(evalCasesRes);
       setSettings(settingsRes);
-      setApiConnected(true);
+      setApiConnected(healthRes?.apiConnected === true);
     } catch (err) {
       console.warn('Initial data load warning:', err);
       setApiConnected(false);
@@ -83,8 +81,29 @@ export default function App() {
     refreshAllData();
   }, [refreshAllData]);
 
+  const handleClearAuditLogs = async () => {
+    await api.clearAuditLogs();
+    setAuditLogs([]);
+  };
+
+  const handleResetData = async () => {
+    await api.resetData();
+    await refreshAllData();
+    setAnalysisResult(null);
+    setTranscript('');
+    setStages([]);
+  };
+
+  const handleTryDemo = async () => {
+    const sample = 'Rahul will complete the frontend dashboard by Friday and Ankit will finish the backend API by Monday.';
+    setCurrentTab('assistant');
+    setCurrentTabInput('text');
+    setTranscript(sample);
+    await handleAnalyze(sample, 'text');
+  };
+
   // Handle Analysis Workflow
-  const handleAnalyze = async (text: string, inputType: 'voice' | 'text' | 'demo') => {
+  const handleAnalyze = async (text: string, inputType: 'voice' | 'text') => {
     if (!text || !text.trim()) return;
     setCurrentTab('assistant');
     setAnalysisError(null);
@@ -151,14 +170,6 @@ export default function App() {
     } finally {
       setIsAnalyzing(false);
     }
-  };
-
-  // Try Demo function (Section 11)
-  const handleTryDemo = async () => {
-    setCurrentTab('assistant');
-    setCurrentTabInput('voice');
-    setTranscript(DEMO_TRANSCRIPT);
-    await handleAnalyze(DEMO_TRANSCRIPT, 'demo');
   };
 
   // Handle Result Refinement (Section 27)
@@ -237,7 +248,7 @@ export default function App() {
           ...analysisResult,
           proposed_actions: analysisResult.proposed_actions.map((act) =>
             act.id === actionId
-              ? { ...act, status: 'CONFIRMED', executionNote: res.message || 'Demo action authorized and recorded.' }
+              ? { ...act, status: 'CONFIRMED', executionNote: res.message || 'Confirmation recorded. No external action was performed.' }
               : act
           ),
         });
@@ -331,6 +342,11 @@ export default function App() {
     setDocuments((prev) => [created, ...prev]);
   };
 
+  const handleUploadDocument = async (file: File, category = 'General', tags: string[] = []) => {
+    const created = await api.uploadDocument(file, category, tags);
+    setDocuments((prev) => [created, ...prev]);
+  };
+
   const handleDeleteDocument = async (id: string) => {
     await api.deleteDocument(id);
     setDocuments((prev) => prev.filter((d) => d.id !== id));
@@ -338,21 +354,6 @@ export default function App() {
 
   const handleSearchKnowledge = async (query: string) => {
     return await api.searchDocuments(query);
-  };
-
-  // Clear Audit Logs
-  const handleClearAuditLogs = async () => {
-    await api.clearAuditLogs();
-    setAuditLogs([]);
-  };
-
-  // Reset Factory Defaults
-  const handleResetData = async () => {
-    await api.resetData();
-    await refreshAllData();
-    setAnalysisResult(null);
-    setTranscript('');
-    setStages([]);
   };
 
   // Compute Dashboard Statistics
@@ -371,11 +372,11 @@ export default function App() {
       case 'tasks':
         return 'Tasks Dashboard';
       case 'knowledge':
-        return 'Knowledge Base (RAG)';
+        return 'Knowledge Base';
       case 'audit':
         return 'Audit Logs';
       case 'evaluation':
-        return 'Benchmark Evaluation';
+        return 'Evaluation';
       case 'settings':
         return 'System Settings';
       default:
@@ -392,7 +393,7 @@ export default function App() {
         mobileOpen={mobileOpen}
         setMobileOpen={setMobileOpen}
         apiConnected={apiConnected}
-        modelName={settings.modelName}
+        modelName={settings.modelName || settings.model || 'standard'}
       />
 
       {/* Main Content Area */}
@@ -401,7 +402,7 @@ export default function App() {
           onOpenMobileMenu={() => setMobileOpen(true)}
           onTryDemo={handleTryDemo}
           title={getPageTitle()}
-          subtitle="ReAct Pattern • RAG Grounding • Consequential Guardrails"
+          subtitle="Turn conversations into clear, reviewable work"
           groundingEnabled={settings.groundingEnabled}
         />
 
@@ -462,7 +463,6 @@ export default function App() {
               onCancelAction={handleCancelAction}
               onExportJSON={handleExportJSON}
               onExportCSV={handleExportCSV}
-              onTryDemo={handleTryDemo}
             />
           )}
 
@@ -481,6 +481,7 @@ export default function App() {
             <KnowledgeBasePage
               documents={documents}
               onAddDocument={handleAddDocument}
+              onUploadDocument={handleUploadDocument}
               onDeleteDocument={handleDeleteDocument}
               onSearch={handleSearchKnowledge}
             />
@@ -515,7 +516,6 @@ export default function App() {
                 setSettings(updated);
               }}
               onResetData={handleResetData}
-              apiConnected={apiConnected}
             />
           )}
         </main>

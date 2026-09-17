@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { 
   Mic, 
-  FileText, 
-  Sparkles, 
+  FileText,
+  Sparkles,
   RefreshCw, 
   AlertCircle, 
   Send, 
@@ -21,7 +21,7 @@ interface VoiceAssistantPageProps {
   setCurrentTabInput: (mode: 'voice' | 'text') => void;
   transcript: string;
   setTranscript: (text: string) => void;
-  onAnalyze: (transcript: string, inputType: 'voice' | 'text' | 'demo') => Promise<void>;
+  onAnalyze: (transcript: string, inputType: 'voice' | 'text') => Promise<void>;
   isAnalyzing: boolean;
   stages: WorkflowStage[];
   analysisResult: AIAnalysisOutput | null;
@@ -35,7 +35,6 @@ interface VoiceAssistantPageProps {
   onCancelAction: (actionId: string) => Promise<void>;
   onExportJSON: () => void;
   onExportCSV: () => void;
-  onTryDemo: () => void;
 }
 
 const SAMPLE_PROMPTS = [
@@ -84,11 +83,10 @@ export const VoiceAssistantPage: React.FC<VoiceAssistantPageProps> = ({
   onCancelAction,
   onExportJSON,
   onExportCSV,
-  onTryDemo,
 }) => {
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const handleTriggerAnalysis = (type: 'voice' | 'text' | 'demo') => {
+  const handleTriggerAnalysis = (type: 'voice' | 'text') => {
     setValidationError(null);
     if (!transcript || transcript.trim().length === 0) {
       setValidationError('Please provide a voice recording or transcript before continuing.');
@@ -156,7 +154,6 @@ export const VoiceAssistantPage: React.FC<VoiceAssistantPageProps> = ({
           setTranscript={setTranscript}
           onAnalyze={() => handleTriggerAnalysis('voice')}
           isAnalyzing={isAnalyzing}
-          onTryDemo={onTryDemo}
         />
       )}
 

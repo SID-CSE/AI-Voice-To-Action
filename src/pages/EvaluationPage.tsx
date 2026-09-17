@@ -9,7 +9,8 @@ import {
   RefreshCw, 
   Cpu, 
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  BookOpen
 } from 'lucide-react';
 import { EvalTestCase, EvalResult, AIAnalysisOutput } from '../types';
 
@@ -336,6 +337,30 @@ export const EvaluationPage: React.FC<EvaluationPageProps> = ({
                         {activeResult.reactOutput?.confirmation_required ? 'Enforced' : 'Passed Cleanly'}
                       </span>
                     </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-800 space-y-2">
+                    <div className="flex items-center justify-between text-[11px] font-semibold text-indigo-300">
+                      <span className="flex items-center gap-1.5"><BookOpen className="w-3.5 h-3.5" />RAG Citations</span>
+                      <span className="font-mono text-slate-400">
+                        {activeResult.reactOutput?.grounded_sources?.length || 0} source(s)
+                      </span>
+                    </div>
+                    {activeResult.reactOutput?.grounded_sources?.length ? (
+                      <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                        {activeResult.reactOutput.grounded_sources.map((source, idx) => (
+                          <div key={`${source.docId}-${idx}`} className="p-2 rounded-lg bg-slate-950 border border-indigo-950 text-[10px]">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="font-semibold text-slate-200">{source.docTitle}</span>
+                              <span className="font-mono text-indigo-300">{source.relevanceScore}% relevance</span>
+                            </div>
+                            <p className="mt-1 text-slate-400 line-clamp-2">“{source.excerpt}”</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[10px] text-slate-500 italic">No knowledge-base citation was returned.</p>
+                    )}
                   </div>
                 </div>
               ) : (

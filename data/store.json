@@ -1,6 +1,17 @@
 {
   "tasks": [
     {
+      "task": "Verify if Siddharth is assigned to the SmartPay project.",
+      "owner": "System",
+      "deadline": "Not specified",
+      "priority": "Medium",
+      "evidence": "Is Siddharth working on this project ?",
+      "userEdited": true,
+      "status": "Pending",
+      "createdAt": "2026-09-16T16:12:27.870Z",
+      "updatedAt": "2026-09-16T16:13:04.319Z"
+    },
+    {
       "id": "t4",
       "task": "Review the complete system",
       "owner": "Not specified",
@@ -28,7 +39,7 @@
       "evidence": "I will improve the salary prediction model.",
       "status": "Pending",
       "createdAt": "2026-09-16T07:03:32.163Z",
-      "updatedAt": "2026-09-16T14:03:17.519Z"
+      "updatedAt": "2026-09-16T16:32:02.928Z"
     },
     {
       "id": "t2",
@@ -41,7 +52,7 @@
       "evidence": "Ankit needs to complete the backend API by Monday.",
       "status": "Pending",
       "createdAt": "2026-09-16T07:00:56.015Z",
-      "updatedAt": "2026-09-16T14:03:17.519Z"
+      "updatedAt": "2026-09-16T16:32:02.928Z"
     },
     {
       "id": "t-1789541786679-1",
@@ -67,7 +78,7 @@
       "evidence": "Rahul will finish the frontend dashboard by Friday.",
       "status": "Pending",
       "createdAt": "2026-09-16T06:55:44.705Z",
-      "updatedAt": "2026-09-16T14:03:17.519Z"
+      "updatedAt": "2026-09-16T16:32:02.928Z"
     },
     {
       "id": "t-1789541530074-1",
@@ -112,6 +123,228 @@
     }
   ],
   "analyses": [
+    {
+      "id": "an-1789576322938",
+      "inputType": "demo",
+      "transcript": "We discussed the SmartPay project today. Rahul will finish the frontend dashboard by Friday. Ankit needs to complete the backend API by Monday. I will improve the salary prediction model. Let's review the complete system next Tuesday. The exact meeting time will be decided later.",
+      "output": {
+        "summary": "The team discussed progress on the SmartPay project, assigning specific development tasks to Rahul, Ankit, and Siddharth, and scheduled a system review for next Tuesday.",
+        "intent": "Sprint Planning and Task Assignment",
+        "tasks": [
+          {
+            "id": "t1",
+            "task": "Finish frontend dashboard",
+            "owner": "Rahul",
+            "deadline": "Friday",
+            "priority": "Medium",
+            "dependencies": [],
+            "confidence": 100,
+            "evidence": "Rahul will finish the frontend dashboard by Friday.",
+            "status": "Pending"
+          },
+          {
+            "id": "t2",
+            "task": "Complete backend API",
+            "owner": "Ankit",
+            "deadline": "Monday",
+            "priority": "Medium",
+            "dependencies": [],
+            "confidence": 100,
+            "evidence": "Ankit needs to complete the backend API by Monday.",
+            "status": "Pending"
+          },
+          {
+            "id": "t3",
+            "task": "Improve salary prediction model",
+            "owner": "Siddharth Kumar",
+            "deadline": "Not specified",
+            "priority": "Medium",
+            "dependencies": [],
+            "confidence": 95,
+            "evidence": "I will improve the salary prediction model.",
+            "status": "Pending"
+          }
+        ],
+        "action_items": [
+          {
+            "action": "Review complete system",
+            "owner": "Team",
+            "deadline": "Next Tuesday",
+            "confidence": 90,
+            "evidence": "Let's review the complete system next Tuesday."
+          }
+        ],
+        "uncertainties": [
+          "The exact time for the system review meeting on next Tuesday is not decided.",
+          "The specific year or date for 'Friday', 'Monday', and 'next Tuesday' is not provided."
+        ],
+        "assumptions": [
+          "Assumed 'I' in the transcript refers to Siddharth Kumar based on the provided team member role description for salary prediction models."
+        ],
+        "unsupported_requests": [],
+        "risk_level": "LOW",
+        "confirmation_required": true,
+        "proposed_actions": [
+          {
+            "id": "act-1789576322927-1",
+            "action": "Schedule system review meeting",
+            "reason": "Per project guidelines, meeting invites must have agreed time slots before calendar dispatch, and the current time is undecided.",
+            "requires_confirmation": true,
+            "status": "AWAITING_CONFIRMATION"
+          }
+        ],
+        "workflow_type": "react",
+        "grounded_sources": [
+          {
+            "docId": "doc-team-1",
+            "docTitle": "team_members.txt",
+            "excerpt": "- Siddharth Kumar: Machine Learning Engineer. Responsible for salary prediction models, PyTorch pipelines, and AI evaluation metrics.",
+            "relevanceScore": 49
+          },
+          {
+            "docId": "doc-guidelines-2",
+            "docTitle": "project_guidelines.txt",
+            "excerpt": "1. Task Assignment: Frontend UI tasks must be assigned directly to Rahul. Backend API or database endpoints must be assigned to Ankit. Model training and AI tasks belong to Siddharth.",
+            "relevanceScore": 41
+          },
+          {
+            "docId": "doc-guidelines-2",
+            "docTitle": "project_guidelines.txt",
+            "excerpt": "3. Review Protocols: All system reviews require full team attendance. Meeting invites must have agreed time slots before calendar dispatch.",
+            "relevanceScore": 15
+          }
+        ],
+        "processing_stages": [
+          {
+            "id": "s1",
+            "label": "Input received",
+            "status": "completed",
+            "detail": "Received 280 characters of transcript.",
+            "timestamp": "2026-09-16T16:31:50.011Z"
+          },
+          {
+            "id": "s2",
+            "label": "Input validated",
+            "status": "completed",
+            "detail": "Transcript length and character integrity verified.",
+            "timestamp": "2026-09-16T16:31:50.011Z"
+          },
+          {
+            "id": "s3",
+            "label": "Understanding request",
+            "status": "completed",
+            "detail": "Analyzed semantics, sentence structures, and entity mentions.",
+            "timestamp": "2026-09-16T16:31:50.011Z"
+          },
+          {
+            "id": "s4",
+            "label": "Checking relevant context",
+            "status": "completed",
+            "detail": "Retrieved 3 grounded reference(s) from project documents.",
+            "timestamp": "2026-09-16T16:31:50.015Z"
+          },
+          {
+            "id": "s5",
+            "label": "Extracting tasks",
+            "status": "completed",
+            "detail": "Structured tasks parsed via gemini-3.1-flash-lite.",
+            "timestamp": "2026-09-16T16:31:50.015Z"
+          },
+          {
+            "id": "s6",
+            "label": "Applying safety checks",
+            "status": "completed",
+            "detail": "Safety guardrail flagged 1 action(s) requiring human confirmation.",
+            "timestamp": "2026-09-16T16:32:02.927Z"
+          },
+          {
+            "id": "s7",
+            "label": "Preparing result",
+            "status": "completed",
+            "detail": "Final structured schema validated and ready for review.",
+            "timestamp": "2026-09-16T16:32:02.928Z"
+          }
+        ]
+      },
+      "timestamp": "2026-09-16T16:32:02.938Z"
+    },
+    {
+      "id": "an-1789575061233",
+      "inputType": "voice",
+      "transcript": "what is this project",
+      "output": {
+        "summary": "The user asked for information regarding the project. However, no project context or documentation was provided in the transcript or knowledge base.",
+        "intent": "Project Information Request",
+        "tasks": [],
+        "action_items": [],
+        "uncertainties": [
+          "The specific project name or context being referred to is missing."
+        ],
+        "assumptions": [
+          "Assumed the user is asking for an overview or background information on an ongoing project."
+        ],
+        "unsupported_requests": [
+          "Cannot explain 'this project' as no project details or context were provided in the input or knowledge base."
+        ],
+        "risk_level": "LOW",
+        "confirmation_required": false,
+        "proposed_actions": [],
+        "workflow_type": "react",
+        "grounded_sources": [],
+        "processing_stages": [
+          {
+            "id": "s1",
+            "label": "Input received",
+            "status": "completed",
+            "detail": "Received 20 characters of transcript.",
+            "timestamp": "2026-09-16T16:10:48.587Z"
+          },
+          {
+            "id": "s2",
+            "label": "Input validated",
+            "status": "completed",
+            "detail": "Transcript length and character integrity verified.",
+            "timestamp": "2026-09-16T16:10:48.587Z"
+          },
+          {
+            "id": "s3",
+            "label": "Understanding request",
+            "status": "completed",
+            "detail": "Analyzed semantics, sentence structures, and entity mentions.",
+            "timestamp": "2026-09-16T16:10:48.587Z"
+          },
+          {
+            "id": "s4",
+            "label": "Checking relevant context",
+            "status": "completed",
+            "detail": "Grounding was not required for this request.",
+            "timestamp": "2026-09-16T16:10:48.587Z"
+          },
+          {
+            "id": "s5",
+            "label": "Extracting tasks",
+            "status": "completed",
+            "detail": "Structured tasks parsed via gemini-3.6-flash.",
+            "timestamp": "2026-09-16T16:10:48.587Z"
+          },
+          {
+            "id": "s6",
+            "label": "Applying safety checks",
+            "status": "completed",
+            "detail": "All safety guardrails passed without consequential triggers.",
+            "timestamp": "2026-09-16T16:11:01.231Z"
+          },
+          {
+            "id": "s7",
+            "label": "Preparing result",
+            "status": "completed",
+            "detail": "Final structured schema validated and ready for review.",
+            "timestamp": "2026-09-16T16:11:01.233Z"
+          }
+        ]
+      },
+      "timestamp": "2026-09-16T16:11:01.233Z"
+    },
     {
       "id": "an-1789567397525",
       "inputType": "demo",
@@ -1910,6 +2143,261 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "aud-1789576322944",
+      "timestamp": "2026-09-16T16:32:02.944Z",
+      "inputType": "demo",
+      "originalInput": "We discussed the SmartPay project today. Rahul will finish the frontend dashboard by Friday. Ankit needs to complete the backend API by Monday. I will improve the salary prediction model. Let's review the complete system next Tuesday. The exact meeting time will be decided later.",
+      "transcript": "We discussed the SmartPay project today. Rahul will finish the frontend dashboard by Friday. Ankit needs to complete the backend API by Monday. I will improve the salary prediction model. Let's review the complete system next Tuesday. The exact meeting time will be decided later.",
+      "promptVersion": "v1.0-react",
+      "model": "gemini-3.1-flash-lite",
+      "retrievedContext": [
+        {
+          "docId": "doc-team-1",
+          "docTitle": "team_members.txt",
+          "excerpt": "- Siddharth Kumar: Machine Learning Engineer. Responsible for salary prediction models, PyTorch pipelines, and AI evaluation metrics.",
+          "relevanceScore": 49
+        },
+        {
+          "docId": "doc-guidelines-2",
+          "docTitle": "project_guidelines.txt",
+          "excerpt": "1. Task Assignment: Frontend UI tasks must be assigned directly to Rahul. Backend API or database endpoints must be assigned to Ankit. Model training and AI tasks belong to Siddharth.",
+          "relevanceScore": 41
+        },
+        {
+          "docId": "doc-guidelines-2",
+          "docTitle": "project_guidelines.txt",
+          "excerpt": "3. Review Protocols: All system reviews require full team attendance. Meeting invites must have agreed time slots before calendar dispatch.",
+          "relevanceScore": 15
+        }
+      ],
+      "riskLevel": "LOW",
+      "confirmationRequired": true,
+      "confirmationStatus": "AWAITING_CONFIRMATION",
+      "aiOutput": {
+        "summary": "The team discussed progress on the SmartPay project, assigning specific development tasks to Rahul, Ankit, and Siddharth, and scheduled a system review for next Tuesday.",
+        "intent": "Sprint Planning and Task Assignment",
+        "tasks": [
+          {
+            "id": "t1",
+            "task": "Finish frontend dashboard",
+            "owner": "Rahul",
+            "deadline": "Friday",
+            "priority": "Medium",
+            "dependencies": [],
+            "confidence": 100,
+            "evidence": "Rahul will finish the frontend dashboard by Friday.",
+            "status": "Pending"
+          },
+          {
+            "id": "t2",
+            "task": "Complete backend API",
+            "owner": "Ankit",
+            "deadline": "Monday",
+            "priority": "Medium",
+            "dependencies": [],
+            "confidence": 100,
+            "evidence": "Ankit needs to complete the backend API by Monday.",
+            "status": "Pending"
+          },
+          {
+            "id": "t3",
+            "task": "Improve salary prediction model",
+            "owner": "Siddharth Kumar",
+            "deadline": "Not specified",
+            "priority": "Medium",
+            "dependencies": [],
+            "confidence": 95,
+            "evidence": "I will improve the salary prediction model.",
+            "status": "Pending"
+          }
+        ],
+        "action_items": [
+          {
+            "action": "Review complete system",
+            "owner": "Team",
+            "deadline": "Next Tuesday",
+            "confidence": 90,
+            "evidence": "Let's review the complete system next Tuesday."
+          }
+        ],
+        "uncertainties": [
+          "The exact time for the system review meeting on next Tuesday is not decided.",
+          "The specific year or date for 'Friday', 'Monday', and 'next Tuesday' is not provided."
+        ],
+        "assumptions": [
+          "Assumed 'I' in the transcript refers to Siddharth Kumar based on the provided team member role description for salary prediction models."
+        ],
+        "unsupported_requests": [],
+        "risk_level": "LOW",
+        "confirmation_required": true,
+        "proposed_actions": [
+          {
+            "id": "act-1789576322927-1",
+            "action": "Schedule system review meeting",
+            "reason": "Per project guidelines, meeting invites must have agreed time slots before calendar dispatch, and the current time is undecided.",
+            "requires_confirmation": true,
+            "status": "AWAITING_CONFIRMATION"
+          }
+        ],
+        "workflow_type": "react",
+        "grounded_sources": [
+          {
+            "docId": "doc-team-1",
+            "docTitle": "team_members.txt",
+            "excerpt": "- Siddharth Kumar: Machine Learning Engineer. Responsible for salary prediction models, PyTorch pipelines, and AI evaluation metrics.",
+            "relevanceScore": 49
+          },
+          {
+            "docId": "doc-guidelines-2",
+            "docTitle": "project_guidelines.txt",
+            "excerpt": "1. Task Assignment: Frontend UI tasks must be assigned directly to Rahul. Backend API or database endpoints must be assigned to Ankit. Model training and AI tasks belong to Siddharth.",
+            "relevanceScore": 41
+          },
+          {
+            "docId": "doc-guidelines-2",
+            "docTitle": "project_guidelines.txt",
+            "excerpt": "3. Review Protocols: All system reviews require full team attendance. Meeting invites must have agreed time slots before calendar dispatch.",
+            "relevanceScore": 15
+          }
+        ],
+        "processing_stages": [
+          {
+            "id": "s1",
+            "label": "Input received",
+            "status": "completed",
+            "detail": "Received 280 characters of transcript.",
+            "timestamp": "2026-09-16T16:31:50.011Z"
+          },
+          {
+            "id": "s2",
+            "label": "Input validated",
+            "status": "completed",
+            "detail": "Transcript length and character integrity verified.",
+            "timestamp": "2026-09-16T16:31:50.011Z"
+          },
+          {
+            "id": "s3",
+            "label": "Understanding request",
+            "status": "completed",
+            "detail": "Analyzed semantics, sentence structures, and entity mentions.",
+            "timestamp": "2026-09-16T16:31:50.011Z"
+          },
+          {
+            "id": "s4",
+            "label": "Checking relevant context",
+            "status": "completed",
+            "detail": "Retrieved 3 grounded reference(s) from project documents.",
+            "timestamp": "2026-09-16T16:31:50.015Z"
+          },
+          {
+            "id": "s5",
+            "label": "Extracting tasks",
+            "status": "completed",
+            "detail": "Structured tasks parsed via gemini-3.1-flash-lite.",
+            "timestamp": "2026-09-16T16:31:50.015Z"
+          },
+          {
+            "id": "s6",
+            "label": "Applying safety checks",
+            "status": "completed",
+            "detail": "Safety guardrail flagged 1 action(s) requiring human confirmation.",
+            "timestamp": "2026-09-16T16:32:02.927Z"
+          },
+          {
+            "id": "s7",
+            "label": "Preparing result",
+            "status": "completed",
+            "detail": "Final structured schema validated and ready for review.",
+            "timestamp": "2026-09-16T16:32:02.928Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "aud-1789575061240",
+      "timestamp": "2026-09-16T16:11:01.240Z",
+      "inputType": "voice",
+      "originalInput": "what is this project",
+      "transcript": "what is this project",
+      "promptVersion": "v1.0-react",
+      "model": "gemini-3.6-flash",
+      "retrievedContext": [],
+      "riskLevel": "LOW",
+      "confirmationRequired": false,
+      "confirmationStatus": "NOT_REQUIRED",
+      "aiOutput": {
+        "summary": "The user asked for information regarding the project. However, no project context or documentation was provided in the transcript or knowledge base.",
+        "intent": "Project Information Request",
+        "tasks": [],
+        "action_items": [],
+        "uncertainties": [
+          "The specific project name or context being referred to is missing."
+        ],
+        "assumptions": [
+          "Assumed the user is asking for an overview or background information on an ongoing project."
+        ],
+        "unsupported_requests": [
+          "Cannot explain 'this project' as no project details or context were provided in the input or knowledge base."
+        ],
+        "risk_level": "LOW",
+        "confirmation_required": false,
+        "proposed_actions": [],
+        "workflow_type": "react",
+        "grounded_sources": [],
+        "processing_stages": [
+          {
+            "id": "s1",
+            "label": "Input received",
+            "status": "completed",
+            "detail": "Received 20 characters of transcript.",
+            "timestamp": "2026-09-16T16:10:48.587Z"
+          },
+          {
+            "id": "s2",
+            "label": "Input validated",
+            "status": "completed",
+            "detail": "Transcript length and character integrity verified.",
+            "timestamp": "2026-09-16T16:10:48.587Z"
+          },
+          {
+            "id": "s3",
+            "label": "Understanding request",
+            "status": "completed",
+            "detail": "Analyzed semantics, sentence structures, and entity mentions.",
+            "timestamp": "2026-09-16T16:10:48.587Z"
+          },
+          {
+            "id": "s4",
+            "label": "Checking relevant context",
+            "status": "completed",
+            "detail": "Grounding was not required for this request.",
+            "timestamp": "2026-09-16T16:10:48.587Z"
+          },
+          {
+            "id": "s5",
+            "label": "Extracting tasks",
+            "status": "completed",
+            "detail": "Structured tasks parsed via gemini-3.6-flash.",
+            "timestamp": "2026-09-16T16:10:48.587Z"
+          },
+          {
+            "id": "s6",
+            "label": "Applying safety checks",
+            "status": "completed",
+            "detail": "All safety guardrails passed without consequential triggers.",
+            "timestamp": "2026-09-16T16:11:01.231Z"
+          },
+          {
+            "id": "s7",
+            "label": "Preparing result",
+            "status": "completed",
+            "detail": "Final structured schema validated and ready for review.",
+            "timestamp": "2026-09-16T16:11:01.233Z"
+          }
+        ]
+      }
+    },
     {
       "id": "aud-1789567397532",
       "timestamp": "2026-09-16T14:03:17.532Z",

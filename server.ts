@@ -1,37 +1,79 @@
 import express from 'express';
 import path from 'path';
+import { randomUUID } from 'crypto';
 import dotenv from 'dotenv';
 import { createServer as createViteServer } from 'vite';
 import { db } from './server/db.js';
 import { geminiService, isGeminiConfigured } from './server/gemini.js';
 import { ragService } from './server/rag.js';
 import { guardrails } from './server/guardrails.js';
+import { put } from '@vercel/blob';
+import { clerkMiddleware, getAuth } from '@clerk/express';
 import { AuditRecord, EvaluationResult, EvaluationMetrics } from './src/types.js';
 
 dotenv.config();
 
-async function startServer() {
+export function createApp() {
   const app = express();
-  const PORT = Number(process.env.PORT) || 3000;
+
+  app.use((req, res, next) => {
+    const requestId = randomUUID();
+    const startedAt = Date.now();
+    res.setHeader('x-request-id', requestId);
+    res.on('finish', () => {
+      console.info(JSON.stringify({
+        requestId,
+        method: req.method,
+        path: req.path,
+        statusCode: res.statusCode,
+        durationMs: Date.now() - startedAt,
+      }));
+    });
+    next();
+  });
 
   // JSON Body parsing
   app.use(express.json({ limit: '10mb' }));
+  if (process.env.CLERK_SECRET_KEY) {
+    app.use(clerkMiddleware());
+  }
+
+  const requestBuckets = new Map<string, { startedAt: number; count: number }>();
+  app.use((req, res, next) => {
+    if (!req.path.startsWith('/api/')) return next();
+    const now = Date.now();
+    const key = req.ip || 'unknown';
+    const bucket = requestBuckets.get(key);
+    if (!bucket || now - bucket.startedAt >= 60_000) {
+      requestBuckets.set(key, { startedAt: now, count: 1 });
+      return next();
+    }
+    bucket.count += 1;
+    if (bucket.count > 120) {
+      return res.status(429).json({ error: 'Too many requests. Please try again shortly.' });
+    }
+    next();
+  });
+
+  app.use(async (req, res, next) => {
+    await db.ready();
+    const userId = process.env.CLERK_SECRET_KEY ? getAuth(req).userId : null;
+    const scope = userId || 'guest';
+    await db.prepareScope(scope);
+    db.runWithScope(scope, next);
+  });
 
   // API Routes
 
-  // 1. Health & Connection Status
+  // 1. Health check
   app.get('/api/health', (req, res) => {
-    const configured = isGeminiConfigured();
     const settings = db.getSettings();
     res.json({
       status: 'ok',
+      apiConnected: isGeminiConfigured(),
+      storage: db.getStorageMode(),
       model: settings.model,
-      geminiConfigured: configured,
-      promptVersion: settings.promptVersion,
-      groundingEnabled: settings.groundingEnabled,
-      defaultWorkflow: settings.defaultWorkflow,
-      version: '1.0.0',
-      timestamp: new Date().toISOString(),
+      systemVersion: 'v1.0.0',
     });
   });
 
@@ -41,7 +83,7 @@ async function startServer() {
       const stats = db.getDashboardStats();
       res.json(stats);
     } catch (err: any) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: 'Unable to load application statistics.' });
     }
   });
 
@@ -110,7 +152,7 @@ async function startServer() {
     } catch (err: any) {
       console.error('Analysis error:', err);
       res.status(500).json({
-        error: err.message || 'AI service is temporarily unavailable. Please try again.',
+        error: 'AI service is temporarily unavailable. Please try again.',
       });
     }
   });
@@ -144,7 +186,7 @@ async function startServer() {
       res.json({ refinedOutput: refined });
     } catch (err: any) {
       console.error('Refinement error:', err);
-      res.status(500).json({ error: err.message || 'Refinement failed' });
+      res.status(500).json({ error: 'Unable to refine this result right now.' });
     }
   });
 
@@ -158,7 +200,7 @@ async function startServer() {
 
       const status = confirmed ? 'CONFIRMED' : 'CANCELLED';
       const executionNote = confirmed
-        ? 'Action explicitly confirmed by user. Simulated demo execution recorded in audit log. (No actual external financial or email API was called in this environment).'
+        ? 'Action explicitly confirmed by user. The confirmation was recorded; no external action was performed.'
         : 'Action cancelled by user before execution. System state was not altered.';
 
       const updated = db.updateAuditConfirmation(auditId, status, executionNote);
@@ -170,16 +212,16 @@ async function startServer() {
         success: true,
         status,
         message: confirmed 
-          ? 'Demo action recorded successfully. Human authorization logged.' 
+          ? 'Confirmation recorded. No external action was performed.' 
           : 'Action cancelled.',
         auditRecord: updated,
       });
     } catch (err: any) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: 'Unable to record this action right now.' });
     }
   });
 
-  // 6. Evaluation Endpoints (Benchmark test suite & comparison)
+  // Evaluation uses fixed, non-destructive test cases only.
   const BENCHMARK_TEST_CASES = [
     {
       id: 'tc-1',
@@ -234,22 +276,14 @@ async function startServer() {
 
   app.post('/api/evaluate', async (req, res) => {
     try {
-      const { testCaseId, transcript: rawTranscript, testCaseName: rawName } = req.body;
+      const { testCaseId } = req.body;
       
-      let transcript = rawTranscript;
-      let testCaseName = rawName || 'Custom Evaluation';
-
-      if (testCaseId) {
-        const found = BENCHMARK_TEST_CASES.find(c => c.id === testCaseId);
-        if (found) {
-          transcript = found.transcript;
-          testCaseName = found.name;
-        }
+      const found = testCaseId ? BENCHMARK_TEST_CASES.find(c => c.id === testCaseId) : undefined;
+      if (!found) {
+        return res.status(400).json({ error: 'Select a supported evaluation case.' });
       }
-
-      if (!transcript || transcript.trim().length === 0) {
-        return res.status(400).json({ error: 'Transcript is required for evaluation' });
-      }
+      const transcript = found.transcript;
+      const testCaseName = found.name;
 
       // Run baseline
       const baselineRes = await geminiService.analyzeTranscript(transcript, {
@@ -306,14 +340,16 @@ async function startServer() {
       res.json(evalResult);
     } catch (err: any) {
       console.error('Evaluation error:', err);
-      res.status(500).json({ error: err.message || 'Evaluation failed' });
+      res.status(500).json({ error: 'Unable to run this evaluation right now.' });
     }
   });
 
-  // Factory Reset
   app.post('/api/reset', (req, res) => {
+    if (req.body?.confirm !== true) {
+      return res.status(400).json({ error: 'Explicit reset confirmation is required.' });
+    }
     db.resetData();
-    res.json({ success: true, message: 'Factory defaults restored' });
+    res.json({ success: true, message: 'Factory defaults restored.' });
   });
 
   // 7. Tasks Endpoints
@@ -364,13 +400,55 @@ async function startServer() {
   });
 
   app.delete('/api/audit-logs', (req, res) => {
+    if (req.body?.confirm !== true) {
+      return res.status(400).json({ error: 'Explicit deletion confirmation is required.' });
+    }
     db.clearAuditLogs();
-    res.json({ success: true, message: 'Audit logs cleared' });
+    res.json({ success: true, message: 'Audit logs cleared.' });
   });
 
   // 10. Knowledge Base Endpoints
   app.get('/api/knowledge', (req, res) => {
     res.json(db.getKnowledgeDocuments());
+  });
+
+  app.post('/api/knowledge/upload', async (req, res) => {
+    try {
+      const { filename, contentBase64, contentType = 'text/plain', category = 'General', tags = [] } = req.body || {};
+      if (!filename || !contentBase64) {
+        return res.status(400).json({ error: 'filename and contentBase64 are required' });
+      }
+
+      const fileBuffer = Buffer.from(contentBase64, 'base64');
+      if (fileBuffer.length === 0 || fileBuffer.length > 5 * 1024 * 1024) {
+        return res.status(400).json({ error: 'Uploaded files must be between 1 byte and 5 MB.' });
+      }
+
+      const content = fileBuffer.toString('utf8').trim();
+      if (!content) {
+        return res.status(400).json({ error: 'Only text-readable files can be indexed in the knowledge base.' });
+      }
+
+      const safeFilename = String(filename).replace(/[^a-zA-Z0-9._-]/g, '-');
+      const blob = await put(`knowledge/${Date.now()}-${safeFilename}`, fileBuffer, {
+        access: 'public',
+        addRandomSuffix: true,
+        contentType,
+      });
+
+      const doc = db.addKnowledgeDocument({
+        title: filename,
+        content,
+        category,
+        tags: Array.isArray(tags) ? tags : [],
+        sourceUrl: blob.url,
+        sourceType: contentType,
+      });
+      res.status(201).json(doc);
+    } catch (err) {
+      console.error('Knowledge upload error:', err);
+      res.status(500).json({ error: 'Unable to upload this file right now.' });
+    }
   });
 
   app.post('/api/knowledge', (req, res) => {
@@ -397,15 +475,46 @@ async function startServer() {
 
   // 11. Settings Endpoints
   app.get('/api/settings', (req, res) => {
-    res.json(db.getSettings());
+    const settings = db.getSettings();
+    res.json({
+      model: settings.model,
+      groundingEnabled: settings.groundingEnabled,
+      guardrailsStrict: settings.guardrailsStrict,
+      defaultWorkflow: settings.defaultWorkflow,
+      confidenceThreshold: settings.confidenceThreshold,
+      audioSensitivity: settings.audioSensitivity,
+    });
   });
 
   app.patch('/api/settings', (req, res) => {
-    const updated = db.updateSettings(req.body);
-    res.json(updated);
+    const allowedModels = new Set(['gemini-3.6-flash', 'gemini-3.1-flash-lite', 'gemini-flash-latest']);
+    const body = req.body || {};
+    const updates = {
+      ...(allowedModels.has(body.model) ? { model: body.model } : {}),
+      ...(typeof body.groundingEnabled === 'boolean' ? { groundingEnabled: body.groundingEnabled } : {}),
+      ...(typeof body.guardrailsStrict === 'boolean' ? { guardrailsStrict: body.guardrailsStrict } : {}),
+      ...(body.defaultWorkflow === 'react' || body.defaultWorkflow === 'baseline' ? { defaultWorkflow: body.defaultWorkflow } : {}),
+      ...(typeof body.confidenceThreshold === 'number' ? { confidenceThreshold: Math.max(0, Math.min(100, body.confidenceThreshold)) } : {}),
+      ...(typeof body.audioSensitivity === 'string' ? { audioSensitivity: body.audioSensitivity } : {}),
+    };
+    const updated = db.updateSettings(updates);
+    res.json({
+      model: updated.model,
+      groundingEnabled: updated.groundingEnabled,
+      guardrailsStrict: updated.guardrailsStrict,
+      defaultWorkflow: updated.defaultWorkflow,
+      confidenceThreshold: updated.confidenceThreshold,
+      audioSensitivity: updated.audioSensitivity,
+    });
   });
 
-  // Vite Middleware in dev, Static files in production
+  return app;
+}
+
+async function startServer() {
+  const app = createApp();
+  const PORT = Number(process.env.PORT) || 3000;
+
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },
@@ -425,4 +534,6 @@ async function startServer() {
   });
 }
 
-startServer();
+if (process.env.VERCEL !== '1') {
+  startServer();
+}

@@ -1,6 +1,6 @@
 # AI Voice-to-Action Assistant
 
-> Turn spoken instructions and unstructured meeting discussions into clear, structured, and auditable tasks, action items, and executive summaries with strict safety guardrails and grounded team context.
+> A responsible AI workspace that converts voice notes and meeting transcripts into structured, explainable, and auditable tasks using Gemini, RAG grounding, deterministic safety guardrails, Clerk identity scopes, Neon persistence, Vercel Blob uploads, and Vercel serverless deployment.
 
 ---
 
@@ -16,11 +16,16 @@
    - [6. Audit Trail & Compliance Logging](#6-audit-trail--compliance-logging)
    - [7. Benchmark Evaluation Suite (ReAct vs. Baseline)](#7-benchmark-evaluation-suite-react-vs-baseline)
 4. [Technology Stack](#technology-stack)
-5. [System Architecture](#system-architecture)
-6. [API Reference](#api-reference)
+5. [High-Level Architecture](#high-level-architecture)
+6. [System Architecture](#system-architecture)
+7. [API Reference](#api-reference)
 7. [Getting Started & Local Development](#getting-started--local-development)
 8. [Configuration & Environment Variables](#configuration--environment-variables)
 9. [Safety & Security Highlights](#safety--security-highlights)
+10. [Vercel Deployment](#vercel-deployment)
+11. [Database Design](#database-design)
+12. [Limitations and Roadmap](#limitations-and-roadmap)
+13. [Resume-Ready Project Summary](#resume-ready-project-summary)
 
 ---
 
@@ -133,13 +138,77 @@ Unlike simple zero-shot prompts, the assistant utilizes a structured Reason + Ac
   - Motion (Fluid animations)
   - Web Speech API & MediaDevices API
 - **Backend**:
-  - Express 4.x running in Node.js (Full-stack architecture on port 3000)
-  - `@google/genai` (Google Gen AI TypeScript SDK)
-  - Local JSON persistence engine (`/data/store.json`) with thread-safe file operations
-- **Build System**:
+  - Express 4.x running as a Vercel serverless function
+  - `@google/genai` for Gemini analysis and refinement
+  - Neon PostgreSQL for hosted persistence and user-scoped state
+  - Vercel Blob for original knowledge-base files
+  - Clerk for optional authentication and verified identity scopes
+  - Local JSON persistence fallback for development
+- **Build and deployment**:
   - Vite 6 + esbuild
+  - Vercel static output plus `/api` serverless routing
+  - TypeScript checks and Node-based guardrail regression tests
 
 ---
+
+## High-Level Architecture
+
+```mermaid
+flowchart LR
+    User[Guest or signed-in user] --> Browser[React + TypeScript client]
+    Browser --> Voice[Web Speech API]
+    Browser --> API[Vercel Express API function]
+    API --> Auth[Clerk verification]
+    API --> Guard[Validation, rate limiting, request IDs]
+    API --> RAG[RAG retrieval service]
+    RAG --> Neon[(Neon PostgreSQL)]
+    API --> Gemini[Gemini API]
+    Gemini --> Safety[Deterministic guardrails]
+    Safety --> Neon
+    API --> Blob[(Vercel Blob)]
+    Browser --> UI[Dashboard, tasks, knowledge, audit, evaluation]
+```
+
+## Analysis Request Flow
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI as React client
+    participant API as Express serverless function
+    participant DB as Neon
+    participant RAG as RAG service
+    participant AI as Gemini
+    participant Guard as Guardrails
+
+    User->>UI: Record voice or enter transcript
+    UI->>API: POST /api/analyze
+    API->>API: Validate input and apply rate limit
+    API->>DB: Load guest or authenticated scope
+    API->>RAG: Retrieve relevant knowledge chunks
+    RAG->>DB: Read knowledge documents
+    API->>AI: Send grounded prompt
+    AI-->>API: Structured JSON result
+    API->>Guard: Scan consequential actions
+    Guard-->>API: Risk and confirmation decision
+    API->>DB: Save tasks, analysis, and audit record
+    API-->>UI: Tasks, stages, evidence, and audit ID
+    UI-->>User: Show result or confirmation dialog
+```
+
+## Upload and RAG Flow
+
+```mermaid
+flowchart TD
+    Select[Select text, Markdown, or CSV file] --> Encode[Encode file in browser]
+    Encode --> Upload[POST /api/knowledge/upload]
+    Upload --> Validate[Validate size, content, and filename]
+    Validate --> Blob[Vercel Blob original file]
+    Validate --> Extract[Extract UTF-8 text]
+    Extract --> Store[Store content and metadata in Neon]
+    Store --> Retrieve[Token and relevance retrieval]
+    Retrieve --> Prompt[Ground future Gemini prompts]
+```
 
 ## System Architecture
 
@@ -178,21 +247,24 @@ Unlike simple zero-shot prompts, the assistant utilizes a structured Reason + Ac
 
 | Endpoint | Method | Description |
 | :--- | :---: | :--- |
-| `/api/health` | `GET` | Health check & Gemini configuration status |
-| `/api/analyze` | `POST` | Executes multi-stage ReAct analysis on a transcript |
-| `/api/refine` | `POST` | Iteratively refines existing tasks based on user guidance |
-| `/api/tasks` | `GET` | Retrieves all saved tasks |
-| `/api/tasks` | `POST` | Adds a new task manually |
-| `/api/tasks/:id` | `PATCH` | Updates task status, owner, priority, or deadline |
-| `/api/tasks/:id` | `DELETE` | Deletes a task |
-| `/api/analyses` | `GET` | Retrieves recent analysis records |
-| `/api/audit-logs` | `GET` | Retrieves compliance audit records |
-| `/api/audit-logs/:id/action` | `POST` | Confirms or cancels a flagged high-risk proposed action |
-| `/api/knowledge-base` | `GET` | Retrieves internal reference documents |
-| `/api/knowledge-base` | `POST` | Adds a new document to the knowledge store |
-| `/api/knowledge-base/:id`| `DELETE`| Deletes a knowledge base document |
-| `/api/eval/cases` | `GET` | Returns benchmark evaluation test cases |
-| `/api/eval/run` | `POST` | Runs benchmark evaluation against a test case |
+| `/api/health` | `GET` | API, model, storage, and system status |
+| `/api/stats` | `GET` | Dashboard metrics |
+| `/api/analyze` | `POST` | Analyze a transcript with grounded AI |
+| `/api/refine` | `POST` | Refine an existing AI result |
+| `/api/execute-action` | `POST` | Record confirmation or cancellation; no external side effect |
+| `/api/tasks` | `GET/POST` | List or create tasks |
+| `/api/tasks/:id` | `PATCH/DELETE` | Update or delete a task |
+| `/api/analyses` | `GET` | List recent analyses |
+| `/api/audit-logs` | `GET/DELETE` | Read or clear audit records |
+| `/api/audit-logs/:id/action` | `POST` | Record a confirmation decision |
+| `/api/knowledge` | `GET/POST` | List or create knowledge documents |
+| `/api/knowledge/upload` | `POST` | Upload a text-readable file to Blob and Neon |
+| `/api/knowledge/:id` | `DELETE` | Delete a knowledge document |
+| `/api/knowledge/search` | `POST` | Search grounded knowledge chunks |
+| `/api/evaluation/cases` | `GET` | List benchmark cases |
+| `/api/evaluate` | `POST` | Run a benchmark comparison |
+| `/api/settings` | `GET/PATCH` | Read or update assistant settings |
+| `/api/reset` | `POST` | Restore demo data after explicit confirmation |
 
 ---
 
@@ -225,17 +297,6 @@ Unlike simple zero-shot prompts, the assistant utilizes a structured Reason + Ac
 
 ---
 
-## Configuration & Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-# Google Gemini API Key
-GEMINI_API_KEY=your_gemini_api_key_here
-```
-
-*Note: In Google AI Studio Build, the `GEMINI_API_KEY` is automatically managed and injected via the Settings menu.*
-
 ---
 
 ## Safety & Security Highlights
@@ -244,3 +305,115 @@ GEMINI_API_KEY=your_gemini_api_key_here
 2. **Audio Privacy**: Speech recognition is executed locally via browser APIs. Audio streams are terminated immediately upon stopping recording.
 3. **Defense-in-Depth Risk Analysis**: High-risk detection uses both deep semantic LLM evaluation and deterministic regular-expression rule matching.
 4. **Transparent Citations**: Every piece of extracted metadata cites its source sentence from the user's transcript or knowledge base document.
+
+## Vercel Deployment
+
+1. Import the repository into Vercel.
+2. Keep the Vite framework preset or allow automatic detection.
+3. Add the environment variables below.
+4. Deploy from the project root.
+5. Confirm `/api/health` reports `storage: "neon"`.
+6. Test guest analysis, sign-in, file upload, audit logging, and persistence.
+
+`vercel.json` builds the Vite client into `dist` and routes `/api/*` to `api/index.ts`.
+
+## Environment Variables
+
+```env
+VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+GEMINI_API_KEY=your_gemini_api_key
+DATABASE_URL=your_neon_pooled_connection_string
+BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
+
+# Local fallback only
+DATA_DIR=./data
+DB_FILE=./data/store.json
+```
+
+Configuration behavior:
+
+- No Clerk keys: shared guest demo scope.
+- Clerk keys enabled: verified user-specific Neon scopes.
+- No `DATABASE_URL`: local JSON persistence.
+- `DATABASE_URL` enabled: hosted Neon persistence.
+- No `BLOB_READ_WRITE_TOKEN`: manual text documents still work, but hosted uploads fail safely.
+- No `GEMINI_API_KEY`: the safe heuristic analyzer keeps the demo usable.
+
+## Database Design
+
+The compatibility runtime stores a bounded JSONB snapshot per guest or authenticated user scope in Neon. This preserves the current synchronous service API while supporting persistent demos and user separation.
+
+`db/normalized-schema.sql` defines the next-stage relational model with workspaces, members, tasks, knowledge documents, audit logs, foreign keys, and indexes.
+
+```mermaid
+erDiagram
+    WORKSPACES ||--o{ WORKSPACE_MEMBERS : contains
+    WORKSPACES ||--o{ TASKS : owns
+    WORKSPACES ||--o{ KNOWLEDGE_DOCUMENTS : owns
+    WORKSPACES ||--o{ AUDIT_LOGS : owns
+
+    WORKSPACES {
+        uuid id PK
+        string name
+        timestamp created_at
+    }
+    WORKSPACE_MEMBERS {
+        uuid workspace_id FK
+        string clerk_user_id
+        string role
+    }
+    TASKS {
+        string id PK
+        uuid workspace_id FK
+        string task
+        string status
+        integer confidence
+    }
+    KNOWLEDGE_DOCUMENTS {
+        string id PK
+        uuid workspace_id FK
+        string title
+        text content
+        string source_url
+    }
+    AUDIT_LOGS {
+        string id PK
+        uuid workspace_id FK
+        string risk_level
+        json ai_output
+    }
+```
+
+## Safety and Security Model
+
+- Gemini and database credentials remain server-side.
+- Clerk sessions are verified server-side when configured.
+- Authenticated scopes use verified Clerk identity, not a client-provided user ID.
+- API requests are rate limited per client IP.
+- Uploads are limited to 5 MB and filenames are sanitized.
+- High-risk actions are recorded for confirmation but never executed externally.
+- Prompt content is treated as untrusted input and passed through deterministic guardrails.
+- Request IDs and latency logs support debugging and incident tracing.
+
+## Testing and Quality Checks
+
+```bash
+npm run lint
+npm test
+npm run build:client
+```
+
+The test suite currently covers input validation, financial risk detection, external communication detection, and routine planning behavior. The next testing milestone is browser end-to-end coverage for voice fallback, uploads, sign-in, and confirmation flows.
+
+## Limitations and Roadmap
+
+- PDF and DOCX extraction require a document parser.
+- The compatibility JSONB snapshot should eventually be replaced with relational repository queries from `db/normalized-schema.sql`.
+- Rate limiting is process-local; high traffic requires a distributed limiter.
+- Production deployments should add centralized error tracking and retained structured logs.
+- Browser end-to-end tests should cover the complete guest and authenticated journeys.
+
+## Resume-Ready Project Summary
+
+> Built a serverless responsible-AI task orchestration platform that converts voice conversations into grounded, explainable, and auditable action plans. Implemented Gemini structured extraction, RAG retrieval, deterministic safety guardrails, human-in-the-loop confirmation, Clerk identity scopes, Neon persistence, Vercel Blob uploads, benchmark evaluation, request observability, and Vercel deployment.
