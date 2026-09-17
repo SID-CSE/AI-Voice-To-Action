@@ -17,6 +17,7 @@ import { KnowledgeDocument, GroundedSource } from '../types';
 interface KnowledgeBasePageProps {
   documents: KnowledgeDocument[];
   onAddDocument: (doc: { title: string; content: string; category?: string; tags?: string[] }) => Promise<void>;
+  onUploadDocument: (file: File, category?: string, tags?: string[]) => Promise<void>;
   onDeleteDocument: (id: string) => Promise<void>;
   onSearch: (query: string) => Promise<GroundedSource[]>;
 }
@@ -24,6 +25,7 @@ interface KnowledgeBasePageProps {
 export const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({
   documents,
   onAddDocument,
+  onUploadDocument,
   onDeleteDocument,
   onSearch,
 }) => {
@@ -38,6 +40,15 @@ export const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({
   const [newCategory, setNewCategory] = useState('Process Guidelines');
   const [newContent, setNewContent] = useState('');
   const [newTags, setNewTags] = useState('project, guidelines');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileSelect = async (file?: File) => {
+    if (!file) return;
+    const content = await file.text();
+    setSelectedFile(file);
+    setNewTitle(file.name);
+    setNewContent(content);
+  };
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,15 +69,21 @@ export const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({
     e.preventDefault();
     if (!newTitle.trim() || !newContent.trim()) return;
 
-    await onAddDocument({
-      title: newTitle,
-      category: newCategory,
-      content: newContent,
-      tags: newTags.split(',').map(t => t.trim()).filter(Boolean),
-    });
+    const tags = newTags.split(',').map(t => t.trim()).filter(Boolean);
+    if (selectedFile) {
+      await onUploadDocument(selectedFile, newCategory, tags);
+    } else {
+      await onAddDocument({
+        title: newTitle,
+        category: newCategory,
+        content: newContent,
+        tags,
+      });
+    }
 
     setNewTitle('');
     setNewContent('');
+    setSelectedFile(null);
     setShowAddModal(false);
   };
 
@@ -214,6 +231,11 @@ export const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({
 
               <div className="flex items-center justify-between text-[10px] text-slate-500">
                 <span>{new Date(doc.updatedAt || doc.createdAt).toLocaleDateString()}</span>
+                {doc.sourceUrl && (
+                  <a href={doc.sourceUrl} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white" title="Open stored file">
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
                 <button
                   onClick={() => setSelectedDoc(doc)}
                   className="text-indigo-400 hover:underline flex items-center gap-0.5"
@@ -261,6 +283,17 @@ export const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({
               Add Grounding Document
             </h3>
             <form onSubmit={handleAddSubmit} className="space-y-3">
+              <div>
+                <label className="text-xs text-slate-300 font-medium">Add a text file (optional)</label>
+                <input
+                  type="file"
+                  accept=".txt,.md,.csv,text/plain,text/markdown,text/csv"
+                  onChange={(e) => handleFileSelect(e.target.files?.[0])}
+                  className="w-full mt-1 text-xs text-slate-400 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-800 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-slate-200 hover:file:bg-slate-700"
+                />
+                <p className="text-[10px] text-slate-500 mt-1">Text content is indexed for RAG and the original file is stored in Vercel Blob.</p>
+              </div>
+
               <div>
                 <label className="text-xs text-slate-300 font-medium">Document Title / Filename</label>
                 <input

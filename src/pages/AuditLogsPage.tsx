@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { 
-  ShieldAlert, 
-  Search, 
-  Trash2, 
+  ShieldAlert,
+  Search,
+  Trash2,
+
   Eye, 
   CheckCircle2, 
   XCircle, 
@@ -79,11 +80,10 @@ export const AuditLogsPage: React.FC<AuditLogsPageProps> = ({
             Immutable trace of transcripts, model versions, retrieved context, risk levels, and human authorizations.
           </p>
         </div>
-
         <button
-          onClick={onClearLogs}
+          onClick={() => { if (window.confirm('Clear all audit logs? This cannot be undone.')) onClearLogs(); }}
           disabled={logs.length === 0}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-red-950/40 text-slate-400 hover:text-red-400 text-xs font-medium border border-slate-700 hover:border-red-800/40 transition-colors disabled:opacity-40 cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-red-950/40 text-slate-400 hover:text-red-400 text-xs font-medium border border-slate-700 disabled:opacity-40"
         >
           <Trash2 className="w-3.5 h-3.5" />
           <span>Clear Logs</span>
@@ -233,15 +233,7 @@ export const AuditLogsPage: React.FC<AuditLogsPageProps> = ({
 
             <div className="flex-1 overflow-y-auto space-y-4 pr-1 text-xs text-slate-300">
               {/* Metadata Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px]">
-                <div>
-                  <span className="text-slate-500 block">Model</span>
-                  <span className="font-mono text-slate-200">{selectedRecord.model}</span>
-                </div>
-                <div>
-                  <span className="text-slate-500 block">Prompt Version</span>
-                  <span className="font-mono text-slate-200">{selectedRecord.promptVersion}</span>
-                </div>
+              <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px]">
                 <div>
                   <span className="text-slate-500 block">Risk Level</span>
                   <span className={`font-bold ${

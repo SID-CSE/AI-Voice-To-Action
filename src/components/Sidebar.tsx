@@ -4,12 +4,11 @@ import {
   Mic, 
   CheckSquare, 
   BookOpen, 
-  ShieldAlert, 
-  GitCompare, 
+  ShieldAlert,
+  GitCompare,
+  Cpu,
+  Wifi,
   Settings, 
-  Cpu, 
-  Wifi, 
-  Sparkles,
   X
 } from 'lucide-react';
 
@@ -66,7 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="flex items-center gap-1.5">
                 <span className="font-bold text-white text-sm tracking-tight">AI Voice-to-Action</span>
               </div>
-              <p className="text-[11px] text-slate-400 font-medium">ReAct Productivity Agent</p>
+              <p className="text-[11px] text-slate-400 font-medium">Productivity Assistant</p>
             </div>
           </div>
 
@@ -114,35 +113,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
           })}
         </nav>
 
-        {/* Bottom System Status Panel (Section 4) */}
-        <div className="p-3 border-t border-slate-800/80 bg-slate-950/40 space-y-2">
+        <div className="p-3 border-t border-slate-800/80 bg-slate-950/40">
           <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] space-y-1.5">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <Cpu className="w-3.5 h-3.5 text-indigo-400" />
-                Model:
-              </span>
-              <span className="text-slate-200 font-mono text-[10px] bg-slate-800 px-1.5 py-0.5 rounded">
-                {modelName}
-              </span>
+              <span className="flex items-center gap-1.5"><Cpu className="w-3.5 h-3.5 text-indigo-400" />Model</span>
+              <span className="text-slate-200 font-mono text-[10px] bg-slate-800 px-1.5 py-0.5 rounded">{modelName}</span>
             </div>
-
             <div className="flex items-center justify-between text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <Wifi className="w-3.5 h-3.5 text-emerald-400" />
-                API Status:
-              </span>
-              <span className={`inline-flex items-center gap-1 font-medium text-[10px] ${
-                apiConnected ? 'text-emerald-400' : 'text-amber-400'
-              }`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${apiConnected ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'}`} />
-                {apiConnected ? 'Connected' : 'Active (Local Mode)'}
-              </span>
+              <span className="flex items-center gap-1.5"><Wifi className="w-3.5 h-3.5 text-emerald-400" />API Status</span>
+              <span className={apiConnected ? 'text-emerald-400' : 'text-amber-400'}>{apiConnected ? 'Connected' : 'Limited'}</span>
             </div>
-
             <div className="flex items-center justify-between text-slate-500 pt-1 border-t border-slate-800/60 text-[10px]">
-              <span>System Version</span>
-              <span className="font-mono">v1.0.0-react</span>
+              <span>System Version</span><span className="font-mono">v1.0.0</span>
             </div>
           </div>
         </div>

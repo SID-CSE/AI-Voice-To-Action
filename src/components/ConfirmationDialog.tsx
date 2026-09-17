@@ -126,7 +126,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                   {isConfirmed ? (
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-900/30 border border-emerald-700/50 text-emerald-400 text-xs font-semibold">
                       <CheckCircle2 className="w-4 h-4" />
-                      <span>Confirmed (Demo Logged)</span>
+                      <span>Confirmed (Recorded)</span>
                     </div>
                   ) : isCancelled ? (
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-xs font-semibold">

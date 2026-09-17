@@ -1,5 +1,8 @@
 import fs from 'fs';
+import fs from 'fs';
 import path from 'path';
+import { neon } from '@neondatabase/serverless';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { 
   StructuredTask, 
   AuditRecord, 
@@ -24,6 +27,9 @@ interface DatabaseSchema {
 
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), 'data');
 const DB_FILE = process.env.DB_FILE || path.join(DATA_DIR, 'store.json');
+const DATABASE_URL = process.env.DATABASE_URL;
+const hostedSql = DATABASE_URL ? neon(DATABASE_URL) : null;
+const scopeStorage = new AsyncLocalStorage<string>();
 
 const INITIAL_SETTINGS: AppSettings = {
   model: 'gemini-3.6-flash',
@@ -76,21 +82,98 @@ const INITIAL_KNOWLEDGE: KnowledgeDocument[] = [
 ];
 
 class DatabaseService {
-  private data: DatabaseSchema;
+  private defaultData: DatabaseSchema;
+  private scopedData = new Map<string, DatabaseSchema>();
   private initialized: boolean = false;
+  private readyPromise: Promise<void>;
+
+  private get data(): DatabaseSchema {
+    const scope = scopeStorage.getStore();
+    return scope ? (this.scopedData.get(scope) || this.defaultData) : this.defaultData;
+  }
+
+  private set data(value: DatabaseSchema) {
+    const scope = scopeStorage.getStore();
+    if (scope) this.scopedData.set(scope, value);
+    else this.defaultData = value;
+  }
 
   constructor() {
-    this.data = {
+    this.defaultData = {
       tasks: [],
       analyses: [],
       auditLogs: [],
       knowledgeDocuments: INITIAL_KNOWLEDGE,
       settings: INITIAL_SETTINGS,
     };
-    this.init();
+    this.readyPromise = this.init();
   }
 
-  private init() {
+  async ready(): Promise<void> {
+    await this.readyPromise;
+  }
+
+  async prepareScope(scope: string): Promise<void> {
+    if (!hostedSql || this.scopedData.has(scope)) return;
+    await scopeStorage.run(scope, async () => {
+      await hostedSql`CREATE TABLE IF NOT EXISTS app_state (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
+      const rows = await hostedSql`SELECT data FROM app_state WHERE id = ${scope}`;
+      if (rows.length > 0) {
+        const parsed = rows[0].data as Partial<DatabaseSchema>;
+        this.data = {
+          tasks: parsed.tasks || [],
+          analyses: parsed.analyses || [],
+          auditLogs: parsed.auditLogs || [],
+          knowledgeDocuments: parsed.knowledgeDocuments?.length ? parsed.knowledgeDocuments : INITIAL_KNOWLEDGE,
+          settings: { ...INITIAL_SETTINGS, ...(parsed.settings || {}) },
+        };
+      } else {
+        this.data = {
+          tasks: [],
+          analyses: [],
+          auditLogs: [],
+          knowledgeDocuments: INITIAL_KNOWLEDGE,
+          settings: INITIAL_SETTINGS,
+        };
+        await this.persistHosted();
+      }
+    });
+  }
+
+  runWithScope(scope: string, next: () => void): void {
+    scopeStorage.run(scope, next);
+  }
+
+  getStorageMode(): 'neon' | 'local' {
+    return hostedSql ? 'neon' : 'local';
+  }
+
+  private async init(): Promise<void> {
+    if (hostedSql) {
+      try {
+        await hostedSql`CREATE TABLE IF NOT EXISTS app_state (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
+        const rows = await hostedSql`SELECT data FROM app_state WHERE id = 'default'`;
+        if (rows.length > 0) {
+          const parsed = rows[0].data as Partial<DatabaseSchema>;
+          this.data = {
+            tasks: parsed.tasks || [],
+            analyses: parsed.analyses || [],
+            auditLogs: parsed.auditLogs || [],
+            knowledgeDocuments: parsed.knowledgeDocuments && parsed.knowledgeDocuments.length > 0
+              ? parsed.knowledgeDocuments
+              : INITIAL_KNOWLEDGE,
+            settings: { ...INITIAL_SETTINGS, ...(parsed.settings || {}) },
+          };
+        } else {
+          await this.persistHosted();
+        }
+        this.initialized = true;
+        return;
+      } catch (err) {
+        console.error('Error initializing Neon database, using in-memory fallback:', err);
+      }
+    }
+
     try {
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -132,6 +215,11 @@ class DatabaseService {
   }
 
   private persist() {
+    if (hostedSql) {
+      void this.persistHosted();
+      return;
+    }
+
     try {
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -141,6 +229,19 @@ class DatabaseService {
       fs.renameSync(tmpPath, DB_FILE);
     } catch (err) {
       console.error('Failed to write database file:', err);
+    }
+  }
+
+  private async persistHosted(): Promise<void> {
+    if (!hostedSql) return;
+    try {
+      await hostedSql`
+        INSERT INTO app_state (id, data, updated_at)
+        VALUES (${scopeStorage.getStore() || 'guest'}, ${JSON.stringify(this.data)}::jsonb, NOW())
+        ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()
+      `;
+    } catch (err) {
+      console.error('Failed to write Neon database state:', err);
     }
   }
 

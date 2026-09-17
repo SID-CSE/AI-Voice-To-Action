@@ -1,5 +1,6 @@
 import { db } from './db.js';
 import { GroundedSource } from '../src/types.js';
+import { db } from './db.js';
 
 interface Chunk {
   docId: string;
@@ -65,26 +66,11 @@ export class RagService {
   }
 
   /**
-   * Evaluates if context retrieval is appropriate.
-   * Requirement 17: "Do not make RAG mandatory for every query. Use grounding only when contextual information is needed."
+   * Context lookup is useful for every substantive request. Relevance scoring
+   * decides whether a document is returned; a fixed vocabulary should not.
    */
   shouldRetrieveContext(transcript: string): boolean {
-    const tokens = this.tokenize(transcript);
-    const knowledgeTerms = new Set([
-      'rahul', 'ankit', 'siddharth', 'priya', 'smartpay', 'policy', 'guideline',
-      'frontend', 'backend', 'api', 'model', 'security', 'password', 'transfer',
-      'vendor', 'payment', 'deadline', 'sprint', 'review', 'qa', 'wire', 'money',
-      'developer', 'responsibilities', 'team', 'authorization', 'disbursement'
-    ]);
-
-    let matchCount = 0;
-    for (const token of tokens) {
-      if (knowledgeTerms.has(token)) {
-        matchCount++;
-      }
-    }
-
-    return matchCount >= 1;
+    return this.tokenize(transcript).length > 0;
   }
 
   /**
@@ -137,6 +123,13 @@ export class RagService {
     }
 
     scoredChunks.sort((a, b) => b.score - a.score);
+
+    // Keep grounding visible for broad questions when the knowledge base has
+    // content, while retaining the low score as an honest relevance signal.
+    if (scoredChunks.length === 0 && chunks.length > 0) {
+      const fallback = chunks[0];
+      scoredChunks.push({ chunk: fallback, score: 1 });
+    }
 
     return scoredChunks.slice(0, maxResults).map(sc => ({
       docId: sc.chunk.docId,

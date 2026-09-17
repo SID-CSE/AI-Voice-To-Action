@@ -6,7 +6,6 @@ interface VoiceRecorderProps {
   setTranscript: (text: string) => void;
   onAnalyze: (transcript: string) => void;
   isAnalyzing: boolean;
-  onTryDemo: () => void;
 }
 
 export const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
@@ -14,7 +13,6 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
   setTranscript,
   onAnalyze,
   isAnalyzing,
-  onTryDemo,
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -333,12 +331,6 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
         {!speechSupported && (
           <div className="mt-4 w-full max-w-lg p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-300 text-xs flex items-center justify-between">
             <span>Speech recognition not supported in this browser.</span>
-            <button
-              onClick={onTryDemo}
-              className="text-indigo-400 font-medium hover:underline text-xs"
-            >
-              Load Demo Audio Transcript
-            </button>
           </div>
         )}
       </div>
