@@ -1,22 +1,65 @@
 import React from 'react';
 import { Menu, ShieldCheck, Database, Sparkles } from 'lucide-react';
-import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
+import { SignInButton, SignUpButton, UserButton, useClerk, useUser } from '@clerk/clerk-react';
+import { LogOut } from 'lucide-react';
 
 const clerkEnabled = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
 
-const AccountControls: React.FC = () => {
+const ClerkStatusBadge: React.FC = () => {
   const { isSignedIn } = useUser();
+  return <span>{isSignedIn ? 'Clerk Auth' : 'Shared Demo'}</span>;
+};
 
-  if (isSignedIn) return <UserButton afterSignOutUrl="/" />;
+const PublicWorkspaceBanner: React.FC = () => (
+  <div className="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <p className="text-xs font-semibold text-white">You are using the shared Guest Demo</p>
+      <p className="text-[11px] text-slate-400">This public workspace contains sample data. Configure Clerk to enable private accounts.</p>
+    </div>
+    <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-200">Public data</span>
+  </div>
+);
+
+const WorkspaceBanner: React.FC = () => {
+  const { isSignedIn } = useUser();
+  const { signOut } = useClerk();
+
+  if (isSignedIn) {
+    return (
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold text-white">Private workspace active</p>
+          <p className="text-[11px] text-slate-400">Your tasks, analyses, and knowledge are isolated from the public demo.</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => signOut({ redirectUrl: '/' })}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition-colors hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-200"
+          >
+            <LogOut className="h-3.5 w-3.5" />
+            Log out
+          </button>
+          <UserButton afterSignOutUrl="/" />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="hidden sm:flex items-center gap-2">
-      <SignInButton mode="modal">
-        <button className="px-3 py-1.5 rounded-xl border border-slate-700 text-slate-300 text-xs hover:bg-slate-800">Sign in</button>
-      </SignInButton>
-      <SignUpButton mode="modal">
-        <button className="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-950 text-xs font-semibold hover:bg-white">Create account</button>
-      </SignUpButton>
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <p className="text-xs font-semibold text-white">You are using the shared Guest Demo</p>
+        <p className="text-[11px] text-slate-400">Sign in or create an account to keep your tasks, analyses, and knowledge private.</p>
+      </div>
+      <div className="flex items-center gap-2">
+        <SignInButton mode="modal">
+          <button type="button" className="px-3.5 py-2 rounded-xl border border-indigo-400/40 text-indigo-100 text-xs font-semibold hover:bg-indigo-500/10 transition-colors">Sign in</button>
+        </SignInButton>
+        <SignUpButton mode="modal">
+          <button type="button" className="px-4 py-2 rounded-xl bg-white text-slate-950 text-xs font-bold hover:bg-indigo-50 transition-colors shadow-lg shadow-indigo-950/20">Create account</button>
+        </SignUpButton>
+      </div>
     </div>
   );
 };
@@ -37,7 +80,8 @@ export const Header: React.FC<HeaderProps> = ({
   groundingEnabled = true,
 }) => {
   return (
-    <header className="h-16 border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between">
+    <>
+      <header className="h-16 border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <button
           id="open-mobile-menu-btn"
@@ -77,15 +121,14 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700/60 text-[11px] text-slate-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>Guest Demo</span>
+            <span className={`w-1.5 h-1.5 rounded-full ${clerkEnabled ? 'bg-indigo-400' : 'bg-emerald-400'}`} />
+            {clerkEnabled ? <ClerkStatusBadge /> : <span>Shared Demo</span>}
           </div>
         </div>
 
-        {clerkEnabled && <AccountControls />}
-
         <button
           id="global-try-demo-btn"
+          type="button"
           onClick={onTryDemo}
           className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-medium text-xs shadow-sm transition-all cursor-pointer"
         >
@@ -93,6 +136,12 @@ export const Header: React.FC<HeaderProps> = ({
           <span>Try Demo</span>
         </button>
       </div>
-    </header>
+      </header>
+      <div className="sticky top-16 z-20 border-b border-indigo-500/20 bg-indigo-950/90 px-4 py-3 backdrop-blur-xl sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          {clerkEnabled ? <WorkspaceBanner /> : <PublicWorkspaceBanner />}
+        </div>
+      </div>
+    </>
   );
 };

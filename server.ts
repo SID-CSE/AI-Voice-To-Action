@@ -34,7 +34,10 @@ export function createApp() {
 
   // JSON Body parsing
   app.use(express.json({ limit: '10mb' }));
-  if (process.env.CLERK_SECRET_KEY) {
+  const clerkPublishableKey = process.env.CLERK_PUBLISHABLE_KEY || process.env.VITE_CLERK_PUBLISHABLE_KEY;
+  const clerkConfigured = Boolean(process.env.CLERK_SECRET_KEY && clerkPublishableKey);
+  if (clerkConfigured) {
+    process.env.CLERK_PUBLISHABLE_KEY = clerkPublishableKey;
     app.use(clerkMiddleware());
   }
 
@@ -57,9 +60,12 @@ export function createApp() {
 
   app.use(async (req, res, next) => {
     await db.ready();
-    const userId = process.env.CLERK_SECRET_KEY ? getAuth(req).userId : null;
-    const scope = userId || 'guest';
-    await db.prepareScope(scope);
+    const auth = clerkConfigured ? getAuth(req) : null;
+    const scope = auth?.userId || 'guest';
+    const displayName = typeof auth?.sessionClaims?.name === 'string'
+      ? auth.sessionClaims.name
+      : 'your workspace';
+    await db.prepareScope(scope, displayName);
     db.runWithScope(scope, next);
   });
 
@@ -173,17 +179,11 @@ export function createApp() {
         db.saveTasks(refined.tasks);
       }
 
-      // If auditId exists, log the user edits
       if (auditId) {
-        const logs = db.getAuditLogs();
-        const existingLog = logs.find(l => l.id === auditId);
-        if (existingLog) {
-          existingLog.userEdits = refined;
-          existingLog.finalOutput = refined;
-        }
+        db.updateAuditOutput(auditId, refined);
       }
 
-      res.json({ refinedOutput: refined });
+      res.json({ refinedOutput: refined, auditId });
     } catch (err: any) {
       console.error('Refinement error:', err);
       res.status(500).json({ error: 'Unable to refine this result right now.' });
@@ -274,6 +274,10 @@ export function createApp() {
     res.json(BENCHMARK_TEST_CASES);
   });
 
+  app.get('/api/evaluations', (req, res) => {
+    res.json(db.getEvaluations());
+  });
+
   app.post('/api/evaluate', async (req, res) => {
     try {
       const { testCaseId } = req.body;
@@ -337,6 +341,7 @@ export function createApp() {
         comparisonNotes: notes.length > 0 ? notes : ['Both workflows extracted the primary tasks.'],
       };
 
+      db.saveEvaluation(evalResult);
       res.json(evalResult);
     } catch (err: any) {
       console.error('Evaluation error:', err);
@@ -467,8 +472,11 @@ export function createApp() {
   });
 
   app.post('/api/knowledge/search', (req, res) => {
-    const { query } = req.body;
+    const query = typeof req.body?.query === 'string' ? req.body.query.trim() : '';
     if (!query) return res.json([]);
+    if (query.length > 500) {
+      return res.status(400).json({ error: 'Search queries must be 500 characters or fewer.' });
+    }
     const matches = ragService.retrieveContext(query, 5);
     res.json(matches);
   });

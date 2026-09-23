@@ -1,6 +1,5 @@
 import { db } from './db.js';
 import { GroundedSource } from '../src/types.js';
-import { db } from './db.js';
 
 interface Chunk {
   docId: string;

@@ -51,6 +51,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       <aside
         id="app-sidebar"
+        aria-label="Primary navigation"
         className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
@@ -88,6 +89,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <button
                 key={item.id}
                 id={`nav-${item.id}`}
+                type="button"
+                aria-current={isActive ? 'page' : undefined}
                 onClick={() => {
                   setCurrentTab(item.id);
                   setMobileOpen(false);
