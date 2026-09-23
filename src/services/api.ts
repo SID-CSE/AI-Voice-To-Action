@@ -76,7 +76,7 @@ export const api = {
     }
 
     const dataRes = await res.json();
-    return { output: dataRes.refinedOutput, auditId: data.auditId };
+    return { output: dataRes.refinedOutput, auditId: dataRes.auditId || data.auditId };
   },
 
   async refineAnalysis(currentOutput: AIAnalysisOutput, userGuidance: string, auditId?: string) {
@@ -139,6 +139,11 @@ export const api = {
 
   async runEvaluation(testCaseId: string): Promise<EvalResult> {
     return this.evaluate({ testCaseId });
+  },
+
+  async getEvaluations(): Promise<EvalResult[]> {
+    const res = await fetch(`${BASE_URL}/evaluations`);
+    return res.json();
   },
 
   async getTasks(): Promise<(StructuredTask & { createdAt?: string; updatedAt?: string })[]> {
@@ -275,6 +280,10 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query }),
     });
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ error: 'Knowledge search failed' }));
+      throw new Error(error.error || 'Knowledge search failed');
+    }
     return res.json();
   },
 

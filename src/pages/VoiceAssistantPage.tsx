@@ -102,19 +102,42 @@ export const VoiceAssistantPage: React.FC<VoiceAssistantPageProps> = ({
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Page Header */}
-      <div className="space-y-1">
-        <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-          AI Voice-to-Action Assistant
-        </h2>
-        <p className="text-xs sm:text-sm text-slate-400">
-          Turn spoken instructions and meeting discussions into structured, actionable tasks.
-        </p>
-      </div>
+      <section className="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-950/80 via-slate-900 to-violet-950/50 p-5 sm:p-7 shadow-2xl shadow-indigo-950/20">
+        <div className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-indigo-500/15 blur-3xl" />
+        <div className="absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-violet-500/10 blur-3xl" />
+        <div className="relative space-y-4">
+          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-400/25 bg-indigo-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-200">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+            Public demo workspace
+          </div>
+          <div className="max-w-2xl space-y-2">
+            <h2 className="font-display text-2xl font-bold tracking-tight text-white sm:text-4xl">
+              Turn conversations into momentum.
+            </h2>
+            <p className="max-w-xl text-sm leading-6 text-indigo-100/70 sm:text-base">
+              Speak naturally or paste a meeting note. Get grounded tasks, clear owners, realistic deadlines, and safety checks in seconds.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2 text-[11px] font-medium text-slate-200">
+            {['Voice or text input', 'Grounded team context', 'Human approval for risky actions'].map((feature) => (
+              <span key={feature} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
+                {feature}
+              </span>
+            ))}
+          </div>
+          <p className="text-[11px] text-indigo-100/55">
+            This demo starts with shared sample data. Sign in or create an account to keep your own tasks and knowledge private.
+          </p>
+        </div>
+      </section>
 
       {/* Input Mode Tabs (Section 6) */}
-      <div className="flex border-b border-slate-800 gap-6">
+      <div className="flex border-b border-slate-800 gap-6" role="tablist" aria-label="Assistant input mode">
         <button
           id="tab-voice-mode"
+          type="button"
+          role="tab"
+          aria-selected={currentTabInput === 'voice'}
           onClick={() => setCurrentTabInput('voice')}
           className={`pb-3 text-xs sm:text-sm font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
             currentTabInput === 'voice'
@@ -123,10 +146,13 @@ export const VoiceAssistantPage: React.FC<VoiceAssistantPageProps> = ({
           }`}
         >
           <Mic className="w-4 h-4" />
-          <span>TAB 1: Voice Input</span>
+          <span>Voice Input</span>
         </button>
         <button
           id="tab-text-mode"
+          type="button"
+          role="tab"
+          aria-selected={currentTabInput === 'text'}
           onClick={() => setCurrentTabInput('text')}
           className={`pb-3 text-xs sm:text-sm font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
             currentTabInput === 'text'
@@ -135,13 +161,13 @@ export const VoiceAssistantPage: React.FC<VoiceAssistantPageProps> = ({
           }`}
         >
           <FileText className="w-4 h-4" />
-          <span>TAB 2: Text Input</span>
+          <span>Text Input</span>
         </button>
       </div>
 
       {/* Input Validation Error Banner (Section 9) */}
       {validationError && (
-        <div className="p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/60 text-amber-300 text-xs flex items-center gap-2">
+        <div role="alert" className="p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/60 text-amber-300 text-xs flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
           <span>{validationError}</span>
         </div>
@@ -235,7 +261,7 @@ export const VoiceAssistantPage: React.FC<VoiceAssistantPageProps> = ({
       )}
 
       {analysisError && (
-        <div className="p-3.5 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs flex items-center gap-2">
+        <div role="alert" className="p-3.5 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
           <span>{analysisError}</span>
         </div>

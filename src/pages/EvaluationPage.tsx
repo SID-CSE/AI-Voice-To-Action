@@ -46,19 +46,17 @@ export const EvaluationPage: React.FC<EvaluationPageProps> = ({
 
   // Compute aggregate statistics
   const evaluatedCount = Object.keys(evalResults).length;
+  const evaluationValues = Object.values(evalResults) as EvalResult[];
+  const overallScore = (metrics?: EvalResult['reactMetrics']): number => {
+    if (!metrics) return 0;
+    return (metrics.taskExtractionAccuracy + metrics.ownerAssignmentAccuracy + metrics.deadlineExtraction) / 3;
+  };
   const avgReActScore = evaluatedCount > 0
-    ? Math.round(
-        (Object.values(evalResults) as EvalResult[]).reduce((acc: number, r: EvalResult) => acc + (r.reactMetrics?.taskExtractionAccuracy || 88), 0) /
-          evaluatedCount
-      )
-    : 92;
-
+    ? Math.round(evaluationValues.reduce((acc, result) => acc + overallScore(result.reactMetrics), 0) / evaluatedCount)
+    : null;
   const avgBaselineScore = evaluatedCount > 0
-    ? Math.round(
-        (Object.values(evalResults) as EvalResult[]).reduce((acc: number, r: EvalResult) => acc + (r.baselineMetrics?.taskExtractionAccuracy || 60), 0) /
-          evaluatedCount
-      )
-    : 64;
+    ? Math.round(evaluationValues.reduce((acc, result) => acc + overallScore(result.baselineMetrics), 0) / evaluatedCount)
+    : null;
 
   return (
     <div className="space-y-6">
@@ -96,22 +94,22 @@ export const EvaluationPage: React.FC<EvaluationPageProps> = ({
       {/* Aggregate Scorecards (Section 20) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
-          <span className="text-xs font-semibold text-slate-400">Production ReAct Accuracy</span>
+          <span className="text-xs font-semibold text-slate-400">Overall ReAct Accuracy</span>
           <div className="text-3xl font-bold text-emerald-400 font-mono">
-            {avgReActScore}%
+            {avgReActScore === null ? '—' : `${avgReActScore}%`}
           </div>
           <p className="text-[11px] text-slate-500">
-            With RAG context & multi-step validation
+            Average of task, owner, and deadline accuracy
           </p>
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
-          <span className="text-xs font-semibold text-slate-400">Baseline Prompt Accuracy</span>
+          <span className="text-xs font-semibold text-slate-400">Overall Baseline Accuracy</span>
           <div className="text-3xl font-bold text-slate-400 font-mono">
-            {avgBaselineScore}%
+            {avgBaselineScore === null ? '—' : `${avgBaselineScore}%`}
           </div>
           <p className="text-[11px] text-slate-500">
-            Raw one-shot extraction without guardrails
+            Raw one-shot comparison across completed cases
           </p>
         </div>
 
@@ -121,7 +119,7 @@ export const EvaluationPage: React.FC<EvaluationPageProps> = ({
             100%
           </div>
           <p className="text-[11px] text-indigo-200/70">
-            Zero consequential actions executed unconfirmed
+            {evaluatedCount === 0 ? 'Run the suite to calculate accuracy' : `${evaluatedCount} private case${evaluatedCount === 1 ? '' : 's'} completed`}
           </p>
         </div>
       </div>

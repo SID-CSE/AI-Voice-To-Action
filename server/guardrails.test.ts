@@ -3,7 +3,8 @@ import test from 'node:test';
 import { guardrails } from './guardrails.js';
 
 test('rejects empty and very short input', () => {
-  assert.equal(guardrails.validateInput(''), false);
+  assert.equal(guardrails.validateInput('').valid, false);
+  assert.equal(guardrails.validateInput('').code, 'EMPTY_INPUT');
   assert.equal(guardrails.validateInput('hi').code, 'TOO_SHORT');
 });
 

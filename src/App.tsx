@@ -21,7 +21,7 @@ import {
 } from './types';
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<string>('dashboard');
+  const [currentTab, setCurrentTab] = useState<string>('assistant');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [apiConnected, setApiConnected] = useState(false);
 
@@ -54,12 +54,13 @@ export default function App() {
   // Load initial data from backend
   const refreshAllData = useCallback(async () => {
     try {
-      const [tasksRes, logsRes, analysesRes, docsRes, evalCasesRes, settingsRes, healthRes] = await Promise.all([
+      const [tasksRes, logsRes, analysesRes, docsRes, evalCasesRes, evalResultsRes, settingsRes, healthRes] = await Promise.all([
         api.getTasks().catch(() => []),
         api.getAuditLogs().catch(() => []),
         api.getAnalyses().catch(() => []),
         api.getDocuments().catch(() => []),
         api.getEvaluationTestCases().catch(() => []),
+        api.getEvaluations().catch(() => []),
         api.getSettings().catch(() => settings),
         api.getHealth().catch(() => null),
       ]);
@@ -69,6 +70,7 @@ export default function App() {
       setRecentAnalyses(analysesRes);
       setDocuments(docsRes);
       setEvalTestCases(evalCasesRes);
+      setEvalResults(Object.fromEntries(evalResultsRes.map((result) => [result.id, result])));
       setSettings(settingsRes);
       setApiConnected(healthRes?.apiConnected === true);
     } catch (err) {

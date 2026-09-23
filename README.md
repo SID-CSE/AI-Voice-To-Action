@@ -319,26 +319,34 @@ flowchart TD
 
 ## Environment Variables
 
+Use `.env` for local development and configure the same values in the hosting provider's encrypted environment settings for deployment. Never commit `.env` or place server secrets in frontend code.
+
 ```env
+# Browser-visible Clerk publishable key and server-only Clerk secret
 VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 CLERK_SECRET_KEY=your_clerk_secret_key
+
+# Server-only AI, database, and file storage credentials
 GEMINI_API_KEY=your_gemini_api_key
 DATABASE_URL=your_neon_pooled_connection_string
 BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 
-# Local fallback only
+# Local development settings
+PORT=3000
+NODE_ENV=development
 DATA_DIR=./data
 DB_FILE=./data/store.json
 ```
 
 Configuration behavior:
 
-- No Clerk keys: shared guest demo scope.
-- Clerk keys enabled: verified user-specific Neon scopes.
-- No `DATABASE_URL`: local JSON persistence.
-- `DATABASE_URL` enabled: hosted Neon persistence.
+- No Clerk keys: automatic guest mode is enabled.
+- Clerk keys enabled: sign-in/sign-up controls and authenticated user scopes are enabled.
+- No `DATABASE_URL`: local JSON persistence is used.
+- `DATABASE_URL` enabled: hosted Neon persistence is used.
 - No `BLOB_READ_WRITE_TOKEN`: manual text documents still work, but hosted uploads fail safely.
 - No `GEMINI_API_KEY`: the safe heuristic analyzer keeps the demo usable.
+- Uploaded Blob files currently use public Blob URLs; do not upload confidential documents without adding private access controls.
 
 ## Database Design
 

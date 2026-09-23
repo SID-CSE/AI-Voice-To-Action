@@ -1,5 +1,4 @@
 import fs from 'fs';
-import fs from 'fs';
 import path from 'path';
 import { neon } from '@neondatabase/serverless';
 import { AsyncLocalStorage } from 'node:async_hooks';
@@ -8,7 +7,8 @@ import {
   AuditRecord, 
   KnowledgeDocument, 
   AppSettings, 
-  AIAnalysisOutput 
+  AIAnalysisOutput,
+  EvalResult
 } from '../src/types.js';
 
 interface DatabaseSchema {
@@ -21,6 +21,7 @@ interface DatabaseSchema {
     output: AIAnalysisOutput;
   }[];
   auditLogs: AuditRecord[];
+  evaluations: EvalResult[];
   knowledgeDocuments: KnowledgeDocument[];
   settings: AppSettings;
 }
@@ -38,6 +39,48 @@ const INITIAL_SETTINGS: AppSettings = {
   defaultWorkflow: 'react',
   demoModeEnabled: true,
 };
+
+const DEMO_TASKS: (StructuredTask & { createdAt: string; updatedAt: string })[] = [
+  {
+    id: 'demo-task-frontend',
+    task: 'Complete the frontend dashboard',
+    owner: 'Rahul Sharma',
+    deadline: 'Friday',
+    priority: 'High',
+    dependencies: [],
+    confidence: 96,
+    evidence: 'Rahul will complete the frontend dashboard by Friday.',
+    status: 'Pending',
+    createdAt: '2025-01-15T09:00:00.000Z',
+    updatedAt: '2025-01-15T09:00:00.000Z',
+  },
+  {
+    id: 'demo-task-api',
+    task: 'Complete the backend API',
+    owner: 'Ankit Verma',
+    deadline: 'Monday',
+    priority: 'High',
+    dependencies: [],
+    confidence: 94,
+    evidence: 'Ankit will finish the backend API by Monday.',
+    status: 'In Progress',
+    createdAt: '2025-01-15T09:00:00.000Z',
+    updatedAt: '2025-01-15T09:00:00.000Z',
+  },
+  {
+    id: 'demo-task-evaluation',
+    task: 'Run the responsible AI evaluation suite',
+    owner: 'Siddharth Kumar',
+    deadline: 'Next Tuesday',
+    priority: 'Medium',
+    dependencies: ['demo-task-frontend', 'demo-task-api'],
+    confidence: 90,
+    evidence: 'The team will review the complete system next Tuesday.',
+    status: 'Pending',
+    createdAt: '2025-01-15T09:00:00.000Z',
+    updatedAt: '2025-01-15T09:00:00.000Z',
+  },
+];
 
 const INITIAL_KNOWLEDGE: KnowledgeDocument[] = [
   {
@@ -100,9 +143,10 @@ class DatabaseService {
 
   constructor() {
     this.defaultData = {
-      tasks: [],
+      tasks: DEMO_TASKS.map(task => ({ ...task })),
       analyses: [],
       auditLogs: [],
+      evaluations: [],
       knowledgeDocuments: INITIAL_KNOWLEDGE,
       settings: INITIAL_SETTINGS,
     };
@@ -113,31 +157,48 @@ class DatabaseService {
     await this.readyPromise;
   }
 
-  async prepareScope(scope: string): Promise<void> {
+  async prepareScope(scope: string, displayName = 'your workspace'): Promise<void> {
     if (!hostedSql || this.scopedData.has(scope)) return;
+    const safeName = displayName.trim().slice(0, 80) || 'your workspace';
     await scopeStorage.run(scope, async () => {
       await hostedSql`CREATE TABLE IF NOT EXISTS app_state (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
       const rows = await hostedSql`SELECT data FROM app_state WHERE id = ${scope}`;
       if (rows.length > 0) {
         const parsed = rows[0].data as Partial<DatabaseSchema>;
         this.data = {
-          tasks: parsed.tasks || [],
-          analyses: parsed.analyses || [],
-          auditLogs: parsed.auditLogs || [],
-          knowledgeDocuments: parsed.knowledgeDocuments?.length ? parsed.knowledgeDocuments : INITIAL_KNOWLEDGE,
+          tasks: scope === 'guest' ? (parsed.tasks || []) : [],
+          analyses: scope === 'guest' ? (parsed.analyses || []) : [],
+          auditLogs: scope === 'guest' ? (parsed.auditLogs || []) : [],
+          evaluations: scope === 'guest' ? (parsed.evaluations || []) : [],
+          knowledgeDocuments: scope === 'guest'
+            ? (parsed.knowledgeDocuments?.length ? parsed.knowledgeDocuments : INITIAL_KNOWLEDGE)
+            : this.getPersonalKnowledge(safeName),
           settings: { ...INITIAL_SETTINGS, ...(parsed.settings || {}) },
         };
       } else {
         this.data = {
-          tasks: [],
+          tasks: scope === 'guest' ? DEMO_TASKS.map(task => ({ ...task })) : [],
           analyses: [],
           auditLogs: [],
-          knowledgeDocuments: INITIAL_KNOWLEDGE,
+          evaluations: [],
+          knowledgeDocuments: scope === 'guest' ? INITIAL_KNOWLEDGE : this.getPersonalKnowledge(safeName),
           settings: INITIAL_SETTINGS,
         };
-        await this.persistHosted();
       }
+      await this.persistHosted();
     });
+  }
+
+  private getPersonalKnowledge(displayName: string): KnowledgeDocument[] {
+    return [{
+      id: 'doc-personal-demo',
+      title: `${displayName}'s demo context.txt`,
+      category: 'Personal Demo',
+      content: `${displayName}'s private demo context: Use this document to test grounded retrieval. Frontend questions should be routed to Rahul Sharma, backend questions to Ankit Verma, and AI evaluation questions to Siddharth Kumar.`,
+      tags: ['demo', 'grounding', 'personal'],
+      createdAt: '2025-01-15T09:00:00.000Z',
+      updatedAt: '2025-01-15T09:00:00.000Z',
+    }];
   }
 
   runWithScope(scope: string, next: () => void): void {
@@ -159,6 +220,7 @@ class DatabaseService {
             tasks: parsed.tasks || [],
             analyses: parsed.analyses || [],
             auditLogs: parsed.auditLogs || [],
+            evaluations: parsed.evaluations || [],
             knowledgeDocuments: parsed.knowledgeDocuments && parsed.knowledgeDocuments.length > 0
               ? parsed.knowledgeDocuments
               : INITIAL_KNOWLEDGE,
@@ -186,6 +248,7 @@ class DatabaseService {
           tasks: parsed.tasks || [],
           analyses: parsed.analyses || [],
           auditLogs: parsed.auditLogs || [],
+          evaluations: parsed.evaluations || [],
           knowledgeDocuments: parsed.knowledgeDocuments && parsed.knowledgeDocuments.length > 0 
             ? parsed.knowledgeDocuments 
             : INITIAL_KNOWLEDGE,
@@ -207,6 +270,7 @@ class DatabaseService {
         tasks: [],
         analyses: [],
         auditLogs: [],
+        evaluations: [],
         knowledgeDocuments: INITIAL_KNOWLEDGE,
         settings: INITIAL_SETTINGS,
       };
@@ -344,6 +408,15 @@ class DatabaseService {
     return record;
   }
 
+  updateAuditOutput(id: string, output: AIAnalysisOutput): AuditRecord | null {
+    const log = this.data.auditLogs.find(l => l.id === id);
+    if (!log) return null;
+    log.userEdits = output;
+    log.finalOutput = output;
+    this.persist();
+    return log;
+  }
+
   updateAuditConfirmation(id: string, confirmationStatus: 'CONFIRMED' | 'CANCELLED', executionNote?: string) {
     const log = this.data.auditLogs.find(l => l.id === id);
     if (log) {
@@ -393,6 +466,17 @@ class DatabaseService {
     return deleted;
   }
 
+  getEvaluations(): EvalResult[] {
+    return [...this.data.evaluations];
+  }
+
+  saveEvaluation(result: EvalResult): EvalResult {
+    if (scopeStorage.getStore() === 'guest') return result;
+    this.data.evaluations = [result, ...this.data.evaluations.filter(item => item.id !== result.id)].slice(0, 50);
+    this.persist();
+    return result;
+  }
+
   // Settings
   getSettings(): AppSettings {
     return { ...this.data.settings };
@@ -409,11 +493,13 @@ class DatabaseService {
 
   // Reset to initial seed state
   resetData(): void {
+    const isGuestScope = scopeStorage.getStore() === 'guest' || !scopeStorage.getStore();
     this.data = {
-      tasks: [],
+      tasks: isGuestScope ? DEMO_TASKS.map(task => ({ ...task })) : [],
       analyses: [],
       auditLogs: [],
-      knowledgeDocuments: INITIAL_KNOWLEDGE,
+      evaluations: [],
+      knowledgeDocuments: isGuestScope ? INITIAL_KNOWLEDGE : this.getPersonalKnowledge('your workspace'),
       settings: INITIAL_SETTINGS,
     };
     this.persist();
