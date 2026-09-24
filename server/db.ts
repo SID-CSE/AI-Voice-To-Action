@@ -158,8 +158,23 @@ class DatabaseService {
   }
 
   async prepareScope(scope: string, displayName = 'your workspace'): Promise<void> {
-    if (!hostedSql || this.scopedData.has(scope)) return;
+    if (this.scopedData.has(scope)) return;
     const safeName = displayName.trim().slice(0, 80) || 'your workspace';
+
+    if (!hostedSql) {
+      this.scopedData.set(scope, scope === 'guest'
+        ? this.defaultData
+        : {
+            tasks: [],
+            analyses: [],
+            auditLogs: [],
+            evaluations: [],
+            knowledgeDocuments: this.getPersonalKnowledge(safeName),
+            settings: { ...INITIAL_SETTINGS },
+          });
+      return;
+    }
+
     await scopeStorage.run(scope, async () => {
       await hostedSql`CREATE TABLE IF NOT EXISTS app_state (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
       const rows = await hostedSql`SELECT data FROM app_state WHERE id = ${scope}`;
@@ -245,7 +260,7 @@ class DatabaseService {
         const fileContent = fs.readFileSync(DB_FILE, 'utf-8');
         const parsed = JSON.parse(fileContent);
         this.data = {
-          tasks: parsed.tasks || [],
+          tasks: parsed.tasks && parsed.tasks.length > 0 ? parsed.tasks : DEMO_TASKS.map(task => ({ ...task })),
           analyses: parsed.analyses || [],
           auditLogs: parsed.auditLogs || [],
           evaluations: parsed.evaluations || [],

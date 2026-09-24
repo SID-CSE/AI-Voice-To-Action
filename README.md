@@ -1,6 +1,6 @@
-# AI Voice-to-Action Assistant
+# ActionFlow AI
 
-> A responsible AI workspace that converts voice notes and meeting transcripts into structured, explainable, and auditable tasks using Gemini, RAG grounding, deterministic safety guardrails, Clerk identity scopes, Neon persistence, Vercel Blob uploads, and Vercel serverless deployment.
+> ReAct Productivity Agent that turns conversations into accountable action with grounded AI, deterministic safety guardrails, human review, and complete auditability.
 
 ---
 
@@ -410,9 +410,27 @@ erDiagram
 npm run lint
 npm test
 npm run build:client
+npm run build
 ```
 
-The test suite currently covers input validation, financial risk detection, external communication detection, and routine planning behavior. The next testing milestone is browser end-to-end coverage for voice fallback, uploads, sign-in, and confirmation flows.
+The automated suite covers input validation, financial risk detection, external communication detection, routine planning behavior, and authenticated-scope isolation. The production build compiles both the Vite client and Express server bundle.
+
+### Deployment Readiness Verification
+
+Last verified locally on 2026-09-24:
+
+| Check | Result | Notes |
+| :--- | :---: | :--- |
+| TypeScript check (`npm run lint`) | PASS | No compiler errors. |
+| Automated tests (`npm test`) | PASS | 5 tests passed. |
+| Production build (`npm run build`) | PASS | Client and server bundle compile successfully. |
+| Development startup | PASS | React SPA and API start on port 3000. |
+| API smoke checks | PASS | Health, tasks, knowledge, and evaluation-case routes responded successfully. |
+| Guest/private scope isolation | PASS | Authenticated scopes start without guest tasks or public documents. |
+| Browser end-to-end tests | NOT RUN | No Playwright suite is configured in this repository. |
+| Real Clerk/Neon/Blob deployment | NOT RUN | Requires production credentials and hosted services. |
+
+The application is **code-ready for deployment**, but a production release still requires the environment variables in the deployment section, a live Neon database, configured Clerk keys for private accounts, and a manual or Playwright browser pass covering sign-in, uploads, voice fallback, and confirmation flows. Docker was not available during local verification, so container-based integration testing was not performed.
 
 ## Limitations and Roadmap
 
