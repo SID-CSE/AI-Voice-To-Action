@@ -8,6 +8,7 @@ import { KnowledgeBasePage } from './pages/KnowledgeBasePage';
 import { AuditLogsPage } from './pages/AuditLogsPage';
 import { EvaluationPage } from './pages/EvaluationPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { CommandPalette } from './components/CommandPalette';
 import { api } from './services/api';
 import { 
   StructuredTask, 
@@ -24,6 +25,8 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState<string>('assistant');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [apiConnected, setApiConnected] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light' | 'system'>(() => (localStorage.getItem('actionflow-theme') as 'dark' | 'light' | 'system') || 'system');
 
   // Voice Assistant input state
   const [currentTabInput, setCurrentTabInput] = useState<'voice' | 'text'>('voice');
@@ -82,6 +85,30 @@ export default function App() {
   useEffect(() => {
     refreshAllData();
   }, [refreshAllData]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const applyTheme = () => {
+      document.documentElement.dataset.theme = theme === 'system' ? (mediaQuery.matches ? 'dark' : 'light') : theme;
+    };
+    applyTheme();
+    localStorage.setItem('actionflow-theme', theme);
+    mediaQuery.addEventListener('change', applyTheme);
+    return () => mediaQuery.removeEventListener('change', applyTheme);
+  }, [theme]);
+
+  const cycleTheme = () => setTheme((current) => current === 'dark' ? 'light' : current === 'light' ? 'system' : 'dark');
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setCommandPaletteOpen(true);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   const handleClearAuditLogs = async () => {
     await api.clearAuditLogs();
@@ -368,11 +395,11 @@ export default function App() {
   const getPageTitle = () => {
     switch (currentTab) {
       case 'dashboard':
-        return 'System Overview';
+        return 'Dashboard';
       case 'assistant':
-        return 'Voice & Text Assistant';
+        return 'Voice Assistant';
       case 'tasks':
-        return 'Tasks Dashboard';
+        return 'Tasks';
       case 'knowledge':
         return 'Knowledge Base';
       case 'audit':
@@ -380,14 +407,14 @@ export default function App() {
       case 'evaluation':
         return 'Evaluation';
       case 'settings':
-        return 'System Settings';
+        return 'Settings';
       default:
         return 'AI Voice-to-Action Assistant';
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="app-shell min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
       {/* Sidebar Navigation */}
       <Sidebar
         currentTab={currentTab}
@@ -396,6 +423,9 @@ export default function App() {
         setMobileOpen={setMobileOpen}
         apiConnected={apiConnected}
         modelName={settings.modelName || settings.model || 'standard'}
+        onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+        theme={theme}
+        onToggleTheme={cycleTheme}
       />
 
       {/* Main Content Area */}
@@ -406,6 +436,11 @@ export default function App() {
           title={getPageTitle()}
           subtitle="Turn conversations into clear, reviewable work"
           groundingEnabled={settings.groundingEnabled}
+          onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+          theme={theme}
+          onToggleTheme={cycleTheme}
+          pendingNotifications={pendingConfCount}
+          onOpenNotifications={() => setCurrentTab('audit')}
         />
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
@@ -419,6 +454,8 @@ export default function App() {
                 pendingConfirmation: pendingConfCount,
                 totalAnalyses: recentAnalyses.length,
                 totalAuditRecords: auditLogs.length,
+                knowledgeSources: documents.length,
+                highRiskActions: auditLogs.filter((log) => log.riskLevel === 'HIGH').length,
               }}
               recentAnalyses={recentAnalyses}
               onNavigateToVoice={() => {
@@ -522,6 +559,15 @@ export default function App() {
           )}
         </main>
       </div>
+      <CommandPalette
+        open={commandPaletteOpen}
+        onClose={() => setCommandPaletteOpen(false)}
+        onNavigate={(tab) => { setCurrentTab(tab); setMobileOpen(false); }}
+        onStartVoice={() => { setCurrentTab('assistant'); setCurrentTabInput('voice'); }}
+        tasks={tasks}
+        documents={documents}
+        auditLogs={auditLogs}
+      />
     </div>
   );
 }

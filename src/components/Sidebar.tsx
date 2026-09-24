@@ -8,9 +8,12 @@ import {
   GitCompare,
   Cpu,
   Wifi,
-  Settings, 
-  X
+  Settings,
+  X,
+  Sun,
+  Moon
 } from 'lucide-react';
+import { Command } from 'lucide-react';
 
 interface SidebarProps {
   currentTab: string;
@@ -19,6 +22,9 @@ interface SidebarProps {
   setMobileOpen: (open: boolean) => void;
   apiConnected: boolean;
   modelName: string;
+  onOpenCommandPalette: () => void;
+  theme: 'dark' | 'light' | 'system';
+  onToggleTheme: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -28,6 +34,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setMobileOpen,
   apiConnected,
   modelName,
+  onOpenCommandPalette,
+  theme,
+  onToggleTheme,
 }) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -64,9 +73,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-white text-sm tracking-tight">AI Voice-to-Action</span>
+                <span className="font-bold text-white text-sm tracking-tight">ActionFlow AI</span>
               </div>
-              <p className="text-[11px] text-slate-400 font-medium">Productivity Assistant</p>
+              <p className="text-[11px] text-slate-400 font-medium">ReAct Productivity Agent</p>
             </div>
           </div>
 
@@ -116,6 +125,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
           })}
         </nav>
 
+        <button type="button" onClick={onOpenCommandPalette} className="mx-3 mb-3 flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/70 px-3 py-2 text-[11px] text-slate-400 hover:border-indigo-500/50 hover:text-slate-200">
+          <span className="flex items-center gap-2"><Command className="h-3.5 w-3.5 text-indigo-400" />Search workspace</span>
+          <kbd className="rounded border border-slate-700 px-1.5 py-0.5 text-[9px]">Ctrl K</kbd>
+        </button>
+
         <div className="p-3 border-t border-slate-800/80 bg-slate-950/40">
           <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] space-y-1.5">
             <div className="flex items-center justify-between text-slate-400">
@@ -129,6 +143,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="flex items-center justify-between text-slate-500 pt-1 border-t border-slate-800/60 text-[10px]">
               <span>System Version</span><span className="font-mono">v1.0.0</span>
             </div>
+            <button type="button" onClick={onToggleTheme} className="flex w-full items-center justify-between border-t border-slate-800/60 pt-2 text-[10px] text-slate-400 hover:text-white">
+              <span>Appearance</span><span className="flex items-center gap-1.5">{theme[0].toUpperCase() + theme.slice(1)} {theme === 'dark' ? <Sun className="h-3 w-3" /> : <Moon className="h-3 w-3" />}</span>
+            </button>
           </div>
         </div>
       </aside>

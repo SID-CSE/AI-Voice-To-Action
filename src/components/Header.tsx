@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, ShieldCheck, Database, Sparkles } from 'lucide-react';
+import { Menu, ShieldCheck, Database, Sparkles, Search, Sun, Moon, Bell } from 'lucide-react';
 import { SignInButton, SignUpButton, UserButton, useClerk, useUser } from '@clerk/clerk-react';
 import { LogOut } from 'lucide-react';
 
@@ -35,7 +35,7 @@ const WorkspaceBanner: React.FC = () => {
           <button
             type="button"
             onClick={() => signOut({ redirectUrl: '/' })}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition-colors hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-200"
+            className="light-theme-logout inline-flex items-center gap-1.5 rounded-xl border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition-colors hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-200"
           >
             <LogOut className="h-3.5 w-3.5" />
             Log out
@@ -70,6 +70,11 @@ interface HeaderProps {
   title: string;
   subtitle?: string;
   groundingEnabled?: boolean;
+  onOpenCommandPalette: () => void;
+  theme: 'dark' | 'light' | 'system';
+  onToggleTheme: () => void;
+  pendingNotifications: number;
+  onOpenNotifications: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -78,6 +83,11 @@ export const Header: React.FC<HeaderProps> = ({
   title,
   subtitle,
   groundingEnabled = true,
+  onOpenCommandPalette,
+  theme,
+  onToggleTheme,
+  pendingNotifications,
+  onOpenNotifications,
 }) => {
   return (
     <>
@@ -103,7 +113,10 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button type="button" onClick={onOpenCommandPalette} className="hidden h-9 w-48 items-center gap-2 rounded-xl border border-slate-800 bg-slate-950/50 px-3 text-left text-[11px] text-slate-500 transition-colors hover:border-indigo-500/50 hover:text-slate-300 md:flex" aria-label="Open command palette">
+            <Search className="h-3.5 w-3.5 text-indigo-400" /><span className="flex-1">Search workspace</span><kbd className="rounded border border-slate-700 px-1 py-0.5 text-[9px]">Ctrl K</kbd>
+          </button>
         {/* Guardrail & Grounding Badges */}
         <div className="hidden md:flex items-center gap-2">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700/60 text-[11px] text-slate-300">
@@ -126,6 +139,13 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
+        <button type="button" onClick={onToggleTheme} className="hidden rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white sm:block" aria-label="Cycle dark, light, and system theme" title={`Theme: ${theme}`}>
+          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </button>
+        <button type="button" onClick={onOpenNotifications} className="relative rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white" aria-label={`${pendingNotifications} notifications`} title="Open audit activity">
+          <Bell className="h-4 w-4" />
+          {pendingNotifications > 0 && <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-amber-400" />}
+        </button>
         <button
           id="global-try-demo-btn"
           type="button"

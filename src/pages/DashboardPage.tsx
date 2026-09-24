@@ -25,6 +25,8 @@ interface DashboardProps {
     pendingConfirmation: number;
     totalAnalyses: number;
     totalAuditRecords: number;
+    knowledgeSources: number;
+    highRiskActions: number;
   };
   recentAnalyses: any[];
   onNavigateToVoice: () => void;
@@ -55,18 +57,27 @@ export const DashboardPage: React.FC<DashboardProps> = ({
 
   return (
     <div className="space-y-6">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-indigo-400">Workspace pulse</p>
+          <h2 className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">Turn conversations into accountable work.</h2>
+          <p className="mt-1 max-w-2xl text-sm text-slate-400">A live view of the tasks, grounding sources, and human reviews moving through ActionFlow AI.</p>
+        </div>
+        <div className="hidden items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/5 px-3 py-1.5 text-[11px] text-emerald-300 sm:flex"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />Workspace protected by guardrails</div>
+      </div>
+
       {/* Metric Cards (Section 5) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-6">
         <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
           <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-semibold">Total Tasks</span>
+            <span className="text-xs font-semibold">Open Tasks</span>
             <CheckSquare className="w-4 h-4 text-indigo-400" />
           </div>
           <div className="text-2xl sm:text-3xl font-bold text-white font-mono">
             {stats.totalTasks}
           </div>
           <div className="text-[11px] text-slate-500 mt-1">
-            Across all conversations
+            {stats.totalTasks === 0 ? 'No data yet' : `${stats.pendingTasks + stats.inProgressTasks} need attention`}
           </div>
         </div>
 
@@ -128,8 +139,18 @@ export const DashboardPage: React.FC<DashboardProps> = ({
             {stats.totalAuditRecords}
           </div>
           <div className="text-[11px] text-slate-500 mt-1">
-            Logged event traces
+            {stats.totalAuditRecords === 0 ? 'No data yet' : 'Logged event traces'}
           </div>
+        </div>
+        <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-slate-400 mb-2"><span className="text-xs font-semibold">Knowledge</span><Database className="w-4 h-4 text-sky-400" /></div>
+          <div className="text-2xl sm:text-3xl font-bold text-white font-mono">{stats.knowledgeSources}</div>
+          <div className="text-[11px] text-slate-500 mt-1">Grounding sources</div>
+        </div>
+        <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-slate-400 mb-2"><span className="text-xs font-semibold">High Risk</span><ShieldAlert className="w-4 h-4 text-red-400" /></div>
+          <div className="text-2xl sm:text-3xl font-bold text-red-300 font-mono">{stats.highRiskActions}</div>
+          <div className="text-[11px] text-slate-500 mt-1">{stats.highRiskActions === 0 ? 'No blocked actions' : 'Review required'}</div>
         </div>
       </div>
 
@@ -205,7 +226,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({
               <FileText className="w-4 h-4" />
               <span>Enter Text</span>
             </button>
-            <button onClick={onTryDemo} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold shadow-md transition-all cursor-pointer">
+              <button onClick={onTryDemo} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-linear-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold shadow-md transition-all cursor-pointer">
               <Sparkles className="w-4 h-4" />
               <span>Try Demo</span>
             </button>

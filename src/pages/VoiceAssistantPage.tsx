@@ -108,11 +108,11 @@ export const VoiceAssistantPage: React.FC<VoiceAssistantPageProps> = ({
         <div className="relative space-y-4">
           <div className="inline-flex items-center gap-2 rounded-full border border-indigo-400/25 bg-indigo-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-200">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-            Public demo workspace
+            ReAct productivity workspace
           </div>
           <div className="max-w-2xl space-y-2">
             <h2 className="font-display text-2xl font-bold tracking-tight text-white sm:text-4xl">
-              Turn conversations into momentum.
+              Turn conversations into accountable action.
             </h2>
             <p className="max-w-xl text-sm leading-6 text-indigo-100/70 sm:text-base">
               Speak naturally or paste a meeting note. Get grounded tasks, clear owners, realistic deadlines, and safety checks in seconds.
@@ -126,7 +126,7 @@ export const VoiceAssistantPage: React.FC<VoiceAssistantPageProps> = ({
             ))}
           </div>
           <p className="text-[11px] text-indigo-100/55">
-            This demo starts with shared sample data. Sign in or create an account to keep your own tasks and knowledge private.
+            Grounded suggestions stay reviewable, risky actions stay human-approved, and every decision is auditable.
           </p>
         </div>
       </section>
