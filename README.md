@@ -78,8 +78,8 @@ The **AI Voice-to-Action Assistant** bridges this gap:
 1. **Permission Check & Capture**: When you click the microphone button, the app explicitly asks for microphone permission via both the Web Audio/MediaDevices API and a dedicated confirmation prompt. Speech is transcribed in real-time.
 2. **Context Grounding**: The assistant scans internal project files (e.g., `team_members.txt`, `project_guidelines.txt`) to correctly associate ambiguous references like *"I"* or *"assign frontend to the lead"* to the correct team member (e.g., Siddharth Kumar, Rahul Sharma).
 3. **Structured Extraction**: Gemini extracts action items, estimates realistic priority and deadline metadata, and isolates specific assumptions and uncertainties.
-4. **Safety & Risk Assessment**: If high-risk verbs (e.g., *transfer funds*, *delete table*, *reveal password*) are present, the app flags the output as `HIGH` or `MEDIUM` risk, generates a pending action card, and halts any downstream automation until an authorized human user explicitly clicks **Confirm** or **Cancel**.
-5. **Continuous Auditability**: Every single prompt, raw transcript, token response, confidence score, and confirmation state is permanently stored in the audit registry.
+4. **Safety & Risk Assessment**: If high-risk verbs (e.g., *transfer funds*, *delete table*, *reveal password*) are present, the app flags the output as `HIGH` or `MEDIUM` risk and displays a pending action card. Confirm/Cancel records a workspace-scoped decision only; this app does not execute external actions.
+5. **Workspace Audit History**: Each analysis, transcript, model output, and confirmation state is stored in the active workspace. Audit history is capped, can be cleared by that workspace, and is not an immutable compliance archive.
 
 ---
 
@@ -115,7 +115,7 @@ Unlike simple zero-shot prompts, the assistant utilizes a structured Reason + Ac
 - **Export Capabilities**: Export entire task lists or individual analyses to structured JSON and CSV.
 
 ### 6. Audit Trail & Compliance Logging
-- **Immutable Log Store**: Logs the exact timestamp, prompt version, input source (`voice`, `text`, `demo`), model used, execution duration, and full AI payload.
+- **Scoped Audit Log Store**: Records timestamps, prompt versions, input source, model, and AI output within the current workspace. Users can clear records from their workspace; this is not an immutable compliance archive.
 - **Confirmation State Tracking**: Tracks whether proposed high-risk actions were `CONFIRMED`, `CANCELLED`, or marked `NOT_REQUIRED`.
 - **Deep Inspection Drawer**: Inspect raw JSON payloads, reasoning stages, and context grounding scores for any past transaction.
 
@@ -141,8 +141,8 @@ Unlike simple zero-shot prompts, the assistant utilizes a structured Reason + Ac
   - Express 4.x running as a Vercel serverless function
   - `@google/genai` for Gemini analysis and refinement
   - Neon PostgreSQL for hosted persistence and user-scoped state
-  - Vercel Blob for original knowledge-base files
-  - Clerk for optional authentication and verified identity scopes
+  - Vercel Blob for public guest knowledge-base originals; signed-in uploads retain indexed text only.
+  - Clerk for verified private identity scopes; the production guest-plus-private product requires Clerk credentials
   - Local JSON persistence fallback for development
 - **Build and deployment**:
   - Vite 6 + esbuild
@@ -200,13 +200,15 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    Select[Select text, Markdown, or CSV file] --> Encode[Encode file in browser]
-    Encode --> Upload[POST /api/knowledge/upload]
-    Upload --> Validate[Validate size, content, and filename]
-    Validate --> Blob[Vercel Blob original file]
-    Validate --> Extract[Extract UTF-8 text]
-    Extract --> Store[Store content and metadata in Neon]
-    Store --> Retrieve[Token and relevance retrieval]
+    Select[Select TXT, Markdown, or CSV file] --> Limit[Validate extension and 512 KB size in browser]
+    Limit --> Extract[Read text in browser]
+    Limit --> Workspace{Current workspace}
+    Workspace -->|Guest| Token[Request constrained upload token from API]
+    Token --> Blob[Upload original directly to public Vercel Blob]
+    Workspace -->|Signed in| PrivateText[Send indexed text to private workspace API]
+    Extract --> Save[Save indexed text and metadata in Neon]
+    Blob --> Save
+    Save --> Retrieve[Token and relevance retrieval]
     Retrieve --> Prompt[Ground future Gemini prompts]
 ```
 
@@ -214,11 +216,15 @@ flowchart TD
 
 ```
 /
-├── server.ts                  # Express server entry point & API route handlers
+├── api/index.ts               # Vercel serverless Express entry point
+├── server.ts                  # Express routes and local development server
 ├── server/
-│   ├── db.ts                  # JSON file storage manager (tasks, analyses, audit logs)
-│   ├── gemini.ts              # Gemini API service, prompt engineering & ReAct parsing
-│   └── guardrails.ts          # Server-side safety guardrails & consequential action scanner
+│   ├── db.ts                  # Neon JSONB workspaces, local development storage, and rate limits
+│   ├── validation.ts          # API task, audit-filter, and upload URL/path validation
+│   ├── gemini.ts              # Server-only Gemini integration, parsing, and heuristic fallback
+│   ├── prompts.ts             # System instructions and prompt templates
+│   ├── rag.ts                 # Workspace-scoped knowledge retrieval
+│   └── guardrails.ts          # Server-side safety checks for consequential requests
 ├── src/
 │   ├── App.tsx                # Main application state, navigation, and API coordination
 │   ├── main.tsx               # Client React DOM entry point
@@ -247,7 +253,7 @@ flowchart TD
 
 | Endpoint | Method | Description |
 | :--- | :---: | :--- |
-| `/api/health` | `GET` | API, model, storage, and system status |
+| `/api/health` | `GET` | Safe dependency configuration and database readiness status |
 | `/api/stats` | `GET` | Dashboard metrics |
 | `/api/analyze` | `POST` | Analyze a transcript with grounded AI |
 | `/api/refine` | `POST` | Refine an existing AI result |
@@ -256,9 +262,9 @@ flowchart TD
 | `/api/tasks/:id` | `PATCH/DELETE` | Update or delete a task |
 | `/api/analyses` | `GET` | List recent analyses |
 | `/api/audit-logs` | `GET/DELETE` | Read or clear audit records |
-| `/api/audit-logs/:id/action` | `POST` | Record a confirmation decision |
-| `/api/knowledge` | `GET/POST` | List or create knowledge documents |
-| `/api/knowledge/upload` | `POST` | Upload a text-readable file to Blob and Neon |
+| `/api/knowledge` | `GET/POST` | List or create indexed knowledge documents |
+| `/api/session` | `GET` | Identify public or private workspace mode |
+| `/api/knowledge/upload-token` | `POST` | Generate a scoped token for direct guest Blob upload |
 | `/api/knowledge/:id` | `DELETE` | Delete a knowledge document |
 | `/api/knowledge/search` | `POST` | Search grounded knowledge chunks |
 | `/api/evaluation/cases` | `GET` | List benchmark cases |
@@ -272,13 +278,13 @@ flowchart TD
 
 ### Prerequisites
 - Node.js 20+
-- npm or yarn
+- npm
 
 ### Installation
-1. Clone the repository or open in Google AI Studio.
-2. Install dependencies:
+1. Open the project folder.
+2. Install the exact locked dependencies:
    ```bash
-   npm install
+   npm ci
    ```
 
 3. Configure environment variables (see below).
@@ -289,10 +295,11 @@ flowchart TD
    ```
    The application will be accessible at `http://localhost:3000`.
 
-5. Build for production:
+5. Run checks and build:
    ```bash
+   npm run lint
+   npm test
    npm run build
-   npm start
    ```
 
 ---
@@ -308,51 +315,52 @@ flowchart TD
 
 ## Vercel Deployment
 
-1. Import the repository into Vercel.
-2. Keep the Vite framework preset or allow automatic detection.
-3. Add the environment variables below.
-4. Deploy from the project root.
-5. Confirm `/api/health` reports `storage: "neon"`.
-6. Test guest analysis, sign-in, file upload, audit logging, and persistence.
+1. Import the reviewed GitHub repository into Vercel from its root directory.
+2. Use the Vite build command `npm run build:client` and output directory `dist`; `vercel.json` contains these settings.
+3. Add the production environment variables described below.
+4. Deploy a preview, then test guest mode, Clerk isolation, database persistence, Gemini, and uploads before sharing the production deployment.
+5. Use `/api/health` to check safe dependency status; `database.persistent: true` is stronger evidence than the configured storage label, but still test a real write and read.
 
-`vercel.json` builds the Vite client into `dist` and routes `/api/*` to `api/index.ts`.
+See [`DEPLOYMENT_GUIDE.md`](DEPLOYMENT_GUIDE.md) for the full beginner-friendly sequence and troubleshooting instructions. The project serves the frontend and `/api/*` from one Vercel project.
 
 ## Environment Variables
 
 Use `.env` for local development and configure the same values in the hosting provider's encrypted environment settings for deployment. Never commit `.env` or place server secrets in frontend code.
 
 ```env
-# Browser-visible Clerk publishable key and server-only Clerk secret
-VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-CLERK_SECRET_KEY=your_clerk_secret_key
+# Required for the full production guest + private-account product. Set all three together.
+VITE_CLERK_PUBLISHABLE_KEY=
+CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
 
-# Server-only AI, database, and file storage credentials
-GEMINI_API_KEY=your_gemini_api_key
-DATABASE_URL=your_neon_pooled_connection_string
-BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
+# Neon is required for durable production persistence
+DATABASE_URL=
+
+# Optional integrations
+GEMINI_API_KEY=
+BLOB_READ_WRITE_TOKEN=
 
 # Local development settings
 PORT=3000
 NODE_ENV=development
 DATA_DIR=./data
-DB_FILE=./data/store.json
+DB_FILE=./data/local-store.json
 ```
 
 Configuration behavior:
 
-- No Clerk keys: automatic guest mode is enabled.
-- Clerk keys enabled: sign-in/sign-up controls and authenticated user scopes are enabled.
-- No `DATABASE_URL`: local JSON persistence is used.
-- `DATABASE_URL` enabled: hosted Neon persistence is used.
-- No `BLOB_READ_WRITE_TOKEN`: manual text documents still work, but hosted uploads fail safely.
-- No `GEMINI_API_KEY`: the safe heuristic analyzer keeps the demo usable.
-- Uploaded Blob files currently use public Blob URLs; do not upload confidential documents without adding private access controls.
+- Leave all Clerk keys blank for guest-only local development. The intended production deployment requires all three Clerk keys so private accounts are available alongside guest mode.
+- Configure all Clerk keys together to enable verified server-side private user scopes. Partial Clerk configuration rejects API requests.
+- Without `DATABASE_URL`, local development uses JSON files; production startup fails rather than silently using ephemeral storage.
+- Without `BLOB_READ_WRITE_TOKEN`, text documents still work, but guest Blob uploads are unavailable.
+- Without `GEMINI_API_KEY`, the heuristic analyzer remains available.
+- Guest uploads are direct-to-Blob and public (TXT, MD, CSV, up to 512 KB). Signed-in uploads index text only and do not upload originals. Never upload confidential guest files.
 
 ## Database Design
 
-The compatibility runtime stores a bounded JSONB snapshot per guest or authenticated user scope in Neon. This preserves the current synchronous service API while supporting persistent demos and user separation.
+The runtime stores a JSONB workspace snapshot per fixed `guest` scope or verified Clerk user ID in Neon. Mutations use version-checked updates and are awaited before success responses. Neon is required for durable production operation; local development can use JSON files.
 
-`db/normalized-schema.sql` defines the next-stage relational model with workspaces, members, tasks, knowledge documents, audit logs, foreign keys, and indexes.
+`db/schema.sql` documents the runtime `app_state` and `api_rate_limits` tables. The server applies those idempotent definitions at startup, including the `version` column and rate-limit cleanup index. `db/normalized-schema.sql` is an unused next-stage relational design; do not apply it to this runtime deployment.
 
 ```mermaid
 erDiagram
@@ -396,12 +404,12 @@ erDiagram
 ## Safety and Security Model
 
 - Gemini and database credentials remain server-side.
-- Clerk sessions are verified server-side when configured.
-- Authenticated scopes use verified Clerk identity, not a client-provided user ID.
-- API requests are rate limited per client IP.
-- Uploads are limited to 5 MB and filenames are sanitized.
+- Clerk sessions are verified server-side when configured; the server selects private scope from the verified identity, never a browser-supplied user ID.
+- Guest mode intentionally shares public data; signed-in users have distinct scopes.
+- Expensive guest AI and upload-token requests use Neon-backed per-IP rate limits; authenticated requests are limited per verified identity.
+- Guest Blob uploads are limited to text formats up to 512 KB; originals are public. Private uploads store indexed text only.
 - High-risk actions are recorded for confirmation but never executed externally.
-- Prompt content is treated as untrusted input and passed through deterministic guardrails.
+- Prompt content is treated as untrusted input; prompts separate transcript/document data from system instructions, and deterministic guardrails run server-side.
 - Request IDs and latency logs support debugging and incident tracing.
 
 ## Testing and Quality Checks
@@ -413,30 +421,28 @@ npm run build:client
 npm run build
 ```
 
-The automated suite covers input validation, financial risk detection, external communication detection, routine planning behavior, and authenticated-scope isolation. The production build compiles both the Vite client and Express server bundle.
+The automated suite covers input validation, risk detection, shared guest persistence, and isolation between private users and guest state. The production build compiles both the Vite client and Express server bundle.
 
 ### Deployment Readiness Verification
 
-Last verified locally on 2026-09-24:
+Validation performed during this update:
 
 | Check | Result | Notes |
 | :--- | :---: | :--- |
-| TypeScript check (`npm run lint`) | PASS | No compiler errors. |
-| Automated tests (`npm test`) | PASS | 5 tests passed. |
-| Production build (`npm run build`) | PASS | Client and server bundle compile successfully. |
-| Development startup | PASS | React SPA and API start on port 3000. |
-| API smoke checks | PASS | Health, tasks, knowledge, and evaluation-case routes responded successfully. |
-| Guest/private scope isolation | PASS | Authenticated scopes start without guest tasks or public documents. |
-| Browser end-to-end tests | NOT RUN | No Playwright suite is configured in this repository. |
-| Real Clerk/Neon/Blob deployment | NOT RUN | Requires production credentials and hosted services. |
+| TypeScript check (`npm run lint`) | PASS | Completed without TypeScript errors. |
+| Automated tests (`npm test`) | PASS | 6 tests passed, including guest persistence and private-scope isolation using local storage. |
+| Frontend build (`npm run build:client`) | PASS | Vite reported a large-chunk advisory. |
+| Full build (`npm run build`) | PASS | Vite reported the same advisory; the server bundle was produced. |
+| Live browser/API smoke test | NOT RUN | Local server startup/testing was blocked by workspace command policy. |
+| Real Clerk/Neon/Blob deployment | NOT RUN | Requires provider accounts and credentials. |
 
-The application is **code-ready for deployment**, but a production release still requires the environment variables in the deployment section, a live Neon database, configured Clerk keys for private accounts, and a manual or Playwright browser pass covering sign-in, uploads, voice fallback, and confirmation flows. Docker was not available during local verification, so container-based integration testing was not performed.
+These checks do not prove real Neon concurrency, Clerk production-domain behavior, Gemini calls, or Blob uploads. Complete the integration and isolation checklist in [`DEPLOYMENT_GUIDE.md`](DEPLOYMENT_GUIDE.md) before treating the app as production-ready.
 
 ## Limitations and Roadmap
 
 - PDF and DOCX extraction require a document parser.
 - The compatibility JSONB snapshot should eventually be replaced with relational repository queries from `db/normalized-schema.sql`.
-- Rate limiting is process-local; high traffic requires a distributed limiter.
+- Production API and expensive-operation limits use Neon when configured. Local JSON development falls back to process-local limits. Public guest access remains abuseable across many IP addresses; monitor usage and set provider spending controls.
 - Production deployments should add centralized error tracking and retained structured logs.
 - Browser end-to-end tests should cover the complete guest and authenticated journeys.
 

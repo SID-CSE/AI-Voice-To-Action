@@ -14,7 +14,7 @@ const PublicWorkspaceBanner: React.FC = () => (
   <div className="flex flex-wrap items-center justify-between gap-3">
     <div>
       <p className="text-xs font-semibold text-white">You are using the shared Guest Demo</p>
-      <p className="text-[11px] text-slate-400">This public workspace contains sample data. Configure Clerk to enable private accounts.</p>
+      <p className="text-[11px] text-slate-400">Guest mode uses shared public data. Do not enter confidential information.</p>
     </div>
     <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-200">Public data</span>
   </div>
@@ -29,7 +29,7 @@ const WorkspaceBanner: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-xs font-semibold text-white">Private workspace active</p>
-          <p className="text-[11px] text-slate-400">Your tasks, analyses, and knowledge are isolated from the public demo.</p>
+          <p className="text-[11px] text-slate-400">Your workspace data is private to your signed-in account.</p>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -50,7 +50,7 @@ const WorkspaceBanner: React.FC = () => {
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div>
         <p className="text-xs font-semibold text-white">You are using the shared Guest Demo</p>
-        <p className="text-[11px] text-slate-400">Sign in or create an account to keep your tasks, analyses, and knowledge private.</p>
+        <p className="text-[11px] text-slate-400">Sign in for a private workspace. Guest data is shared and public.</p>
       </div>
       <div className="flex items-center gap-2">
         <SignInButton mode="modal">
@@ -119,12 +119,12 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         {/* Guardrail & Grounding Badges */}
         <div className="hidden md:flex items-center gap-2">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700/60 text-[11px] text-slate-300">
+          <div className="light-theme-status-badge inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700/60 text-[11px] text-slate-300">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>Guardrails Active</span>
           </div>
 
-          <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] border ${
+          <div className={`light-theme-grounding-badge inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] border ${
             groundingEnabled
               ? 'bg-indigo-950/40 border-indigo-700/40 text-indigo-300'
               : 'bg-slate-800/80 border-slate-700/60 text-slate-400'
@@ -133,7 +133,7 @@ export const Header: React.FC<HeaderProps> = ({
             <span>{groundingEnabled ? 'RAG Grounding' : 'Grounding Off'}</span>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700/60 text-[11px] text-slate-300">
+          <div className="light-theme-auth-badge inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700/60 text-[11px] text-slate-300">
             <span className={`w-1.5 h-1.5 rounded-full ${clerkEnabled ? 'bg-indigo-400' : 'bg-emerald-400'}`} />
             {clerkEnabled ? <ClerkStatusBadge /> : <span>Shared Demo</span>}
           </div>

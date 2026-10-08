@@ -77,7 +77,7 @@ export const AuditLogsPage: React.FC<AuditLogsPageProps> = ({
             <span>Audit Logs & Accountability Trail</span>
           </h2>
           <p className="text-xs text-slate-400">
-            Immutable trace of transcripts, model versions, retrieved context, risk levels, and human authorizations.
+            Workspace-scoped history of transcripts, retrieved context, risk levels, and human confirmations. Records can be cleared from this workspace.
           </p>
         </div>
         <button

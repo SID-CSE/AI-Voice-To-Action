@@ -2,6 +2,12 @@ node_modules/
 build/
 dist/
 coverage/
+node_modules/
+.vercel/
+data/users/
+data/local-store.json
+data/local-store.json.tmp
+data/*.backup.json
 .DS_Store
 *.log
 .env*

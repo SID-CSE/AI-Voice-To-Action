@@ -109,6 +109,28 @@ body {
 :root[data-theme='light'] .light-theme-logout { background: #ffffff; border-color: #cbd5e1; color: #334155; }
 :root[data-theme='light'] .light-theme-logout:hover { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
 
+/* Keep intentionally dark indigo panels readable in the light theme. */
+:root[data-theme='light'] .bg-indigo-950\/90,
+:root[data-theme='light'] .bg-indigo-950\/80,
+:root[data-theme='light'] .bg-gradient-to-br {
+  color: #eef2ff;
+}
+:root[data-theme='light'] .bg-indigo-950\/90 .text-white,
+:root[data-theme='light'] .bg-indigo-950\/80 .text-white,
+:root[data-theme='light'] .bg-gradient-to-br .text-white { color: #f8fafc; }
+:root[data-theme='light'] .bg-indigo-950\/90 .text-slate-400,
+:root[data-theme='light'] .bg-indigo-950\/80 .text-slate-400 { color: #c7d2fe; }
+:root[data-theme='light'] .bg-indigo-950\/20 { background-color: #e0e7ff; border-color: #a5b4fc; }
+:root[data-theme='light'] .bg-indigo-950\/20 .text-indigo-300,
+:root[data-theme='light'] .bg-indigo-950\/20 .text-indigo-200,
+:root[data-theme='light'] .bg-indigo-950\/20 .text-indigo-200\/80,
+:root[data-theme='light'] .bg-indigo-950\/20 .text-indigo-200\/90 { color: #3730a3; }
+:root[data-theme='light'] .light-theme-status-badge,
+:root[data-theme='light'] .light-theme-auth-badge { background: #e2e8f0; border-color: #cbd5e1; color: #334155; }
+:root[data-theme='light'] .light-theme-status-badge .text-emerald-400 { color: #15803d; }
+:root[data-theme='light'] .light-theme-grounding-badge { background: #e0e7ff; border-color: #a5b4fc; color: #3730a3; }
+:root[data-theme='light'] .light-theme-grounding-badge.text-slate-400 { color: #475569; }
+
 /* State colors remain saturated enough to read on light surfaces. */
 :root[data-theme='light'] .text-emerald-400,
 :root[data-theme='light'] .text-emerald-300 { color: var(--af-success); }
