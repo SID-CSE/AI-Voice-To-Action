@@ -1,22 +1,32 @@
 import express from 'express';
-import path from 'path';
-import { randomUUID } from 'crypto';
-import dotenv from 'dotenv';
+import 'dotenv/config';
+import path from 'node:path';
+import { createHash, randomUUID } from 'node:crypto';
 import { createServer as createViteServer } from 'vite';
+import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import { db } from './server/db.js';
 import { geminiService, isGeminiConfigured } from './server/gemini.js';
 import { ragService } from './server/rag.js';
 import { guardrails } from './server/guardrails.js';
-import { put } from '@vercel/blob';
+import { handleUpload } from '@vercel/blob/client';
+import { del as deleteBlob, head as inspectBlob } from '@vercel/blob';
 import { clerkMiddleware, getAuth } from '@clerk/express';
-import { AuditRecord, EvaluationResult, EvaluationMetrics } from './src/types.js';
+import type { AuditRecord, KnowledgeDocument } from './src/types.js';
+import { guestUploadContentType, isSafePublicBlobUrl, parseAuditLogFilters, parseTaskCreate, parseTaskUpdates } from './server/validation.js';
 
-dotenv.config();
+const asyncRoute = (handler: (req: Request, res: Response, next: NextFunction) => Promise<unknown>): RequestHandler =>
+  (req, res, next) => { void handler(req, res, next).catch(next); };
 
 export function createApp() {
   const app = express();
 
   app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Permissions-Policy', 'microphone=(self), camera=(), geolocation=()');
+    if (process.env.NODE_ENV === 'production') res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
+    if (req.path.startsWith('/api/')) res.setHeader('Cache-Control', 'no-store');
     const requestId = randomUUID();
     const startedAt = Date.now();
     res.setHeader('x-request-id', requestId);
@@ -32,56 +42,80 @@ export function createApp() {
     next();
   });
 
-  // JSON Body parsing
-  app.use(express.json({ limit: '10mb' }));
+  app.set('trust proxy', 1);
+  app.use(express.json({ limit: '4mb' }));
   const clerkPublishableKey = process.env.CLERK_PUBLISHABLE_KEY || process.env.VITE_CLERK_PUBLISHABLE_KEY;
-  const clerkConfigured = Boolean(process.env.CLERK_SECRET_KEY && clerkPublishableKey);
+  const hasClerkSecret = Boolean(process.env.CLERK_SECRET_KEY);
+  const hasClerkPublishable = Boolean(clerkPublishableKey);
+  const clerkConfigured = hasClerkSecret && hasClerkPublishable;
+  const clerkConfigurationInvalid = hasClerkSecret !== hasClerkPublishable;
+
   if (clerkConfigured) {
     process.env.CLERK_PUBLISHABLE_KEY = clerkPublishableKey;
     app.use(clerkMiddleware());
   }
 
-  const requestBuckets = new Map<string, { startedAt: number; count: number }>();
-  app.use((req, res, next) => {
+  app.use(async (req, res, next) => {
     if (!req.path.startsWith('/api/')) return next();
-    const now = Date.now();
-    const key = req.ip || 'unknown';
-    const bucket = requestBuckets.get(key);
-    if (!bucket || now - bucket.startedAt >= 60_000) {
-      requestBuckets.set(key, { startedAt: now, count: 1 });
-      return next();
+    if (req.path === '/api/health') return next();
+    if (clerkConfigurationInvalid) {
+      return res.status(503).json({ error: 'Authentication is partially configured. Complete both Clerk server and publishable key settings.' });
     }
-    bucket.count += 1;
-    if (bucket.count > 120) {
-      return res.status(429).json({ error: 'Too many requests. Please try again shortly.' });
+    try {
+      await db.ready();
+      const userId = clerkConfigured ? getAuth(req).userId : null;
+      const scope = userId || 'guest';
+      const displayName = typeof (clerkConfigured ? getAuth(req).sessionClaims?.name : null) === 'string'
+        ? String(getAuth(req).sessionClaims?.name)
+        : 'your workspace';
+      await db.prepareScope(scope, displayName);
+      db.runWithScope(scope, next);
+    } catch (error) {
+      console.error('Workspace initialization failed:', error instanceof Error ? error.name : 'Unknown error');
+      res.status(503).json({ error: 'Workspace storage is temporarily unavailable.' });
     }
-    next();
   });
 
+  const expensiveRoutes = new Set(['/api/analyze', '/api/refine', '/api/evaluate', '/api/knowledge/upload-token']);
   app.use(async (req, res, next) => {
-    await db.ready();
-    const auth = clerkConfigured ? getAuth(req) : null;
-    const scope = auth?.userId || 'guest';
-    const displayName = typeof auth?.sessionClaims?.name === 'string'
-      ? auth.sessionClaims.name
-      : 'your workspace';
-    await db.prepareScope(scope, displayName);
-    db.runWithScope(scope, next);
+    if (!req.path.startsWith('/api/') || req.path === '/api/health') return next();
+    try {
+      const identity = db.getCurrentScope() === 'guest' ? `guest:${req.ip || 'unknown'}` : db.getCurrentScope();
+      const key = createHash('sha256').update(identity).digest('hex');
+      if (!await db.consumeRateLimit(`${key}:api`, 180, 60_000)) {
+        return res.status(429).json({ error: 'Too many requests. Please try again shortly.' });
+      }
+      if (req.method === 'POST' && expensiveRoutes.has(req.path) && !await db.consumeRateLimit(`${key}:expensive`, 12, 60_000)) {
+        return res.status(429).json({ error: 'Too many AI or upload requests. Please try again in a minute.' });
+      }
+      const destructive = (req.method === 'POST' && req.path === '/api/reset')
+        || (req.method === 'DELETE' && req.path === '/api/audit-logs');
+      if (destructive && !await db.consumeRateLimit(`${key}:destructive`, 3, 60_000)) {
+        return res.status(429).json({ error: 'Too many reset or audit-log deletion requests. Please try again in a minute.' });
+      }
+      next();
+    } catch (error) {
+      next(error);
+    }
   });
 
   // API Routes
 
   // 1. Health check
-  app.get('/api/health', (req, res) => {
-    const settings = db.getSettings();
-    res.json({
-      status: 'ok',
-      apiConnected: isGeminiConfigured(),
+  app.get('/api/health', asyncRoute(async (req, res) => {
+    const database = await db.checkHealth();
+    const status = database.available ? 'ok' : 'degraded';
+    res.status(database.available ? 200 : 503).json({
+      status,
+      database,
+      geminiConfigured: isGeminiConfigured(),
+      blobConfigured: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      clerkConfigured,
+      clerkConfigurationValid: !clerkConfigurationInvalid,
       storage: db.getStorageMode(),
-      model: settings.model,
       systemVersion: 'v1.0.0',
     });
-  });
+  }));
 
   // 2. Dashboard Stats
   app.get('/api/stats', (req, res) => {
@@ -96,8 +130,16 @@ export function createApp() {
   // 3. Analyze Transcript
   app.post('/api/analyze', async (req, res) => {
     try {
-      const { transcript, inputType = 'text', workflowType, enableGrounding } = req.body;
-      
+      const { transcript, inputType = 'text', workflowType, enableGrounding } = req.body || {};
+      if (!['voice', 'text', 'demo'].includes(inputType)
+        || (workflowType !== undefined && workflowType !== 'react' && workflowType !== 'baseline')
+        || (enableGrounding !== undefined && typeof enableGrounding !== 'boolean')) {
+        return res.status(400).json({ error: 'Analysis options are invalid.' });
+      }
+      if (typeof transcript === 'string' && transcript.length > 20_000) {
+        return res.status(413).json({ error: 'Transcripts must be 20,000 characters or fewer.' });
+      }
+
       // Validate input
       const validation = guardrails.validateInput(transcript);
       if (!validation.valid) {
@@ -118,13 +160,13 @@ export function createApp() {
       });
 
       // Save extracted tasks
-      if (result.output.tasks && result.output.tasks.length > 0) {
-        db.saveTasks(result.output.tasks);
+      if (result.output.tasks && result.output.tasks.length > 0 && !await db.saveTasks(result.output.tasks)) {
+        return res.status(409).json({ error: 'This workspace has reached its task storage limit.' });
       }
 
       // Save analysis record
       const analysisId = `an-${Date.now()}`;
-      db.saveAnalysis({
+      await db.saveAnalysis({
         id: analysisId,
         inputType,
         transcript,
@@ -146,7 +188,7 @@ export function createApp() {
         confirmationStatus: result.output.confirmation_required ? 'AWAITING_CONFIRMATION' : 'NOT_REQUIRED',
         aiOutput: result.output,
       };
-      db.saveAuditRecord(auditRecord);
+      await db.saveAuditRecord(auditRecord);
 
       res.json({
         output: result.output,
@@ -156,9 +198,9 @@ export function createApp() {
         analysisId,
       });
     } catch (err: any) {
-      console.error('Analysis error:', err);
+      console.error('Analysis request failed:', err instanceof Error ? err.name : 'Unknown error');
       res.status(500).json({
-        error: 'AI service is temporarily unavailable. Please try again.',
+        error: 'Analysis could not be completed or saved. Please try again.',
       });
     }
   });
@@ -167,35 +209,44 @@ export function createApp() {
   app.post('/api/refine', async (req, res) => {
     try {
       const { currentOutput, userGuidance, auditId } = req.body;
-      if (!currentOutput || !userGuidance) {
+      if (!currentOutput || typeof userGuidance !== 'string' || !userGuidance.trim()) {
         return res.status(400).json({ error: 'currentOutput and userGuidance are required' });
+      }
+      if (userGuidance.length > 5_000 || JSON.stringify(currentOutput).length > 100_000) {
+        return res.status(413).json({ error: 'The refinement request exceeds the supported size.' });
       }
 
       const settings = db.getSettings();
       const refined = await geminiService.refineOutput(currentOutput, userGuidance, settings.model);
 
       // Save updated tasks
-      if (refined.tasks && refined.tasks.length > 0) {
-        db.saveTasks(refined.tasks);
+      if (refined.tasks && refined.tasks.length > 0 && !await db.saveTasks(refined.tasks)) {
+        return res.status(409).json({ error: 'This workspace has reached its task storage limit.' });
       }
 
       if (auditId) {
-        db.updateAuditOutput(auditId, refined);
+        await db.updateAuditOutput(auditId, refined);
       }
 
       res.json({ refinedOutput: refined, auditId });
     } catch (err: any) {
-      console.error('Refinement error:', err);
+      console.error('Refinement request failed:', err instanceof Error ? err.name : 'Unknown error');
       res.status(500).json({ error: 'Unable to refine this result right now.' });
     }
   });
 
   // 5. Execute / Confirm Consequential Action (Safe Simulation)
-  app.post('/api/execute-action', (req, res) => {
+  app.post('/api/execute-action', async (req, res) => {
     try {
-      const { auditId, actionId, confirmed } = req.body;
-      if (!auditId) {
-        return res.status(400).json({ error: 'auditId is required' });
+      const { auditId, actionId, confirmed } = req.body || {};
+      if (typeof auditId !== 'string' || typeof actionId !== 'string' || typeof confirmed !== 'boolean') {
+        return res.status(400).json({ error: 'auditId, actionId, and a boolean confirmed value are required.' });
+      }
+      const auditRecord = db.getAuditLogs().find((record) => record.id === auditId);
+      if (!auditRecord) return res.status(404).json({ error: 'Audit record not found' });
+      const proposedAction = auditRecord.aiOutput.proposed_actions.find((item) => item.id === actionId);
+      if (!proposedAction || proposedAction.status !== 'AWAITING_CONFIRMATION') {
+        return res.status(409).json({ error: 'This proposed action is no longer awaiting confirmation.' });
       }
 
       const status = confirmed ? 'CONFIRMED' : 'CANCELLED';
@@ -203,10 +254,8 @@ export function createApp() {
         ? 'Action explicitly confirmed by user. The confirmation was recorded; no external action was performed.'
         : 'Action cancelled by user before execution. System state was not altered.';
 
-      const updated = db.updateAuditConfirmation(auditId, status, executionNote);
-      if (!updated) {
-        return res.status(404).json({ error: 'Audit record not found' });
-      }
+      const updated = await db.updateAuditConfirmation(auditId, actionId, status, executionNote);
+      if (!updated) return res.status(409).json({ error: 'This proposed action is no longer awaiting confirmation.' });
 
       res.json({
         success: true,
@@ -341,56 +390,55 @@ export function createApp() {
         comparisonNotes: notes.length > 0 ? notes : ['Both workflows extracted the primary tasks.'],
       };
 
-      db.saveEvaluation(evalResult);
+      await db.saveEvaluation(evalResult);
       res.json(evalResult);
     } catch (err: any) {
-      console.error('Evaluation error:', err);
+      console.error('Evaluation request failed:', err instanceof Error ? err.name : 'Unknown error');
       res.status(500).json({ error: 'Unable to run this evaluation right now.' });
     }
   });
 
-  app.post('/api/reset', (req, res) => {
+  app.post('/api/reset', asyncRoute(async (req, res) => {
     if (req.body?.confirm !== true) {
       return res.status(400).json({ error: 'Explicit reset confirmation is required.' });
     }
-    db.resetData();
+    await db.resetData();
     res.json({ success: true, message: 'Factory defaults restored.' });
-  });
+  }));
 
   // 7. Tasks Endpoints
   app.get('/api/tasks', (req, res) => {
     res.json(db.getTasks());
   });
 
-  app.post('/api/tasks', (req, res) => {
-    const { task, owner = 'Not specified', deadline = 'Not specified', priority = 'Medium' } = req.body;
-    if (!task) return res.status(400).json({ error: 'task name is required' });
+  app.post('/api/tasks', asyncRoute(async (req, res) => {
+    const input = parseTaskCreate(req.body);
+    if (!input) return res.status(400).json({ error: 'Task, owner, deadline, or priority is invalid.' });
     const newTask = {
-      id: `t-${Date.now()}`,
-      task,
-      owner,
-      deadline,
-      priority,
+      id: `t-${randomUUID()}`,
+      ...input,
       dependencies: [],
       confidence: 100,
       evidence: 'Manually added task',
       status: 'Pending' as const,
     };
-    db.saveTasks([newTask]);
+    if (!await db.saveTasks([newTask])) return res.status(409).json({ error: 'This workspace has reached its task storage limit.' });
     res.json(newTask);
-  });
+  }));
 
-  app.patch('/api/tasks/:id', (req, res) => {
-    const updated = db.updateTask(req.params.id, req.body);
+  app.patch('/api/tasks/:id', asyncRoute(async (req, res) => {
+    const updates = parseTaskUpdates(req.body);
+    if (!updates) return res.status(400).json({ error: 'Task update is invalid.' });
+    const updated = await db.updateTask(req.params.id, updates);
     if (!updated) return res.status(404).json({ error: 'Task not found' });
     res.json(updated);
-  });
+  }));
 
-  app.delete('/api/tasks/:id', (req, res) => {
-    const deleted = db.deleteTask(req.params.id);
+  app.delete('/api/tasks/:id', asyncRoute(async (req, res) => {
+    const deleted = await db.deleteTask(req.params.id);
     if (!deleted) return res.status(404).json({ error: 'Task not found' });
     res.json({ success: true });
-  });
+  }));
 
   // 8. Analyses History
   app.get('/api/analyses', (req, res) => {
@@ -399,77 +447,134 @@ export function createApp() {
 
   // 9. Audit Logs Endpoints
   app.get('/api/audit-logs', (req, res) => {
-    const { riskLevel, confirmationStatus, search } = req.query as Record<string, string>;
-    const logs = db.getAuditLogs({ riskLevel, confirmationStatus, search });
+    const filters = parseAuditLogFilters(req.query as Record<string, unknown>);
+    if (!filters) return res.status(400).json({ error: 'Audit filters are invalid.' });
+    const logs = db.getAuditLogs(filters);
     res.json(logs);
   });
 
-  app.delete('/api/audit-logs', (req, res) => {
+  app.delete('/api/audit-logs', asyncRoute(async (req, res) => {
     if (req.body?.confirm !== true) {
       return res.status(400).json({ error: 'Explicit deletion confirmation is required.' });
     }
-    db.clearAuditLogs();
+    await db.clearAuditLogs();
     res.json({ success: true, message: 'Audit logs cleared.' });
-  });
+  }));
 
   // 10. Knowledge Base Endpoints
   app.get('/api/knowledge', (req, res) => {
     res.json(db.getKnowledgeDocuments());
   });
 
-  app.post('/api/knowledge/upload', async (req, res) => {
+  app.get('/api/session', (req, res) => {
+    res.json({ workspace: db.getCurrentScope() === 'guest' ? 'public' : 'private' });
+  });
+
+  app.post('/api/knowledge/upload-token', async (req, res, next) => {
+    if (db.getCurrentScope() !== 'guest') {
+      return res.status(403).json({ error: 'Original-file storage is public. Private workspaces can index text without storing the original file.' });
+    }
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      return res.status(503).json({ error: 'File storage is not configured.' });
+    }
     try {
-      const { filename, contentBase64, contentType = 'text/plain', category = 'General', tags = [] } = req.body || {};
-      if (!filename || !contentBase64) {
-        return res.status(400).json({ error: 'filename and contentBase64 are required' });
-      }
-
-      const fileBuffer = Buffer.from(contentBase64, 'base64');
-      if (fileBuffer.length === 0 || fileBuffer.length > 5 * 1024 * 1024) {
-        return res.status(400).json({ error: 'Uploaded files must be between 1 byte and 5 MB.' });
-      }
-
-      const content = fileBuffer.toString('utf8').trim();
-      if (!content) {
-        return res.status(400).json({ error: 'Only text-readable files can be indexed in the knowledge base.' });
-      }
-
-      const safeFilename = String(filename).replace(/[^a-zA-Z0-9._-]/g, '-');
-      const blob = await put(`knowledge/${Date.now()}-${safeFilename}`, fileBuffer, {
-        access: 'public',
-        addRandomSuffix: true,
-        contentType,
+      const result = await handleUpload({
+        request: req,
+        body: req.body,
+        token: process.env.BLOB_READ_WRITE_TOKEN,
+        onBeforeGenerateToken: async (pathname, clientPayload) => {
+          const expectedContentType = guestUploadContentType(pathname);
+          if (!expectedContentType) throw new Error('Only TXT, Markdown, and CSV files are supported');
+          const payload = clientPayload ? JSON.parse(clientPayload) : {};
+          if (payload.contentType !== expectedContentType) {
+            throw new Error('The upload content type must match its supported filename extension');
+          }
+          return {
+            allowedContentTypes: [expectedContentType],
+            maximumSizeInBytes: 512 * 1024,
+            addRandomSuffix: true,
+          };
+        },
+        onUploadCompleted: async () => undefined,
       });
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
 
-      const doc = db.addKnowledgeDocument({
-        title: filename,
+  app.post('/api/knowledge', asyncRoute(async (req, res) => {
+    const { title, content, category = 'General', tags = [], sourceUrl } = req.body || {};
+    if (typeof title !== 'string' || !title.trim() || typeof content !== 'string' || !content.trim()) {
+      return res.status(400).json({ error: 'Title and text content are required.' });
+    }
+    if (Buffer.byteLength(content, 'utf8') > 512 * 1024) {
+      return res.status(413).json({ error: 'Indexed text must be 512 KB or smaller.' });
+    }
+    if (title.trim().length > 180 || !Array.isArray(tags) || tags.length > 20 || !tags.every((tag: unknown) => typeof tag === 'string' && tag.length <= 80)) {
+      return res.status(400).json({ error: 'The document metadata is invalid.' });
+    }
+    if (category !== undefined && (typeof category !== 'string' || category.length > 80)) {
+      return res.status(400).json({ error: 'The document category is invalid.' });
+    }
+    let verifiedSourceUrl: string | undefined;
+    let verifiedSourceType: string | undefined;
+    if (sourceUrl !== undefined) {
+      if (db.getCurrentScope() !== 'guest' || !isSafePublicBlobUrl(sourceUrl) || !process.env.BLOB_READ_WRITE_TOKEN) {
+        return res.status(400).json({ error: 'Public file links are only allowed for valid guest Blob uploads.' });
+      }
+      const blob = await inspectBlob(sourceUrl);
+      if (!blob.pathname.startsWith('guest-uploads/') || blob.size > 512 * 1024 || !['text/plain', 'text/markdown', 'text/csv'].includes(blob.contentType)) {
+        return res.status(400).json({ error: 'The uploaded file is not an allowed guest document.' });
+      }
+      verifiedSourceUrl = blob.url;
+      verifiedSourceType = blob.contentType;
+    }
+    let doc: KnowledgeDocument | null;
+    try {
+      doc = await db.addKnowledgeDocument({
+        title: title.trim(),
         content,
-        category,
-        tags: Array.isArray(tags) ? tags : [],
-        sourceUrl: blob.url,
-        sourceType: contentType,
+        category: typeof category === 'string' ? category : 'General',
+        tags,
+        ...(verifiedSourceUrl ? { sourceUrl: verifiedSourceUrl, sourceType: verifiedSourceType } : {}),
       });
-      res.status(201).json(doc);
-    } catch (err) {
-      console.error('Knowledge upload error:', err);
-      res.status(500).json({ error: 'Unable to upload this file right now.' });
+    } catch (error) {
+      if (verifiedSourceUrl) {
+        try {
+          await deleteBlob(verifiedSourceUrl);
+        } catch {
+          console.error('Guest Blob cleanup failed');
+        }
+      }
+      throw error;
     }
-  });
-
-  app.post('/api/knowledge', (req, res) => {
-    const { title, content, category = 'General', tags = [] } = req.body;
-    if (!title || !content) {
-      return res.status(400).json({ error: 'Title and content are required' });
+    if (!doc) {
+      if (verifiedSourceUrl) {
+        try {
+          await deleteBlob(verifiedSourceUrl);
+        } catch {
+          console.error('Guest Blob cleanup failed');
+        }
+      }
+      return res.status(409).json({ error: 'This workspace has reached its knowledge document storage limit.' });
     }
-    const doc = db.addKnowledgeDocument({ title, content, category, tags });
-    res.json(doc);
-  });
+    res.status(201).json(doc);
+  }));
 
-  app.delete('/api/knowledge/:id', (req, res) => {
-    const deleted = db.deleteKnowledgeDocument(req.params.id);
+  app.delete('/api/knowledge/:id', asyncRoute(async (req, res) => {
+    const doc = db.getKnowledgeDocuments().find((item) => item.id === req.params.id);
+    const deleted = await db.deleteKnowledgeDocument(req.params.id);
     if (!deleted) return res.status(404).json({ error: 'Document not found' });
+    if (doc?.sourceUrl && db.getCurrentScope() === 'guest' && process.env.BLOB_READ_WRITE_TOKEN) {
+      try {
+        await deleteBlob(doc.sourceUrl);
+      } catch {
+        console.error('Guest Blob cleanup failed');
+      }
+    }
     res.json({ success: true });
-  });
+  }));
 
   app.post('/api/knowledge/search', (req, res) => {
     const query = typeof req.body?.query === 'string' ? req.body.query.trim() : '';
@@ -494,7 +599,7 @@ export function createApp() {
     });
   });
 
-  app.patch('/api/settings', (req, res) => {
+  app.patch('/api/settings', asyncRoute(async (req, res) => {
     const allowedModels = new Set(['gemini-3.6-flash', 'gemini-3.1-flash-lite', 'gemini-flash-latest']);
     const body = req.body || {};
     const updates = {
@@ -503,9 +608,9 @@ export function createApp() {
       ...(typeof body.guardrailsStrict === 'boolean' ? { guardrailsStrict: body.guardrailsStrict } : {}),
       ...(body.defaultWorkflow === 'react' || body.defaultWorkflow === 'baseline' ? { defaultWorkflow: body.defaultWorkflow } : {}),
       ...(typeof body.confidenceThreshold === 'number' ? { confidenceThreshold: Math.max(0, Math.min(100, body.confidenceThreshold)) } : {}),
-      ...(typeof body.audioSensitivity === 'string' ? { audioSensitivity: body.audioSensitivity } : {}),
+      ...(typeof body.audioSensitivity === 'string' && body.audioSensitivity.length <= 32 ? { audioSensitivity: body.audioSensitivity } : {}),
     };
-    const updated = db.updateSettings(updates);
+    const updated = await db.updateSettings(updates);
     res.json({
       model: updated.model,
       groundingEnabled: updated.groundingEnabled,
@@ -514,6 +619,21 @@ export function createApp() {
       confidenceThreshold: updated.confidenceThreshold,
       audioSensitivity: updated.audioSensitivity,
     });
+  }));
+
+  app.use((error: any, req: any, res: any, next: any) => {
+    if (res.headersSent) return next(error);
+    console.error('Request failed:', error instanceof Error ? error.name : 'Unknown error');
+    const originalStatus = Number(error?.status || error?.statusCode);
+    const status = [400, 401, 403, 413].includes(originalStatus) ? originalStatus : 500;
+    const messages: Record<number, string> = {
+      400: 'The request is malformed.',
+      401: 'Authentication is required for this request.',
+      403: 'This request is not allowed.',
+      413: 'Request body is too large.',
+      500: 'The request could not be completed.',
+    };
+    res.status(status).json({ error: messages[status] });
   });
 
   return app;

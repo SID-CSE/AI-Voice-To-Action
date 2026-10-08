@@ -291,7 +291,7 @@ export const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({
                   onChange={(e) => handleFileSelect(e.target.files?.[0])}
                   className="w-full mt-1 text-xs text-slate-400 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-800 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-slate-200 hover:file:bg-slate-700"
                 />
-                <p className="text-[10px] text-slate-500 mt-1">Text content is indexed for RAG and the original file is stored in Vercel Blob.</p>
+                <p className="text-[10px] text-slate-500 mt-1">TXT, MD, and CSV files up to 512 KB are indexed. Guest originals are public; private workspaces store indexed text only. Never upload confidential guest files.</p>
               </div>
 
               <div>

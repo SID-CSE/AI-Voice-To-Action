@@ -67,7 +67,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({
       </div>
 
       {/* Metric Cards (Section 5) */}
-      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-7">
         <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-semibold">Open Tasks</span>

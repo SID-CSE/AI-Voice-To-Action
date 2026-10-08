@@ -30,6 +30,8 @@ function getGenAI(): GoogleGenAI | null {
         headers: {
           'User-Agent': 'aistudio-build',
         },
+        timeout: 3_500,
+        retryOptions: { attempts: 1 },
       },
     });
   }
@@ -37,7 +39,8 @@ function getGenAI(): GoogleGenAI | null {
 }
 
 export function isGeminiConfigured(): boolean {
-  return !!process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'MY_GEMINI_API_KEY';
+  const apiKey = process.env.GEMINI_API_KEY;
+  return Boolean(apiKey && apiKey !== 'MY_GEMINI_API_KEY' && apiKey.trim());
 }
 
 /**
@@ -77,9 +80,12 @@ async function generateWithModelFallback(
   ]));
 
   let lastError: any = null;
+  const deadline = Date.now() + 5_500;
 
   for (const model of candidateModels) {
+    if (Date.now() >= deadline) break;
     for (let attempt = 0; attempt < 2; attempt++) {
+      if (Date.now() >= deadline) break;
       try {
         const response = await ai.models.generateContent({
           model,
@@ -112,7 +118,7 @@ async function generateWithModelFallback(
     }
   }
 
-  throw lastError || new Error('All model candidates failed');
+  throw lastError || new Error('Gemini request exceeded its time budget');
 }
 
 /**
@@ -434,7 +440,7 @@ export class GeminiService {
         stages.find(s => s.id === 's5')!.status = 'completed';
         stages.find(s => s.id === 's5')!.detail = `Structured tasks parsed via ${resolvedModelUsed}.`;
       } catch (err) {
-        console.warn('Gemini API call failed across model pool, utilizing heuristic fallback:', err);
+        console.warn('Gemini API call failed across model pool, utilizing heuristic fallback:', err instanceof Error ? err.name : 'Unknown error');
         rawOutput = generateHeuristicAnalysis(transcript, workflowType);
         stages.find(s => s.id === 's5')!.status = 'completed';
         stages.find(s => s.id === 's5')!.detail = 'Extracted tasks using safe local parser fallback.';
@@ -533,7 +539,7 @@ export class GeminiService {
           ),
         };
       } catch (err) {
-        console.error('Refinement with Gemini failed across model pool, applying local refinement filter:', err);
+        console.error('Refinement with Gemini failed across model pool, applying local refinement filter:', err instanceof Error ? err.name : 'Unknown error');
       }
     }
 

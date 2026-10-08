@@ -1,4 +1,5 @@
-import { 
+import { upload as uploadToBlob } from '@vercel/blob/client';
+import {
   AIAnalysisOutput, 
   WorkflowStage, 
   StructuredTask, 
@@ -12,15 +13,34 @@ import {
 } from '../types';
 
 const BASE_URL = '/api';
+let getClerkToken: () => Promise<string | null> = async () => null;
+
+export function setApiTokenProvider(provider: () => Promise<string | null>): void {
+  getClerkToken = provider;
+}
+
+async function request(input: RequestInfo | URL, init: RequestInit = {}): Promise<Response> {
+  const headers = new Headers(init.headers);
+  const token = await getClerkToken();
+  if (token) headers.set('Authorization', `Bearer ${token}`);
+  return globalThis.fetch(input, { ...init, headers, credentials: 'same-origin' });
+}
 
 export const api = {
   async getHealth() {
-    const res = await fetch(`${BASE_URL}/health`);
+    const res = await request(`${BASE_URL}/health`);
+    if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || 'Health check failed');
+    return res.json();
+  },
+
+  async getSession(): Promise<{ workspace: 'public' | 'private' }> {
+    const res = await request(`${BASE_URL}/session`);
+    if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || 'Unable to identify the current workspace');
     return res.json();
   },
 
   async getStats() {
-    const res = await fetch(`${BASE_URL}/stats`);
+    const res = await request(`${BASE_URL}/stats`);
     return res.json();
   },
 
@@ -36,7 +56,7 @@ export const api = {
     auditId: string;
     analysisId: string;
   }> {
-    const res = await fetch(`${BASE_URL}/analyze`, {
+    const res = await request(`${BASE_URL}/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -64,7 +84,7 @@ export const api = {
     userGuidance: string;
     auditId?: string;
   }): Promise<{ output: AIAnalysisOutput; auditId?: string }> {
-    const res = await fetch(`${BASE_URL}/refine`, {
+    const res = await request(`${BASE_URL}/refine`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -99,7 +119,7 @@ export const api = {
       payload = actionIdOrData;
     }
 
-    const res = await fetch(`${BASE_URL}/execute-action`, {
+    const res = await request(`${BASE_URL}/execute-action`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -114,7 +134,7 @@ export const api = {
   },
 
   async getEvaluationTestCases(): Promise<EvalTestCase[]> {
-    const res = await fetch(`${BASE_URL}/evaluation/cases`);
+    const res = await request(`${BASE_URL}/evaluation/cases`);
     return res.json();
   },
 
@@ -123,7 +143,7 @@ export const api = {
     testCaseId?: string;
     testCaseName?: string;
   }): Promise<EvalResult> {
-    const res = await fetch(`${BASE_URL}/evaluate`, {
+    const res = await request(`${BASE_URL}/evaluate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -142,17 +162,17 @@ export const api = {
   },
 
   async getEvaluations(): Promise<EvalResult[]> {
-    const res = await fetch(`${BASE_URL}/evaluations`);
+    const res = await request(`${BASE_URL}/evaluations`);
     return res.json();
   },
 
   async getTasks(): Promise<(StructuredTask & { createdAt?: string; updatedAt?: string })[]> {
-    const res = await fetch(`${BASE_URL}/tasks`);
+    const res = await request(`${BASE_URL}/tasks`);
     return res.json();
   },
 
   async createTask(taskData: Partial<StructuredTask>): Promise<StructuredTask> {
-    const res = await fetch(`${BASE_URL}/tasks`, {
+    const res = await request(`${BASE_URL}/tasks`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(taskData),
@@ -168,7 +188,7 @@ export const api = {
     const id = typeof taskOrId === 'string' ? taskOrId : taskOrId.id;
     const body = typeof taskOrId === 'string' ? updates : taskOrId;
 
-    const res = await fetch(`${BASE_URL}/tasks/${id}`, {
+    const res = await request(`${BASE_URL}/tasks/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -177,19 +197,19 @@ export const api = {
   },
 
   async deleteTask(id: string) {
-    const res = await fetch(`${BASE_URL}/tasks/${id}`, {
+    const res = await request(`${BASE_URL}/tasks/${id}`, {
       method: 'DELETE',
     });
     return res.json();
   },
 
   async getAnalyses() {
-    const res = await fetch(`${BASE_URL}/analyses`);
+    const res = await request(`${BASE_URL}/analyses`);
     return res.json();
   },
 
   async clearAuditLogs() {
-    const res = await fetch(`${BASE_URL}/audit-logs`, {
+    const res = await request(`${BASE_URL}/audit-logs`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ confirm: true }),
@@ -207,12 +227,12 @@ export const api = {
     if (params?.confirmationStatus) query.append('confirmationStatus', params.confirmationStatus);
     if (params?.search) query.append('search', params.search);
 
-    const res = await fetch(`${BASE_URL}/audit-logs?${query.toString()}`);
+    const res = await request(`${BASE_URL}/audit-logs?${query.toString()}`);
     return res.json();
   },
 
   async getKnowledge(): Promise<KnowledgeDocument[]> {
-    const res = await fetch(`${BASE_URL}/knowledge`);
+    const res = await request(`${BASE_URL}/knowledge`);
     return res.json();
   },
 
@@ -226,7 +246,7 @@ export const api = {
     category?: string;
     tags?: string[];
   }): Promise<KnowledgeDocument> {
-    const res = await fetch(`${BASE_URL}/knowledge`, {
+    const res = await request(`${BASE_URL}/knowledge`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -244,19 +264,33 @@ export const api = {
   },
 
   async uploadDocument(file: File, category = 'General', tags: string[] = []): Promise<KnowledgeDocument> {
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    let binary = '';
-    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
-    const res = await fetch(`${BASE_URL}/knowledge/upload`, {
+    const extension = file.name.toLowerCase().split('.').pop();
+    const contentType = extension === 'md' ? 'text/markdown' : extension === 'csv' ? 'text/csv' : 'text/plain';
+    if (!['txt', 'md', 'csv'].includes(extension || '') || file.size === 0 || file.size > 512 * 1024) {
+      throw new Error('Choose a non-empty TXT, MD, or CSV file no larger than 512 KB.');
+    }
+    const content = await file.text();
+    if (!content.trim() || content.includes('\u0000')) {
+      throw new Error('The selected file does not contain readable text.');
+    }
+
+    const { workspace } = await this.getSession();
+    let sourceUrl: string | undefined;
+    if (workspace === 'public') {
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-').slice(0, 180);
+      const uploadBody = new Blob([file], { type: contentType });
+      const blob = await uploadToBlob(`guest-uploads/${Date.now()}-${safeName}`, uploadBody, {
+        access: 'public',
+        handleUploadUrl: `${BASE_URL}/knowledge/upload-token`,
+        clientPayload: JSON.stringify({ contentType }),
+      });
+      sourceUrl = blob.url;
+    }
+
+    const res = await request(`${BASE_URL}/knowledge`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        filename: file.name,
-        contentType: file.type || 'text/plain',
-        contentBase64: btoa(binary),
-        category,
-        tags,
-      }),
+      body: JSON.stringify({ filename: file.name, title: file.name, content, contentType, sourceUrl, category, tags }),
     });
     if (!res.ok) {
       const error = await res.json().catch(() => ({ error: 'File upload failed' }));
@@ -266,7 +300,7 @@ export const api = {
   },
 
   async deleteKnowledge(id: string) {
-    const res = await fetch(`${BASE_URL}/knowledge/${id}`, { method: 'DELETE' });
+    const res = await request(`${BASE_URL}/knowledge/${id}`, { method: 'DELETE' });
     return res.json();
   },
 
@@ -275,7 +309,7 @@ export const api = {
   },
 
   async searchKnowledge(query: string) {
-    const res = await fetch(`${BASE_URL}/knowledge/search`, {
+    const res = await request(`${BASE_URL}/knowledge/search`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query }),
@@ -292,7 +326,7 @@ export const api = {
   },
 
   async resetData() {
-    const res = await fetch(`${BASE_URL}/reset`, {
+    const res = await request(`${BASE_URL}/reset`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ confirm: true }),
@@ -301,7 +335,7 @@ export const api = {
   },
 
   async getSettings(): Promise<SystemSettings> {
-    const res = await fetch(`${BASE_URL}/settings`);
+    const res = await request(`${BASE_URL}/settings`);
     const data = await res.json();
     const model = data.model || 'standard';
     return {
@@ -318,7 +352,7 @@ export const api = {
   },
 
   async updateSettings(updates: Partial<SystemSettings>): Promise<SystemSettings> {
-    const res = await fetch(`${BASE_URL}/settings`, {
+    const res = await request(`${BASE_URL}/settings`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updates),

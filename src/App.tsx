@@ -75,7 +75,7 @@ export default function App() {
       setEvalTestCases(evalCasesRes);
       setEvalResults(Object.fromEntries(evalResultsRes.map((result) => [result.id, result])));
       setSettings(settingsRes);
-      setApiConnected(healthRes?.apiConnected === true);
+      setApiConnected(healthRes?.status === 'ok');
     } catch (err) {
       console.warn('Initial data load warning:', err);
       setApiConnected(false);
