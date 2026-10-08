@@ -32,6 +32,9 @@ Complete the provider/account steps in `DEPLOYMENT_GUIDE.md`. Never place secret
 
 ## Product behavior and security
 
+- [ ] Landing page explains the product and intended users; logo and layout render on mobile and desktop
+- [ ] Landing page guest-demo action opens the shared workspace
+- [ ] Landing page sign-in and account creation actions work with the configured Clerk instance
 - [ ] Guest demo tested without signing in; guest data is visibly labelled public/shared
 - [ ] Guest create/update/delete and refresh behavior tested
 - [ ] User A sign-up/sign-in, persistence, and sign-out tested

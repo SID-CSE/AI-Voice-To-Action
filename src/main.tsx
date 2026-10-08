@@ -11,7 +11,7 @@ function ClerkApplication() {
   const { isLoaded, userId, getToken } = useAuth();
   useLayoutEffect(() => setApiTokenProvider(getToken), [getToken]);
   if (!isLoaded) return <div className="min-h-screen bg-slate-950" />;
-  return <App key={userId || 'guest'} />;
+  return <App key={userId || 'guest'} isSignedIn={Boolean(userId)} />;
 }
 
 const app = publishableKey ? (

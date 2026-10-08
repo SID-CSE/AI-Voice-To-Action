@@ -10,6 +10,7 @@ import { EvaluationPage } from './pages/EvaluationPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { CommandPalette } from './components/CommandPalette';
 import { api } from './services/api';
+import { LandingPage } from './pages/LandingPage';
 import { 
   StructuredTask, 
   AIAnalysisOutput, 
@@ -21,7 +22,8 @@ import {
   SystemSettings 
 } from './types';
 
-export default function App() {
+export default function App({ isSignedIn = false }: React.Attributes & { isSignedIn?: boolean }) {
+  const [hasEnteredWorkspace, setHasEnteredWorkspace] = useState(isSignedIn);
   const [currentTab, setCurrentTab] = useState<string>('assistant');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [apiConnected, setApiConnected] = useState(false);
@@ -412,6 +414,19 @@ export default function App() {
         return 'AI Voice-to-Action Assistant';
     }
   };
+
+  if (!isSignedIn && !hasEnteredWorkspace) {
+    return (
+      <LandingPage
+        clerkEnabled={Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY)}
+        onEnterDemo={() => setHasEnteredWorkspace(true)}
+        onTrySample={() => {
+          setHasEnteredWorkspace(true);
+          void handleTryDemo();
+        }}
+      />
+    );
+  }
 
   return (
     <div className="app-shell min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
