@@ -24,7 +24,7 @@ The browser uses the Web Speech API for live transcription when supported and al
 
 ### 2. Backend API
 
-`server.ts` runs an Express API and serves the Vite-built single-page application in production. The API provides:
+`server.ts` exports the Express application and API routes. `dev-server.ts` owns local Vite middleware and the standalone production server. `api/index.ts` loads the Express app lazily as a Vercel function. The API provides:
 
 - `/api/analyze` for transcript analysis.
 - `/api/refine` for user-guided result refinement.
@@ -39,7 +39,7 @@ The server accepts `PORT` from the hosting platform and binds to `0.0.0.0`.
 
 ### 3. AI and fallback processing
 
-`server/gemini.ts` calls the Google GenAI SDK when `GEMINI_API_KEY` is configured. It uses separate baseline and ReAct-style prompts, requests JSON output, normalizes the model response, and retries across configured model candidates.
+`server/gemini.ts` calls the Google GenAI SDK when `GEMINI_API_KEY` is configured. It uses separate baseline and ReAct-style prompts, requests JSON output, normalizes the model response, and retries across configured model candidates. Before these routes run, `server.ts` applies weighted Gemini workflow budgets: analysis and refinement cost one unit, while evaluation costs two because it runs baseline and ReAct analysis. The defaults are 12 weighted units per minute and 100 weighted units per rolling 24 hours per identity, configurable with `GEMINI_WORKFLOW_LIMIT_PER_MINUTE` and `GEMINI_WORKFLOW_LIMIT_PER_DAY`.
 
 When the API key is absent or the model is unavailable, a deterministic local heuristic parser keeps the product usable for demos and basic task extraction. This fallback is not a replacement for production model quality.
 
@@ -55,36 +55,50 @@ The application does not execute real financial, email, deletion, or access-cont
 
 ### 6. Storage
 
-`server/db.ts` currently uses an atomic local JSON file. The path is configurable:
+`server/db.ts` supports local JSON storage for development and Neon PostgreSQL for deployed environments. The local path is configurable:
 
 - `DATA_DIR` sets the storage directory.
 - `DB_FILE` sets the full JSON file path.
 
-This is suitable for local development, a single-instance demo, or a persistent mounted disk. It is not suitable as-is for a horizontally scaled multi-user production deployment because instances do not share memory and concurrent writes are not coordinated across replicas.
+When `DATABASE_URL` is configured, the deployment uses Neon and stores versioned workspace state in PostgreSQL. Without it, local development can use JSON storage; production fails closed rather than treating ephemeral serverless disk as durable.
 
-For production shared use, replace the JSON store with a managed database such as PostgreSQL, Azure SQL, or Cosmos DB. Add authentication, user/workspace ownership on tasks and documents, authorization on destructive endpoints, encrypted secrets, backups, retention controls, and rate limiting before exposing it to unrelated users.
+### 7. Settings and model selection
+
+The Settings page sends model changes to `PATCH /api/settings`. The server validates the supported IDs and persists them in the active workspace. The current choices are:
+
+- Standard: `gemini-3.6-flash`
+- Fast: `gemini-3.1-flash-lite`
+- Latest stable: `gemini-flash-latest`
+
+The client checks HTTP failures and synchronizes its local form with the saved server response, so a failed save cannot silently reset the visible choice.
 
 ## Deployment readiness
 
-The application is buildable as a Vite frontend plus bundled Node/Express server:
+The application is deployed at [https://action-flow-ten.vercel.app/](https://action-flow-ten.vercel.app/) as a Vite frontend plus a Vercel serverless Express API:
 
 ```text
 npm run build
 npm start
 ```
 
-Required runtime configuration:
+Required deployment configuration:
 
 ```env
 GEMINI_API_KEY=your_server_side_key
+GEMINI_WORKFLOW_LIMIT_PER_MINUTE=12
+GEMINI_WORKFLOW_LIMIT_PER_DAY=100
 PORT=3000
-DATA_DIR=/path/to/persistent/data
+DATABASE_URL=your_neon_connection_string
+CLERK_PUBLISHABLE_KEY=your_server_key
+CLERK_SECRET_KEY=your_server_secret
 ```
 
 The app can run without `GEMINI_API_KEY` using its local fallback, but production AI quality and model-backed evaluation require the key. Never expose the key to browser code.
+
+Gemini usage limits are enforced before provider calls. In Neon mode, the `api_rate_limits` table provides atomic counters shared across Vercel instances; local mode uses process memory. A 429 response means the caller reached either the per-minute or rolling daily Gemini workflow budget. SDK retries and model fallback are bounded resilience behavior, not an alternate path around the budget.
 
 ## Presentation summary
 
 This project demonstrates a responsible AI workflow that turns unstructured voice or text into actionable work. Its differentiators are grounded team context, evidence-linked structured output, explicit uncertainty handling, server-enforced safety guardrails, human confirmation for consequential actions, and an auditable history of every analysis.
 
-The honest production qualification is that the current repository is ready for a single-instance deployment or controlled demonstration after build validation. A true shared multi-user deployment still needs managed shared storage and authentication/authorization.
+The current live Vercel deployment demonstrates the guest flow and supports private workspaces when Clerk and Neon environment variables are configured. Check `/api/health` and Vercel Runtime Logs before diagnosing browser symptoms.

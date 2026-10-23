@@ -336,8 +336,12 @@ export const api = {
 
   async getSettings(): Promise<SystemSettings> {
     const res = await request(`${BASE_URL}/settings`);
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ error: 'Unable to load settings' }));
+      throw new Error(error.error || 'Unable to load settings');
+    }
     const data = await res.json();
-    const model = data.model || 'standard';
+    const model = data.model || 'gemini-3.6-flash';
     return {
       model,
       modelName: model,
@@ -357,8 +361,12 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updates),
     });
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ error: 'Unable to save settings' }));
+      throw new Error(error.error || 'Unable to save settings');
+    }
     const data = await res.json();
-    const model = data.model || 'standard';
+    const model = data.model || 'gemini-3.6-flash';
     return {
       model,
       modelName: model,
