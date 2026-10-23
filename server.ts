@@ -15,6 +15,11 @@ import { guestUploadContentType, isSafePublicBlobUrl, parseAuditLogFilters, pars
 const asyncRoute = (handler: (req: Request, res: Response, next: NextFunction) => Promise<unknown>): RequestHandler =>
   (req, res, next) => { void handler(req, res, next).catch(next); };
 
+function readPositiveIntegerEnv(name: string, fallback: number): number {
+  const value = Number.parseInt(process.env[name] || '', 10);
+  return Number.isInteger(value) && value > 0 ? value : fallback;
+}
+
 export function createApp() {
   const app = express();
 
@@ -75,6 +80,9 @@ export function createApp() {
   });
 
   const expensiveRoutes = new Set(['/api/analyze', '/api/refine', '/api/evaluate', '/api/knowledge/upload-token']);
+  const geminiRoutes = new Set(['/api/analyze', '/api/refine', '/api/evaluate']);
+  const geminiPerMinuteLimit = readPositiveIntegerEnv('GEMINI_WORKFLOW_LIMIT_PER_MINUTE', 12);
+  const geminiPerDayLimit = readPositiveIntegerEnv('GEMINI_WORKFLOW_LIMIT_PER_DAY', 100);
   app.use(async (req, res, next) => {
     if (!req.path.startsWith('/api/') || req.path === '/api/health') return next();
     try {
@@ -86,11 +94,21 @@ export function createApp() {
       if (req.method === 'POST' && expensiveRoutes.has(req.path) && !await db.consumeRateLimit(`${key}:expensive`, 12, 60_000)) {
         return res.status(429).json({ error: 'Too many AI or upload requests. Please try again in a minute.' });
       }
+      if (req.method === 'POST' && geminiRoutes.has(req.path) && isGeminiConfigured()) {
+        const workflowCost = req.path === '/api/evaluate' ? 2 : 1;
+        if (!await db.consumeRateLimit(`${key}:gemini-minute`, geminiPerMinuteLimit, 60_000, workflowCost)) {
+          return res.status(429).json({ error: 'Gemini usage limit reached for this minute. Please try again shortly.' });
+        }
+        if (!await db.consumeRateLimit(`${key}:gemini-day`, geminiPerDayLimit, 24 * 60 * 60_000, workflowCost)) {
+          return res.status(429).json({ error: 'Gemini daily usage limit reached for this workspace. Please try again tomorrow.' });
+        }
+      }
       const destructive = (req.method === 'POST' && req.path === '/api/reset')
         || (req.method === 'DELETE' && req.path === '/api/audit-logs');
       if (destructive && !await db.consumeRateLimit(`${key}:destructive`, 3, 60_000)) {
         return res.status(429).json({ error: 'Too many reset or audit-log deletion requests. Please try again in a minute.' });
       }
+
       next();
     } catch (error) {
       next(error);
@@ -600,8 +618,11 @@ export function createApp() {
   app.patch('/api/settings', asyncRoute(async (req, res) => {
     const allowedModels = new Set(['gemini-3.6-flash', 'gemini-3.1-flash-lite', 'gemini-flash-latest']);
     const body = req.body || {};
+    if (body.model !== undefined && !allowedModels.has(body.model)) {
+      return res.status(400).json({ error: 'The selected processing model is not supported.' });
+    }
     const updates = {
-      ...(allowedModels.has(body.model) ? { model: body.model } : {}),
+      ...(body.model !== undefined ? { model: body.model } : {}),
       ...(typeof body.groundingEnabled === 'boolean' ? { groundingEnabled: body.groundingEnabled } : {}),
       ...(typeof body.guardrailsStrict === 'boolean' ? { guardrailsStrict: body.guardrailsStrict } : {}),
       ...(body.defaultWorkflow === 'react' || body.defaultWorkflow === 'baseline' ? { defaultWorkflow: body.defaultWorkflow } : {}),

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Settings, 
 
@@ -27,12 +27,23 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 }) => {
   const [localSettings, setLocalSettings] = useState<SystemSettings>(settings);
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
+  useEffect(() => {
+    setLocalSettings(settings);
+  }, [settings]);
+
   const handleSave = async () => {
-    await onUpdateSettings(localSettings);
-    setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 2500);
+    setSaveError(null);
+    setSavedSuccess(false);
+    try {
+      await onUpdateSettings(localSettings);
+      setSavedSuccess(true);
+      setTimeout(() => setSavedSuccess(false), 2500);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Unable to save settings.');
+    }
   };
 
   return (
@@ -52,6 +63,11 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 text-xs flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
           <span>System configuration saved successfully.</span>
+        </div>
+      )}
+      {saveError && (
+        <div className="p-3.5 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs">
+          {saveError}
         </div>
       )}
 

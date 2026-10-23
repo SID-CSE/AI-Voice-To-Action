@@ -412,20 +412,23 @@ export class DatabaseService {
     throw new Error('Workspace changed too often to save this update; please retry');
   }
 
-  async consumeRateLimit(id: string, limit: number, windowMs: number): Promise<boolean> {
+  async consumeRateLimit(id: string, limit: number, windowMs: number, cost = 1): Promise<boolean> {
+    if (!Number.isInteger(cost) || cost < 1) {
+      throw new Error('Rate-limit cost must be a positive integer');
+    }
     if (this.sql) {
       await this.ready();
       const rows = await this.sql`
         INSERT INTO api_rate_limits (id, window_started_at, request_count)
-        VALUES (${id}, NOW(), 1)
+        VALUES (${id}, NOW(), ${cost})
         ON CONFLICT (id) DO UPDATE SET
           window_started_at = CASE
             WHEN api_rate_limits.window_started_at <= NOW() - ${windowMs} * INTERVAL '1 millisecond' THEN NOW()
             ELSE api_rate_limits.window_started_at
           END,
           request_count = CASE
-            WHEN api_rate_limits.window_started_at <= NOW() - ${windowMs} * INTERVAL '1 millisecond' THEN 1
-            ELSE api_rate_limits.request_count + 1
+            WHEN api_rate_limits.window_started_at <= NOW() - ${windowMs} * INTERVAL '1 millisecond' THEN ${cost}
+            ELSE api_rate_limits.request_count + ${cost}
           END
         RETURNING request_count
       `;
@@ -436,10 +439,10 @@ export class DatabaseService {
     const now = Date.now();
     const current = this.localRateLimits.get(id);
     if (!current || now - current.start >= windowMs) {
-      this.localRateLimits.set(id, { start: now, count: 1 });
-      return true;
+      this.localRateLimits.set(id, { start: now, count: cost });
+      return cost <= limit;
     }
-    current.count += 1;
+    current.count += cost;
     return current.count <= limit;
   }
 

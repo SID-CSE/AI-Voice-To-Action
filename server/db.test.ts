@@ -149,6 +149,18 @@ test('local rate limits allow only the configured number of requests per window'
   }
 });
 
+test('local rate limits account for weighted AI workflows', async () => {
+  const store = temporaryStore();
+  try {
+    const service = new DatabaseService(null, store.file, false);
+    await service.ready();
+    assert.equal(await service.consumeRateLimit('gemini-key', 2, 60_000, 2), true);
+    assert.equal(await service.consumeRateLimit('gemini-key', 2, 60_000, 1), false);
+  } finally {
+    store.cleanup();
+  }
+});
+
 test('knowledge documents enforce per-workspace count and byte limits', async () => {
   const store = temporaryStore();
   try {

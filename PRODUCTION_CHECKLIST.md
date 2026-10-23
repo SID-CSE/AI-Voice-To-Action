@@ -2,6 +2,13 @@
 
 Complete the provider/account steps in `DEPLOYMENT_GUIDE.md`. Never place secrets in this checklist or in Git commit messages.
 
+## Current deployment
+
+- Live application: [https://action-flow-ten.vercel.app/](https://action-flow-ten.vercel.app/)
+- Health check: [https://action-flow-ten.vercel.app/api/health](https://action-flow-ten.vercel.app/api/health)
+- API entry point: `api/index.ts`
+- Vercel build command: `npm run build:client`
+
 ## Source and local validation
 
 - [ ] Existing Git changes reviewed and preserved
@@ -26,6 +33,8 @@ Complete the provider/account steps in `DEPLOYMENT_GUIDE.md`. Never place secret
 - [ ] Matching `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, and `VITE_CLERK_PUBLISHABLE_KEY` configured for Preview/Production
 - [ ] Production domain authorized in the matching Clerk production instance
 - [ ] `GEMINI_API_KEY` configured if Gemini-backed analysis is required
+- [ ] `GEMINI_WORKFLOW_LIMIT_PER_MINUTE` reviewed; default is 12 weighted workflows per identity per minute
+- [ ] `GEMINI_WORKFLOW_LIMIT_PER_DAY` reviewed; default is 100 weighted workflows per identity per rolling 24 hours
 - [ ] `BLOB_READ_WRITE_TOKEN` configured if public guest original-file uploads are required
 - [ ] Vercel project root, `npm run build:client`, `dist`, API entry, and SPA rewrites verified
 - [ ] Vercel security headers and HTTPS domain verified
@@ -51,6 +60,7 @@ Complete the provider/account steps in `DEPLOYMENT_GUIDE.md`. Never place secret
 - [ ] Authenticated file upload indexes text privately and does not publish/store the original
 - [ ] Data remains after refresh and a later function instance/deployment
 - [ ] Gemini success and missing/failed-key fallback tested
+- [ ] Gemini budget behavior tested: analyze/refine cost one unit, evaluate costs two, and excess usage returns HTTP 429
 - [ ] `/api/health` reports database readiness and safe integration booleans
 - [ ] No secrets committed; leaked credentials rotated
 
@@ -58,6 +68,8 @@ Complete the provider/account steps in `DEPLOYMENT_GUIDE.md`. Never place secret
 
 - [ ] Vercel Preview deployment tested before Production promotion
 - [ ] Production homepage, direct route refresh, and `/api/health` tested over HTTPS
+- [ ] `GET /api/settings` returns the expected persisted model
+- [ ] Standard, Fast, and Latest stable model selections each save and remain selected after refresh
 - [ ] Vercel runtime/build logs reviewed without copying secrets into public messages
 - [ ] Provider quotas/spending alerts or usage controls reviewed for Gemini and Blob
 - [ ] Current known-good Vercel deployment identified for rollback

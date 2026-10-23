@@ -2,6 +2,10 @@
 
 **Turn conversations into clear, reviewable work.** ActionFlow AI is a voice-and-text productivity workspace that extracts proposed tasks from meeting notes, connects them to relevant team context, and keeps people in control of what is saved or confirmed.
 
+[Live application: action-flow-ten.vercel.app](https://action-flow-ten.vercel.app/)
+
+The application is deployed as a Vercel project with a React frontend and an Express serverless API. The live deployment is the recommended way to demonstrate the complete guest workflow; private workspace behavior additionally depends on the configured Clerk environment.
+
 The application offers two deliberately separate experiences:
 
 - **Guest demo:** open access to one shared, public, mutable workspace. Everyone using guest mode can see and change the same guest data. Never enter confidential or personal information here.
@@ -42,26 +46,129 @@ Inside the workspace:
 - **Evaluation:** compare the configured ReAct and baseline analysis flows using the included test cases.
 - **Settings:** configure available analysis behavior and reset the active workspace after confirmation.
 
+### Result preference models
+
+The Settings page persists the selected processing model through `PATCH /api/settings`. The choices are:
+
+| Display option | Persisted model |
+| --- | --- |
+| Standard | `gemini-3.6-flash` |
+| Fast | `gemini-3.1-flash-lite` |
+| Latest stable | `gemini-flash-latest` |
+
+The selected value is read back from the server after saving and remains active for subsequent analysis requests. Failed settings requests are surfaced to the user instead of silently reverting to Standard.
+
 ## Architecture
 
+The deployed system combines a browser client, a Vercel serverless boundary, identity-aware workspace scoping, responsible-AI controls, optional Gemini generation, and durable Neon storage. The diagrams below show both the runtime topology and the internal request flow.
+
+<!-- mermaid-checked: no \n, no em-dash/en-dash, no {} in labels, subgraphs are id["label"], arrows are -->|"label"|, all subgraphs closed by end, ids unique -->
 ```mermaid
-flowchart LR
-    Visitor[Visitor] --> Landing[React landing page]
-    Landing --> Guest[Shared guest workspace]
-    Landing --> Clerk[Clerk sign-in]
-    Clerk --> Private[Private account workspace]
-    Guest --> Browser[React and TypeScript app]
-    Private --> Browser
-    Browser --> API[Vercel Express API]
-    API --> Auth[Clerk session verification]
-    API --> Validate[Validation, rate limits, safety checks]
-    Validate --> Neon[(Neon PostgreSQL)]
-    Validate --> Gemini[Gemini API, optional]
-    Browser --> Speech[Browser speech recognition]
-    Browser --> Blob[Vercel Blob, optional guest originals]
+flowchart TD
+    subgraph ClientLayer["Client Layer"]
+        Browser["React 19 and TypeScript"]
+        Speech["Browser speech recognition"]
+    end
+    subgraph VercelLayer["Vercel Deployment"]
+        Static["Vite static assets"]
+        Function["Express serverless function"]
+        Rewrite["API rewrite and SPA fallback"]
+    end
+    subgraph ControlLayer["Application Controls"]
+        Clerk["Clerk identity verification"]
+        Scope["Workspace scope selection"]
+        Validate["Validation and guardrails"]
+        Budget["Gemini workflow budgets"]
+        RAG["Knowledge retrieval"]
+    end
+    subgraph ProviderLayer["External Providers"]
+        Gemini["Google Gemini API"]
+        Blob["Vercel Blob guest originals"]
+    end
+    subgraph DataLayer["Persistent Data"]
+        Neon[("Neon PostgreSQL JSONB")]
+        Limits[("Atomic rate limit counters")]
+    end
+
+    Browser -->|"loads"| Static
+    Browser -->|"same origin API requests"| Rewrite
+    Rewrite -->|"routes /api requests"| Function
+    Speech -->|"transcript input"| Browser
+    Function -->|"verifies sessions"| Clerk
+    Function -->|"selects guest or private scope"| Scope
+    Scope -->|"checks request data"| Validate
+    Validate -->|"enforces weighted usage"| Budget
+    Validate -->|"retrieves context"| RAG
+    RAG -->|"reads workspace knowledge"| Neon
+    Budget -->|"stores shared counters"| Limits
+    Validate -->|"generates structured output"| Gemini
+    Validate -->|"uploads guest originals"| Blob
+    Validate -->|"persists tasks and analyses"| Neon
 ```
 
-The Express API runs as a Vercel serverless function at `/api`. Frontend requests use same-origin relative `/api` routes. Clerk session tokens are sent by the client and verified by the server. The API then selects either the fixed guest scope or the verified user's scope.
+### Detailed request and deployment flow
+
+<!-- mermaid-checked: no \n, no em-dash/en-dash, no {} in labels, subgraphs are id["label"], arrows are -->|"label"|, all subgraphs closed by end, ids unique -->
+```mermaid
+flowchart LR
+    subgraph PresentationLayer["Presentation"]
+        cLanding["Landing page"]
+        cAssistant["Assistant screen"]
+        cSettings["Settings screen"]
+        cWorkspace["Workspace views"]
+    end
+    subgraph ApiLayer["API and Middleware"]
+        cEntry["Vercel API entry"]
+        cExpress["Express application"]
+        cHeaders["Security headers and logging"]
+        cAuth["Clerk middleware"]
+        cWorkspaceScope["Workspace initialization"]
+        cRate["Request and Gemini limits"]
+    end
+    subgraph AiLayer["Analysis Pipeline"]
+        cValidation["Input validation"]
+        cGuardrails["Risk guardrails"]
+        cKnowledge["RAG relevance scoring"]
+        cGemini["Gemini model fallback"]
+        cHeuristic["Deterministic fallback"]
+        cPersistence["Version checked persistence"]
+    end
+    subgraph StorageLayer["Storage and Providers"]
+        cNeon[("Neon PostgreSQL")]
+        cBlob["Vercel Blob"]
+        cProvider["Google Gemini"]
+    end
+
+    cLanding -->|"opens"| cAssistant
+    cAssistant -->|"calls /api/analyze"| cEntry
+    cSettings -->|"calls /api/settings"| cEntry
+    cWorkspace -->|"calls task and history APIs"| cEntry
+    cEntry -->|"lazy loads"| cExpress
+    cExpress -->|"adds"| cHeaders
+    cHeaders -->|"authenticates"| cAuth
+    cAuth -->|"selects"| cWorkspaceScope
+    cWorkspaceScope -->|"limits"| cRate
+    cRate -->|"validates"| cValidation
+    cValidation -->|"checks risk"| cGuardrails
+    cValidation -->|"retrieves context"| cKnowledge
+    cKnowledge -->|"reads"| cNeon
+    cGuardrails -->|"allows structured analysis"| cGemini
+    cGemini -->|"calls"| cProvider
+    cGemini -.->|"provider unavailable"| cHeuristic
+    cGemini -->|"returns output"| cPersistence
+    cHeuristic -->|"returns output"| cPersistence
+    cPersistence -->|"writes workspace state"| cNeon
+    cValidation -->|"guest file original"| cBlob
+```
+
+### Runtime integration
+
+1. Vercel serves the Vite-built React assets and rewrites `/api/*` to the lazy-loaded Express function.
+2. Express applies security headers, request logging, Clerk verification, workspace selection, and persistent rate limits.
+3. Validation and guardrails run before AI generation. Knowledge retrieval adds workspace context, while weighted Gemini budgets prevent uncontrolled provider usage.
+4. Gemini output is normalized and stored with tasks, analyses, settings, and audit records in Neon. If Gemini is unavailable or unconfigured, the deterministic fallback keeps the workflow usable.
+
+The Express API runs as a Vercel serverless function at `/api`. Frontend requests use same-origin relative `/api` routes. Clerk session tokens are sent by the client and verified by the server. The API then selects either the fixed guest scope or the verified user's scope. `api/index.ts` loads `server.js` lazily, while `dev-server.ts` contains the Vite-only local startup path; Vite is never imported by the Vercel function.
 
 ### File uploads and knowledge retrieval
 
@@ -75,7 +182,7 @@ Supported uploads are TXT, Markdown, and CSV files up to 512 KB. Guest originals
 - Neon PostgreSQL for hosted persistence and rate-limit state
 - Google Gemini for optional model-backed analysis
 - Vercel Blob for optional public guest file originals
-- Vercel for the frontend and serverless API
+- Vercel for the frontend and serverless API: [live deployment](https://action-flow-ten.vercel.app/)
 - Node test runner with `tsx` for backend and validation tests
 
 ## Repository structure
@@ -119,7 +226,7 @@ npm run build:client
 npm run build
 ```
 
-`npm test` runs the input/guardrail, workspace persistence and isolation, concurrency, storage-limit, confirmation, and API validation tests.
+`npm test` runs the input/guardrail, workspace persistence and isolation, concurrency, storage-limit, confirmation, and API validation tests. The current suite contains 18 passing tests.
 
 ### Environment variables
 
@@ -132,6 +239,8 @@ Use a local `.env` file for local configuration. Never commit it. Configure depl
 | `CLERK_PUBLISHABLE_KEY` | Clerk publishable key used by the server. Must match the browser key. |
 | `CLERK_SECRET_KEY` | Server-only Clerk secret. Required with both publishable-key settings for private accounts. |
 | `GEMINI_API_KEY` | Optional server-side Gemini access. The heuristic analyzer is used when not configured. |
+| `GEMINI_WORKFLOW_LIMIT_PER_MINUTE` | Optional weighted Gemini workflow limit per guest IP or signed-in workspace; defaults to `12`. |
+| `GEMINI_WORKFLOW_LIMIT_PER_DAY` | Optional rolling 24-hour weighted Gemini workflow limit per guest IP or signed-in workspace; defaults to `100`. |
 | `BLOB_READ_WRITE_TOKEN` | Optional Vercel Blob access for public guest originals. |
 | `PORT` | Local server port; defaults to `3000`. |
 | `DATA_DIR`, `DB_FILE` | Optional paths for local JSON persistence. |
@@ -139,6 +248,22 @@ Use a local `.env` file for local configuration. Never commit it. Configure depl
 For a deployment with both guest mode and private accounts, configure all three Clerk variables together and configure `DATABASE_URL`. Partial Clerk configuration causes API requests to fail rather than silently selecting an unintended workspace. Do not prefix server secrets with `VITE_`.
 
 ## Deployment
+
+### Live deployment
+
+- Application: [https://action-flow-ten.vercel.app/](https://action-flow-ten.vercel.app/)
+- Health check: [https://action-flow-ten.vercel.app/api/health](https://action-flow-ten.vercel.app/api/health)
+- API routing: `/api/:path*` is rewritten to the Vercel function before the SPA fallback.
+- Build command: `npm run build:client`
+- Output directory: `dist`
+
+The Vercel function must receive `DATABASE_URL` and the required Clerk variables for the intended environment. `GEMINI_API_KEY` enables Gemini-backed analysis; without it, the deterministic fallback keeps the demo available. `BLOB_READ_WRITE_TOKEN` is required only for guest original-file uploads.
+
+### Gemini usage controls
+
+Gemini access is limited at the workflow boundary, before a provider call is started. `/api/analyze` and `/api/refine` consume one workflow unit; `/api/evaluate` consumes two because it runs both baseline and ReAct analyses. Each guest IP or signed-in workspace is limited to 12 weighted units per minute and 100 weighted units in a rolling 24-hour window by default. The limits can be adjusted with `GEMINI_WORKFLOW_LIMIT_PER_MINUTE` and `GEMINI_WORKFLOW_LIMIT_PER_DAY`.
+
+The existing general API limit remains 180 requests per minute, and the short expensive-route limit still protects upload-token and other expensive endpoints. Neon stores the counters atomically in `api_rate_limits`, so limits are shared across Vercel function instances. Local development uses in-memory counters. Gemini retries and model fallback remain separate resilience behavior and do not bypass these application limits.
 
 Deploy the frontend and API together as one Vercel project. Use the repository's Vercel settings: `npm run build:client` and output directory `dist`; `vercel.json` routes `/api/*` to the serverless API and other paths to the single-page application.
 

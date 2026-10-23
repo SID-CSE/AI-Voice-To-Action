@@ -2,6 +2,9 @@
 
 This guide is for deploying the project as one Vercel application with a shared public guest demo and Clerk-backed private user workspaces. It uses service placeholders only. Never paste real credentials into chat or commit them to Git.
 
+**Current live deployment:** [https://action-flow-ten.vercel.app/](https://action-flow-ten.vercel.app/)
+**Health endpoint:** [https://action-flow-ten.vercel.app/api/health](https://action-flow-ten.vercel.app/api/health)
+
 ## 1. What We Are Deploying
 
 ```text
@@ -17,6 +20,7 @@ Visitor ── Vercel ───────┤
 
 - **Vercel** builds and serves the React website and runs its Express API as serverless functions. A serverless function is a short-lived server process started to handle a request. Its local disk is not a durable database.
 - The production Express app is loaded by `api/index.ts`; the Vite development server is isolated in `dev-server.ts` and is never imported by the Vercel function. Keep the `/api/:path*` rewrite before the SPA catch-all rewrite in `vercel.json`.
+- The Vercel function imports the explicit `../server.js` module specifier. Do not change it back to `../server`; native Vercel ESM resolution rejects the extensionless directory import with `ERR_UNSUPPORTED_DIR_IMPORT`.
 - **Neon** hosts PostgreSQL, a relational database. The application stores each workspace as one versioned JSON document in the `app_state` table.
 - **Clerk** provides sign-up and sign-in. Authentication identifies a user. Authorization decides which data that user can access. The API verifies Clerk on the server and uses its verified user ID; it never accepts a browser-supplied user ID as authority.
 - **Gemini** analyzes transcripts. Its API key is read by the server, not the browser. If the key is absent, the application uses its heuristic fallback.
@@ -71,6 +75,8 @@ npm run build
 ```
 
 `npm run dev` starts the Express API and Vite development middleware on port 3000. Keep that terminal open while using the local app. Open `http://localhost:3000` in your browser. Stop the server with **Ctrl+C**. `npm run lint` checks TypeScript, `npm test` runs the automated tests, `build:client` creates the Vite website, and `build` builds the website plus a standalone server bundle.
+
+The Settings page supports three persisted model choices: Standard (`gemini-3.6-flash`), Fast (`gemini-3.1-flash-lite`), and Latest stable (`gemini-flash-latest`). After changing a preference, verify it with `GET /api/settings`; a failed save must be treated as an error rather than a successful reset.
 
 ## STEP 2 — Verify GitHub and push safely
 
@@ -193,6 +199,8 @@ An **API key** is a credential that lets this server call a provider on your beh
 | `CLERK_PUBLISHABLE_KEY` | Clerk public key used by server middleware | Server configuration, not secret | Required together with other Clerk keys | Same as matching Clerk development instance | Required; use the matching Production instance |
 | `VITE_CLERK_PUBLISHABLE_KEY` | Clerk key bundled into browser UI | Client-safe/public | Required for Clerk UI | Same as matching Clerk development instance | Required; redeploy after changing it |
 | `GEMINI_API_KEY` | Google AI Studio API credential | Server-only secret | Optional; heuristic fallback is available | Optional | Optional; required only for Gemini-backed responses |
+| `GEMINI_WORKFLOW_LIMIT_PER_MINUTE` | Weighted Gemini workflow budget per identity per minute | Server-only configuration | `12` | `12` | `12` |
+| `GEMINI_WORKFLOW_LIMIT_PER_DAY` | Weighted Gemini workflow budget per identity per rolling 24 hours | Server-only configuration | `100` | `100` | `100` |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob store token | Server-only secret | Optional; required for public guest original uploads | Optional | Optional; required only for guest Blob uploads |
 | `PORT` | Local Express listening port; defaults to 3000 | Server, non-secret | Local only | `3000` or leave unset | Do not set; Vercel manages function ports |
 | `NODE_ENV` | Runtime mode | Server, non-secret | Local convenience | `development` | Vercel-managed; do not override without a reason |
@@ -402,7 +410,7 @@ Use a Preview deployment and test data only. Do not break Production settings or
 - **Missing configuration:** test incomplete Clerk keys only in Preview. API routes must report configuration failure rather than claiming a signed-in private workspace is active. Restore all matching Clerk keys.
 - **Invalid authentication:** send an invalid bearer token to a harmless API request from a test client; because Guest is public, the request can only resolve to guest scope, never another private user. Do not put a valid user's token in a shared script or log.
 - **Invalid request:** try an invalid task status and a malformed confirmation request; the API should reject them with a 4xx response and not change stored data.
-- **Rate limit:** from a single test identity, make more than 12 requests to an expensive endpoint in one minute or more than 3 reset/audit-clear requests. Expect HTTP 429, then wait for the window to expire. Avoid repeated Gemini calls that could incur cost.
+- **Rate limit:** from a single test identity, make more than 12 weighted Gemini workflow units in one minute or more than 100 in a rolling 24-hour period. `/api/analyze` and `/api/refine` cost one unit; `/api/evaluate` costs two. Expect HTTP 429 and do not repeatedly retry against a production key. Upload-token requests remain protected by the separate expensive-route limit but do not consume Gemini workflow units.
 
 ## STEP 13 — Roll back a broken deployment
 
@@ -437,8 +445,11 @@ Use a Preview deployment and test data only. Do not break Production settings or
 | File too large or unsupported | Upload exceeds the 512 KB limit or is not TXT/MD/CSV | File picker and upload message | Choose a supported text file under the limit. PDF/DOCX extraction is not implemented. |
 | CORS error | Browser rejected a cross-origin request | Browser developer tools → Console/Network | The intended Vercel setup is same-origin and should not require separate CORS configuration. Confirm the frontend is using relative `/api` paths and is opened from the Vercel deployment, not an unrelated domain. |
 | `/api/...` returns 404 | API rewrite/function path not active or URL was typed incorrectly | Vercel deployment files/logs; inspect `vercel.json` | Confirm `api/index.ts` is deployed from the project root, `/api` is included, and the endpoint path is correct. Redeploy after fixing configuration. |
+| `ERR_UNSUPPORTED_DIR_IMPORT` or `/var/task/server` appears in Vercel logs | The function used an extensionless ESM import | Vercel Runtime Logs | Ensure `api/index.ts` uses `import('../server.js')`, then redeploy. |
+| `invalid_function_runtime` appears during deployment | An unsupported runtime value was added to `vercel.json` | Vercel deployment output | Remove the explicit `runtime` override and let Vercel select the Node runtime from the project configuration. |
+| Model selection returns to Standard | Settings save failed or the response was silently normalized | Settings UI, `GET /api/settings`, Runtime Logs | Confirm the PATCH returns 200, verify the persisted model ID, and check that the UI displays the server response. |
 | `CLERK_*` partial-configuration error | Only some Clerk keys are set | Vercel environment settings | Configure both server secret and publishable key; configure the browser publishable key too for the UI. Save and redeploy. To intentionally disable Clerk locally, leave all Clerk keys blank. |
-| 429 rate-limit response | This IP or signed-in identity exceeded the expensive-operation limit | Wait one minute; check API response and server logs | Retry after the window resets. The application uses Neon-backed limits for AI and upload-token requests; public guest access can still be abused, so monitor provider usage and set provider-side spend/usage controls. |
+| 429 rate-limit response | This IP or signed-in identity exceeded the general, expensive-route, Gemini per-minute, or Gemini rolling daily limit | Read the JSON error and check Runtime Logs without exposing secrets | Wait for the applicable window. Tune `GEMINI_WORKFLOW_LIMIT_PER_MINUTE` or `GEMINI_WORKFLOW_LIMIT_PER_DAY` deliberately in Vercel if the product's expected usage changes, and retain provider-side spend/usage controls as a second safety layer. |
 | Local and deployed data differ | They use different storage/environment settings | Local `.env`, Vercel environment selection, Neon project | Confirm both target the intended database. Local JSON mode is separate and is not automatically synchronized with Neon. |
 
 ## 19. Security Checklist
