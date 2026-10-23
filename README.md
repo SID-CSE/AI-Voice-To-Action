@@ -82,7 +82,8 @@ Supported uploads are TXT, Markdown, and CSV files up to 512 KB. Guest originals
 
 ```text
 api/index.ts                 Vercel serverless Express entry point
-server.ts                    Express routes and local server
+server.ts                    Express application and API routes
+dev-server.ts                Local Vite development and production server
 server/db.ts                 Neon workspaces, local JSON storage, rate limits
 server/validation.ts         Request and upload validation
 server/guardrails.ts         Deterministic safety checks

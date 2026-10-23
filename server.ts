@@ -1,6 +1,5 @@
 import express from 'express';
 import 'dotenv/config';
-import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import { db } from './server/db.js';
@@ -636,44 +635,4 @@ export function createApp() {
   });
 
   return app;
-}
-
-async function startServer() {
-  const app = createApp();
-  const PORT = Number(process.env.PORT) || 3000;
-
-  if (process.env.NODE_ENV !== 'production') {
-    const { createServer: createViteServer } = await import('vite');
-    const vite = await createViteServer({
-      server: { middlewareMode: true, hmr: { port: PORT + 1 } },
-      appType: 'spa',
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
-    });
-  }
-
-  const server = app.listen(PORT, '0.0.0.0');
-  server.once('listening', () => {
-    console.log(`AI Voice-to-Action Server running at http://0.0.0.0:${PORT}`);
-  });
-  server.once('error', (error: NodeJS.ErrnoException) => {
-    if (error.code === 'EADDRINUSE') {
-      console.error(`Port ${PORT} is already in use. Stop the existing development server or start with a different port, for example: $env:PORT=3001; npm run dev`);
-    } else {
-      console.error('Unable to start the server:', error);
-    }
-    process.exit(1);
-  });
-}
-
-if (process.env.VERCEL !== '1') {
-  startServer().catch((error) => {
-    console.error('Unable to initialize the application:', error);
-    process.exitCode = 1;
-  });
 }

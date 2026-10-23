@@ -16,6 +16,7 @@ Visitor ── Vercel ───────┤
 ```
 
 - **Vercel** builds and serves the React website and runs its Express API as serverless functions. A serverless function is a short-lived server process started to handle a request. Its local disk is not a durable database.
+- The production Express app is loaded by `api/index.ts`; the Vite development server is isolated in `dev-server.ts` and is never imported by the Vercel function. Keep the `/api/:path*` rewrite before the SPA catch-all rewrite in `vercel.json`.
 - **Neon** hosts PostgreSQL, a relational database. The application stores each workspace as one versioned JSON document in the `app_state` table.
 - **Clerk** provides sign-up and sign-in. Authentication identifies a user. Authorization decides which data that user can access. The API verifies Clerk on the server and uses its verified user ID; it never accepts a browser-supplied user ID as authority.
 - **Gemini** analyzes transcripts. Its API key is read by the server, not the browser. If the key is absent, the application uses its heuristic fallback.
