@@ -242,6 +242,7 @@ db/schema.sql                Runtime Neon schema reference
 vercel.json                  Build, API rewrite, SPA fallback, and response headers
 DEPLOYMENT_GUIDE.md          Step-by-step Vercel and provider setup
 PRODUCTION_CHECKLIST.md       Preview and production verification checklist
+TECH_STACK.md                Complete technology inventory and rationale
 ```
 
 ## Run and verify locally
