@@ -645,7 +645,7 @@ async function startServer() {
 
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, hmr: { port: PORT + 1 } },
       appType: 'spa',
     });
     app.use(vite.middlewares);
@@ -657,11 +657,23 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  const server = app.listen(PORT, '0.0.0.0');
+  server.once('listening', () => {
     console.log(`AI Voice-to-Action Server running at http://0.0.0.0:${PORT}`);
+  });
+  server.once('error', (error: NodeJS.ErrnoException) => {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use. Stop the existing development server or start with a different port, for example: $env:PORT=3001; npm run dev`);
+    } else {
+      console.error('Unable to start the server:', error);
+    }
+    process.exit(1);
   });
 }
 
 if (process.env.VERCEL !== '1') {
-  startServer();
+  startServer().catch((error) => {
+    console.error('Unable to initialize the application:', error);
+    process.exitCode = 1;
+  });
 }

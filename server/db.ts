@@ -122,6 +122,8 @@ const INITIAL_KNOWLEDGE: KnowledgeDocument[] = [
 const MAX_TASKS = 500;
 const MAX_KNOWLEDGE_DOCUMENTS = 50;
 const MAX_KNOWLEDGE_BYTES = 2 * 1024 * 1024;
+const DATABASE_INITIALIZATION_ATTEMPTS = 3;
+const DATABASE_INITIALIZATION_RETRY_DELAY_MS = 250;
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
 function queryRows<T>(result: unknown): T[] {
@@ -204,7 +206,7 @@ export class DatabaseService {
     this.dataFile = dataFile;
     this.legacyDataFile = legacyDataFile === dataFile ? null : legacyDataFile;
     this.production = production;
-    this.readyPromise = this.initialize().catch((error) => {
+    this.readyPromise = this.initializeWithRetry().catch((error) => {
       this.initializationError = error;
     });
   }
@@ -307,6 +309,26 @@ export class DatabaseService {
       )
     `;
     await this.sql`CREATE INDEX IF NOT EXISTS api_rate_limits_window_idx ON api_rate_limits(window_started_at)`;
+  }
+
+  private async initializeWithRetry(): Promise<void> {
+    if (!this.sql) {
+      await this.initialize();
+      return;
+    }
+
+    let lastError: unknown;
+    for (let attempt = 1; attempt <= DATABASE_INITIALIZATION_ATTEMPTS; attempt += 1) {
+      try {
+        await this.initialize();
+        return;
+      } catch (error) {
+        lastError = error;
+        if (attempt === DATABASE_INITIALIZATION_ATTEMPTS) break;
+        await new Promise((resolve) => setTimeout(resolve, DATABASE_INITIALIZATION_RETRY_DELAY_MS * attempt));
+      }
+    }
+    throw lastError;
   }
 
   private loadLocalData(): void {
