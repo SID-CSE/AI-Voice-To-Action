@@ -36,6 +36,23 @@ test('production storage reports unavailable instead of falling back to disk wit
   }
 });
 
+test('Neon initialization retries transient connection failures', async () => {
+  let attempts = 0;
+  const fakeSql = async () => {
+    attempts += 1;
+    if (attempts <= 2) throw new Error('temporary database outage');
+    return [];
+  };
+  const store = temporaryStore();
+  try {
+    const service = new DatabaseService(fakeSql as never, store.file, true);
+    await service.ready();
+    assert.equal(attempts, 6);
+  } finally {
+    store.cleanup();
+  }
+});
+
 test('guest scope is shared and survives a fresh database service', async () => {
   const store = temporaryStore();
   try {
