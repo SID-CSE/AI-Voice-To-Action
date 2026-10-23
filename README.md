@@ -168,6 +168,42 @@ flowchart LR
 3. Validation and guardrails run before AI generation. Knowledge retrieval adds workspace context, while weighted Gemini budgets prevent uncontrolled provider usage.
 4. Gemini output is normalized and stored with tasks, analyses, settings, and audit records in Neon. If Gemini is unavailable or unconfigured, the deterministic fallback keeps the workflow usable.
 
+### Repository architecture map
+
+The original project map is retained below as a complementary view. The runtime diagrams above explain deployment and request flow; this map explains where the implementation lives in the repository.
+
+```text
+/
+├── api/
+│   └── index.ts                    # Vercel serverless entry point
+├── server.ts                       # Express app and API route handlers
+├── dev-server.ts                   # Local Vite and standalone server startup
+├── server/
+│   ├── db.ts                       # Neon and local persistence, scopes, rate limits
+│   ├── gemini.ts                   # Gemini integration, retries, fallback models
+│   ├── guardrails.ts                # Server-side risk and safety checks
+│   ├── rag.ts                       # Workspace knowledge retrieval
+│   ├── prompts.ts                   # Baseline and ReAct prompt definitions
+│   ├── validation.ts                # Request, task, audit, and upload validation
+│   └── *.test.ts                    # Backend and validation regression tests
+├── src/
+│   ├── App.tsx                      # Workspace state and navigation
+│   ├── main.tsx                     # React and Clerk browser entry point
+│   ├── types.ts                     # Shared TypeScript domain types
+│   ├── services/
+│   │   └── api.ts                  # Same-origin browser API client
+│   ├── components/                  # Shared navigation, forms, cards, dialogs
+│   └── pages/                       # Assistant, dashboard, tasks, knowledge,
+│       │                             # audit, evaluation, settings, landing
+├── db/
+│   └── schema.sql                   # Neon schema reference
+├── dist/                            # Generated Vite and production server output
+├── metadata.json                    # Platform capability metadata
+├── package.json                     # Scripts and dependency manifest
+├── tsconfig.json                    # TypeScript compiler configuration
+└── vercel.json                      # Build, API rewrite, SPA fallback, headers
+```
+
 The Express API runs as a Vercel serverless function at `/api`. Frontend requests use same-origin relative `/api` routes. Clerk session tokens are sent by the client and verified by the server. The API then selects either the fixed guest scope or the verified user's scope. `api/index.ts` loads `server.js` lazily, while `dev-server.ts` contains the Vite-only local startup path; Vite is never imported by the Vercel function.
 
 ### File uploads and knowledge retrieval
