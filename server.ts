@@ -2,7 +2,6 @@ import express from 'express';
 import 'dotenv/config';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
-import { createServer as createViteServer } from 'vite';
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import { db } from './server/db.js';
 import { geminiService, isGeminiConfigured } from './server/gemini.js';
@@ -644,6 +643,7 @@ async function startServer() {
   const PORT = Number(process.env.PORT) || 3000;
 
   if (process.env.NODE_ENV !== 'production') {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true, hmr: { port: PORT + 1 } },
       appType: 'spa',
