@@ -15,6 +15,7 @@ import {
 } from './prompts.js';
 import { ragService } from './rag.js';
 import { guardrails } from './guardrails.js';
+import { extractActionCandidates, validateTaskEvidence } from './action-extraction.js';
 
 let genAIClient: GoogleGenAI | null = null;
 
@@ -30,7 +31,7 @@ function getGenAI(): GoogleGenAI | null {
         headers: {
           'User-Agent': 'aistudio-build',
         },
-        timeout: 3_500,
+        timeout: 20_000,
         retryOptions: { attempts: 1 },
       },
     });
@@ -47,10 +48,12 @@ export function isGeminiConfigured(): boolean {
  * Model candidate pool ordered by current reliability and availability
  */
 const MODEL_FALLBACK_CANDIDATES = [
-  'gemini-3.6-flash',
+  'gemini-flash-lite-latest',
+  'gemini-3.5-flash-lite',
   'gemini-3.1-flash-lite',
-  'gemini-flash-latest',
-  'gemini-3.8-flash',
+  'gemini-3.1-flash-lite-preview',
+  'gemini-3.6-flash',
+  'gemini-3-flash-preview',
 ];
 
 /**
@@ -60,6 +63,7 @@ async function generateWithModelFallback(
   ai: GoogleGenAI,
   options: {
     preferredModel?: string;
+    failFast?: boolean;
     prompt: string;
     systemInstruction: string;
     temperature?: number;
@@ -67,24 +71,22 @@ async function generateWithModelFallback(
 ): Promise<{ text: string; modelUsed: string }> {
   const preferred = options.preferredModel && options.preferredModel.trim().length > 0 
     ? options.preferredModel.trim() 
-    : 'gemini-3.6-flash';
+    : process.env.GEMINI_MODEL?.trim() || 'gemini-flash-lite-latest';
     
   // Normalize deprecated or legacy model names
-  const normalizedPreferred = (preferred.includes('2.5') || preferred.includes('2.0') || preferred.includes('1.5'))
-    ? 'gemini-3.6-flash'
-    : preferred;
+  const normalizedPreferred = preferred;
 
   const candidateModels = Array.from(new Set([
     normalizedPreferred,
     ...MODEL_FALLBACK_CANDIDATES,
-  ]));
+  ])).slice(0, options.failFast ? 1 : undefined);
 
   let lastError: any = null;
-  const deadline = Date.now() + 5_500;
+  const deadline = Date.now() + 25_000;
 
   for (const model of candidateModels) {
     if (Date.now() >= deadline) break;
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < (options.failFast ? 1 : 2); attempt++) {
       if (Date.now() >= deadline) break;
       try {
         const response = await ai.models.generateContent({
@@ -305,6 +307,7 @@ export class GeminiService {
       workflowType?: 'react' | 'baseline';
       enableGrounding?: boolean;
       preferredModel?: string;
+      failFast?: boolean;
     } = {}
   ): Promise<{
     output: AIAnalysisOutput;
@@ -380,7 +383,7 @@ export class GeminiService {
     });
 
     let rawOutput: AIAnalysisOutput;
-    let resolvedModelUsed = 'gemini-3.6-flash';
+    let resolvedModelUsed = process.env.GEMINI_MODEL?.trim() || 'gemini-flash-lite-latest';
     const ai = getGenAI();
 
     if (ai) {
@@ -390,12 +393,14 @@ export class GeminiService {
           : BASELINE_SYSTEM_INSTRUCTION;
 
         const formattedContext = ragService.formatContextForPrompt(groundedSources);
+        const actionCandidates = extractActionCandidates(transcript).join('\n') || transcript;
         const promptContent = workflowType === 'react'
           ? BUILD_REACT_PROMPT(transcript, formattedContext)
-          : BUILD_BASELINE_PROMPT(transcript);
+          : BUILD_BASELINE_PROMPT(transcript, actionCandidates);
 
         const genResult = await generateWithModelFallback(ai, {
           preferredModel: options.preferredModel,
+          failFast: options.failFast,
           prompt: promptContent,
           systemInstruction,
           temperature: workflowType === 'react' ? 0.2 : 0.7,
@@ -412,7 +417,7 @@ export class GeminiService {
           deadline: t.deadline ? String(t.deadline) : 'Not specified',
           priority: t.priority || 'Medium',
           dependencies: Array.isArray(t.dependencies) ? t.dependencies : [],
-          confidence: typeof t.confidence === 'number' ? t.confidence : 85,
+          confidence: normalizeConfidence(t.confidence),
           evidence: String(t.evidence || ''),
           status: 'Pending',
         })) : [];
@@ -436,11 +441,25 @@ export class GeminiService {
           })) : [],
           workflow_type: workflowType,
         };
+        rawOutput.tasks = validateTaskEvidence(rawOutput.tasks, transcript);
+        rawOutput.action_items = rawOutput.tasks.map(task => ({
+          action: task.task,
+          owner: task.owner,
+          deadline: task.deadline,
+          confidence: task.confidence,
+          evidence: task.evidence,
+        }));
 
         stages.find(s => s.id === 's5')!.status = 'completed';
         stages.find(s => s.id === 's5')!.detail = `Structured tasks parsed via ${resolvedModelUsed}.`;
       } catch (err) {
-        console.warn('Gemini API call failed across model pool, utilizing heuristic fallback:', err instanceof Error ? err.name : 'Unknown error');
+        const apiError = err as { name?: string; status?: number; message?: string };
+        console.warn(
+          'Gemini API call failed across model pool, utilizing heuristic fallback:',
+          apiError.name || 'Unknown error',
+          apiError.status ? `status=${apiError.status}` : '',
+          apiError.message || '',
+        );
         rawOutput = generateHeuristicAnalysis(transcript, workflowType);
         stages.find(s => s.id === 's5')!.status = 'completed';
         stages.find(s => s.id === 's5')!.detail = 'Extracted tasks using safe local parser fallback.';
@@ -493,6 +512,10 @@ export class GeminiService {
 
     rawOutput.grounded_sources = groundedSources;
     rawOutput.processing_stages = stages;
+    const extractionDetail = stages.find(stage => stage.id === 's5')?.detail || '';
+    const usedHeuristic = extractionDetail.includes('fallback') || extractionDetail.includes('rule engine');
+    rawOutput.analysis_provider = usedHeuristic ? 'heuristic' : 'gemini';
+    rawOutput.model_used = usedHeuristic ? undefined : resolvedModelUsed;
 
     const durationMs = Date.now() - startTime;
     return {

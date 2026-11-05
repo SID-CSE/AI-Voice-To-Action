@@ -59,6 +59,8 @@ export interface AIAnalysisOutput {
   grounded_sources?: GroundedSource[];
   workflow_type?: 'react' | 'baseline';
   processing_stages?: WorkflowStage[];
+  analysis_provider?: 'gemini' | 'heuristic';
+  model_used?: string;
 }
 
 export interface WorkflowStage {
@@ -151,9 +153,58 @@ export interface EvalTestCase {
   name: string;
   category: string;
   transcript: string;
+  benchmarkVersion: string;
   expectedTasksCount: number;
   expectedRisk: RiskLevel;
   expectedConfirmation: boolean;
+  goldTasks: EvalGoldTask[];
+  expectedUncertaintyCount: number;
+}
+
+export interface EvalGoldTask {
+  task: string;
+  owner: string;
+  deadline: string;
+  evidence: string;
+}
+
+export interface TextSpan {
+  start: number;
+  end: number;
+  text: string;
+}
+
+export interface GoldTaskAnnotation extends EvalGoldTask {
+  taskSpan?: TextSpan;
+  ownerSpan?: TextSpan;
+  deadlineSpan?: TextSpan;
+  evidenceSpan?: TextSpan;
+  ownerStatus: 'explicit' | 'resolved_from_context' | 'unknown';
+  deadlineStatus: 'explicit' | 'relative' | 'unknown';
+}
+
+export interface EvaluationAnnotationRecord {
+  schemaVersion: string;
+  caseId: string;
+  split: 'train' | 'validation' | 'test';
+  source: {
+    dataset: string;
+    license: string;
+    meetingId: string;
+    transcript: string;
+  };
+  tasks: GoldTaskAnnotation[];
+  uncertaintyLabels: string[];
+  risk: {
+    level: RiskLevel;
+    confirmationRequired: boolean;
+    categories: ProposedAction['category'][];
+  };
+  annotation: {
+    annotatorIds: string[];
+    adjudicated: boolean;
+    notes?: string;
+  };
 }
 
 export interface EvalResult {
@@ -166,11 +217,23 @@ export interface EvalResult {
     taskExtractionAccuracy: number;
     ownerAssignmentAccuracy: number;
     deadlineExtraction: number;
+    evidenceFaithfulness: number;
+    riskClassificationAccuracy: number;
+    confirmationAccuracy: number;
+    uncertaintyRecall: number;
+    taskPrecision: number;
+    taskRecall: number;
   };
   reactMetrics?: {
     taskExtractionAccuracy: number;
     ownerAssignmentAccuracy: number;
     deadlineExtraction: number;
+    evidenceFaithfulness: number;
+    riskClassificationAccuracy: number;
+    confirmationAccuracy: number;
+    uncertaintyRecall: number;
+    taskPrecision: number;
+    taskRecall: number;
   };
   comparisonNotes?: string[];
 }

@@ -76,7 +76,7 @@ npm run build
 
 `npm run dev` starts the Express API and Vite development middleware on port 3000. Keep that terminal open while using the local app. Open `http://localhost:3000` in your browser. Stop the server with **Ctrl+C**. `npm run lint` checks TypeScript, `npm test` runs the automated tests, `build:client` creates the Vite website, and `build` builds the website plus a standalone server bundle.
 
-The Settings page supports three persisted model choices: Standard (`gemini-3.6-flash`), Fast (`gemini-3.1-flash-lite`), and Latest stable (`gemini-flash-latest`). After changing a preference, verify it with `GET /api/settings`; a failed save must be treated as an error rather than a successful reset.
+The Settings page supports six persisted model choices: Fast Lite (`gemini-flash-lite-latest`), Balanced Lite (`gemini-3.5-flash-lite`), Available Lite (`gemini-3.1-flash-lite`), Available Lite Preview (`gemini-3.1-flash-lite-preview`), Standard (`gemini-3.6-flash`), and Preview (`gemini-3-flash-preview`). After changing a preference, verify it with `GET /api/settings`; a failed save must be treated as an error rather than a successful reset.
 
 ## STEP 2 — Verify GitHub and push safely
 

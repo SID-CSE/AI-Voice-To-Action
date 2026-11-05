@@ -1,0 +1,10 @@
+{
+  "dataset": "AMI Meeting Corpus",
+  "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+  "recordCount": 50,
+  "actionRecordCount": 25,
+  "reviewRequiredCount": 0,
+  "mergedRecordCount": 100,
+  "mergedActionRecordCount": 27,
+  "warning": "35 disagreement rows have independent human adjudication; the remaining rows have one primary annotation and the pilot remains too small for final publication claims."
+}

@@ -6,6 +6,14 @@
 
 The application is deployed as a Vercel project with a React frontend and an Express serverless API. The live deployment is the recommended way to demonstrate the complete guest workflow; private workspace behavior additionally depends on the configured Clerk environment.
 
+## Project status
+
+**Complete for the current prototype and 500-record evaluation milestone.**
+
+The implementation, reproducible evaluation outputs, final IEEE-style paper, paper figures, architecture documentation, tests, type-check, and production build are included in this repository. The completion status does not claim autonomous external action execution or quantitative RAG improvement; those remain explicitly out of scope until separately labeled data and integrations are available.
+
+See [`PROJECT_COMPLETION.md`](./PROJECT_COMPLETION.md) for the completion checklist and the remaining publication-quality extensions.
+
 The application offers two deliberately separate experiences:
 
 - **Guest demo:** open access to one shared, public, mutable workspace. Everyone using guest mode can see and change the same guest data. Never enter confidential or personal information here.
@@ -52,8 +60,12 @@ The Settings page persists the selected processing model through `PATCH /api/set
 
 | Display option | Persisted model |
 | --- | --- |
+| Fast Lite | `gemini-flash-lite-latest` |
+| Balanced Lite | `gemini-3.5-flash-lite` |
+| Available Lite | `gemini-3.1-flash-lite` |
+| Available Lite Preview | `gemini-3.1-flash-lite-preview` |
 | Standard | `gemini-3.6-flash` |
-| Fast | `gemini-3.1-flash-lite` |
+| Preview | `gemini-3-flash-preview` |
 | Latest stable | `gemini-flash-latest` |
 
 The selected value is read back from the server after saving and remains active for subsequent analysis requests. Failed settings requests are surfaced to the user instead of silently reverting to Standard.
@@ -61,6 +73,8 @@ The selected value is read back from the server after saving and remains active 
 ## Architecture
 
 The deployed system combines a browser client, a Vercel serverless boundary, identity-aware workspace scoping, responsible-AI controls, optional Gemini generation, and durable Neon storage. The diagrams below show both the runtime topology and the internal request flow.
+
+The generated architecture inventory is also available at [`architecture-diagram.md`](./.github/modernize/assessment/engines/facts/architecture-diagram.md), and the publication figures are in [`research/figures/`](./research/figures/).
 
 <!-- mermaid-checked: no \n, no em-dash/en-dash, no {} in labels, subgraphs are id["label"], arrows are -->|"label"|, all subgraphs closed by end, ids unique -->
 ```mermaid
@@ -197,6 +211,8 @@ The original project map is retained below as a complementary view. The runtime 
 │       │                             # audit, evaluation, settings, landing
 ├── db/
 │   └── schema.sql                   # Neon schema reference
+├── evaluation/                      # Annotation schema, validator, loader, runner, pilot fixture
+├── research/                        # Research assessment, roadmap, literature, and experiment design
 ├── dist/                            # Generated Vite and production server output
 ├── metadata.json                    # Platform capability metadata
 ├── package.json                     # Scripts and dependency manifest
@@ -263,7 +279,15 @@ npm run build:client
 npm run build
 ```
 
-`npm test` runs the input/guardrail, workspace persistence and isolation, concurrency, storage-limit, confirmation, and API validation tests. The current suite contains 18 passing tests.
+`npm test` runs the input/guardrail, workspace persistence and isolation, concurrency, storage-limit, confirmation, API validation, annotation, dataset-loader, scorer, calibration, and offline-runner tests. The current suite contains 30 passing tests.
+
+### Research evaluation workflow
+
+The project now includes an offline research evaluation foundation. The 10 synthetic cases in `server/evaluation.ts` are versioned regression fixtures, not a representative research dataset. Annotation records are validated before scoring, and the public `/api/evaluation/cases` endpoint does not expose gold task labels.
+
+The research documentation and manual-work checklist are in [`research/README.md`](./research/README.md). The machine-readable annotation contract is [`evaluation/benchmark.schema.json`](./evaluation/benchmark.schema.json), and the analyzer-agnostic runner is [`evaluation/runner.ts`](./evaluation/runner.ts).
+
+For the recommended dataset plan and exact files to provide manually, see [`research/MANUAL_INPUT_CHECKLIST.md`](./research/MANUAL_INPUT_CHECKLIST.md). AMI is recommended as the primary voice/multi-party corpus; MeetingBank is recommended for external generalization; QMSum is optional for query-focused retrieval.
 
 ### Environment variables
 

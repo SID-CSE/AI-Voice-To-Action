@@ -17,7 +17,7 @@ The React 19 and TypeScript frontend is organized around a single application sh
 - Tasks: task filtering, status changes, inline editing, manual task creation, and export.
 - Knowledge Base: documents used for grounded retrieval and searchable excerpts.
 - Audit Logs: searchable risk and confirmation history with detailed JSON inspection.
-- Evaluation: baseline versus ReAct benchmark cases.
+- Evaluation: baseline versus ReAct benchmark cases with server-side gold scoring.
 - Settings: model, grounding, guardrail, and reset controls.
 
 The browser uses the Web Speech API for live transcription when supported and always provides typed transcript input as a fallback.
@@ -53,6 +53,10 @@ When the API key is absent or the model is unavailable, a deterministic local he
 
 The application does not execute real financial, email, deletion, or access-control operations. The confirmation endpoint records an authorization decision as a safe simulation.
 
+### Research evaluation tooling
+
+The `evaluation/` directory is intentionally separate from the production API. It contains the versioned annotation schema, span/evidence validator, duplicate-safe dataset loader, annotation adapter, and offline analyzer runner. `server/evaluation.ts` computes gold-based task, field, evidence, risk, confirmation, uncertainty, and confidence metrics. The ten synthetic cases are regression fixtures only; larger licensed or de-identified data must be collected and annotated manually.
+
 ### 6. Storage
 
 `server/db.ts` supports local JSON storage for development and Neon PostgreSQL for deployed environments. The local path is configurable:
@@ -66,8 +70,12 @@ When `DATABASE_URL` is configured, the deployment uses Neon and stores versioned
 
 The Settings page sends model changes to `PATCH /api/settings`. The server validates the supported IDs and persists them in the active workspace. The current choices are:
 
+- Fast Lite: `gemini-flash-lite-latest`
+- Balanced Lite: `gemini-3.5-flash-lite`
+- Available Lite: `gemini-3.1-flash-lite`
+- Available Lite Preview: `gemini-3.1-flash-lite-preview`
 - Standard: `gemini-3.6-flash`
-- Fast: `gemini-3.1-flash-lite`
+- Preview: `gemini-3-flash-preview`
 - Latest stable: `gemini-flash-latest`
 
 The client checks HTTP failures and synchronizes its local form with the saved server response, so a failed save cannot silently reset the visible choice.

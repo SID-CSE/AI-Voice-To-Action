@@ -1,0 +1,1737 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-001",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3010a",
+      "transcript": "So we will get back th on that. First we have to make a functional design. After that we have to make a conceptual design, and then after that a detailed design. So we'll discuss that later."
+    },
+    "tasks": [
+      {
+        "task": "Make the functional design, then the conceptual design, then the detailed design",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "First we have to make a functional design.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 32,
+          "end": 74,
+          "text": "First we have to make a functional design."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Both readings are defensible; adopted yes because 'we have to make' states group obligations in sequence. 'First/After that' are ordering words, not deadlines; 'discuss that later' gives no date. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-002",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2009d",
+      "transcript": ". You don't you don't need me involved in the pilot, do you. So well unle unless unless it's a bug report, yeah. I'll w yeah w I'll I'll I'll b I'll be around. But yeah, I'll make sure. But ho hopefully it will run smoothly and yeah, I can relax. So"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Availability statement; 'I'll make sure' has no stated object; opens with a question. Could be read as a commitment. Transcript begins and ends mid-utterance. || Second-pass review: Kept as no. 'I'll be around' is availability, 'I'll make sure' has no object, and the plan is conditional on a bug report."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-003",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2011c",
+      "transcript": "And we'll need to custom desi design a circuit board, because the circuit board has to take the button input and send it to the output so you have to design that each time. But once we come up with a design we'll send it to the circuit people and they'll just print it out."
+    },
+    "tasks": [
+      {
+        "task": "Design a custom circuit board",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "But once we come up with a design we'll send it to the circuit people",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 173,
+          "end": 242,
+          "text": "But once we come up with a design we'll send it to the circuit people"
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Adopted yes: 'we'll need to design' states an intended group action. Sending the design to the circuit people is conditional on having a design and was not merged into the task (primary evidence points at that conditional step). Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-004",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2003b",
+      "transcript": "To go on from here. Um we have to decide exactly what we're going to do with the remote. Before we leave this meeting, it would be best to say this is what we're going this is the design we're gonna try and get, this is how we're gonna make ourselves look unique."
+    },
+    "tasks": [
+      {
+        "task": "Decide exactly what to do with the remote",
+        "owner": "Not specified",
+        "deadline": "Before we leave this meeting",
+        "evidence": "we have to decide exactly what we're going to do with the remote. Before we leave this meeting",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "explicit",
+        "evidenceSpan": {
+          "start": 23,
+          "end": 117,
+          "text": "we have to decide exactly what we're going to do with the remote. Before we leave this meeting"
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Both annotators agree it is an action. Deadline is the verbatim phrase. 'Group' not adopted as owner. The 'it would be best to say' clause is elaboration of the same decision. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-005",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002b",
+      "transcript": ". So But I mean you can, you know, you can write we can write something like um we'll try and do it on the fly and and observe if if that gonna is gonna take too long. If it's gonna take too long, we'll think about writing it to a file and doing it off-line."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Changed to no: the sentence is introduced by 'you can write we can write something like', so the content is suggested wording for a written plan, not a commitment. Alternative reading: group plans to try processing on the fly, with a conditional fallback to doing it off-line."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-006",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2009b",
+      "transcript": "Yep. Yep. Um yeah, I'll make sure make sure they can actually pick up the f um audio signal as well. Uh so but uh it should be the yeah, the audio signal should be coming out the speakers once it's set up properly. So that should that should make that slightly easier."
+    },
+    "tasks": [
+      {
+        "task": "Make sure they can pick up the audio signal",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "I'll make sure make sure they can actually pick up the f um audio signal as well.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 19,
+          "end": 100,
+          "text": "I'll make sure make sure they can actually pick up the f um audio signal as well."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Agreed action. 'they' is unidentified. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-007",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1000d",
+      "transcript": "Both in i i or we just have to choose. And adapt. Because, when we choose for this one we have to we have to make it more attractive and w when we to d for this one we have to make it more cheap."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Discussion of options; no commitment or owner. || Second-pass review: Kept as no. 'we just have to choose' is one alternative in an either/or ('Both ... or'), not a decided action."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-008",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1002c",
+      "transcript": "I'm gonna open. I'm gonna talk for a bit about what we're gonna do. I'm gonna take some notes. We're gonna all do a presentation, and then hopefully we're gonna make some decisions now."
+    },
+    "tasks": [
+      {
+        "task": "Take notes",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "I'm gonna take some notes.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 68,
+          "end": 94,
+          "text": "I'm gonna take some notes."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Agreed action; 'during the meeting' is not stated in the transcript so deadline stays Not specified. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-009",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1004a",
+      "transcript": "During each step uh of each design we wi you will work uh s separately, individually on uh your specific tasks and will m we will meet to um to discuss and take decisions about uh what you've you've you did and what uh we will do next."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Classified no: general description of how work will proceed in each design step; the specific tasks are not named. Borderline: could be read as a standing assignment to each participant."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-010",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3003c",
+      "transcript": "We've got a general idea of the concepts and the materials we're going to use. So now for the next meeting uh we'll have to look at the look-and-feel design. It's important that the corporate design image uh is going to be in the remote. So check out the corporate website maybe."
+    },
+    "tasks": [
+      {
+        "task": "Look at the look-and-feel design",
+        "owner": "Not specified",
+        "deadline": "next meeting",
+        "evidence": "now for the next meeting uh we'll have to look at the look-and-feel design.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "explicit",
+        "evidenceSpan": {
+          "start": 82,
+          "end": 157,
+          "text": "now for the next meeting uh we'll have to look at the look-and-feel design."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "'next meeting' is explicitly tied to the look-and-feel work. 'check out the corporate website maybe' is a tentative, secondary suggestion and is not merged (annotator 2's primary). Confirmation no: nothing external. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-011",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3003d",
+      "transcript": "And this uh design, detailed design meeting uh we will discuss uh the look-and-feel of the design, the usability interface design, and we will do the product evaluation. Um, in order to do that we have this agenda."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Agenda announcement, not a specific action."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-012",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IB4011",
+      "transcript": "So the goal for today is to decide for a movie to project at the end of the month, so for this month of of April, and also discuss the content for an adver advertising posters and um I I will present you three des different design, we'll discuss it. So first we have to decide for um a movie."
+    },
+    "tasks": [
+      {
+        "task": "Decide on a movie to project at the end of the month",
+        "owner": "Not specified",
+        "deadline": "today",
+        "evidence": "the goal for today is to decide for a movie to project at the end of the month",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "explicit",
+        "evidenceSpan": {
+          "start": 3,
+          "end": 81,
+          "text": "the goal for today is to decide for a movie to project at the end of the month"
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "The stated goal for today is the decision, so deadline is 'today'; annotator 2's 'End of April' is the screening date, not a deadline for the action. Presenting three designs and discussing posters are further agenda items, not captured. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-013",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3010b",
+      "transcript": "And when you push the button, it will uh will be sent to the chip. And the chip will um send it to all kind of sub-components. That's what I said, it's very difficult. And after that it will be sent to the infrared. And that will send it to your television."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Explanation of how the device works."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-014",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001a",
+      "transcript": "Let's check that out. Um I'll p I'll probably ask Jonathan about it. So alternatively, if we realise we can't do the whole thing in one go, we can probably just process some sort of meta-data, you know what I mean, like sort of sort of for the whole series"
+    },
+    "tasks": [
+      {
+        "task": "Ask Jonathan about it",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "I'll probably ask Jonathan about it.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 32,
+          "end": 68,
+          "text": "I'll probably ask Jonathan about it."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Adopted yes: 'I'll probably ask' is a hedged but stated intention. 'it' is unresolved. Jonathan is the person asked, not the owner. The 'alternatively' meta-data plan is conditional and not captured. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-015",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2009b",
+      "transcript": "Yes. Mm mm-hmm, yeah. Yes, but uh or in our discussion we haven't mentioned uh it was assumed there'd be a voice over. But I'll I'll I better I'll I'll remind her yeah, I'll I'll I'll do that. Mm-hmm. Yes, 'cause we've got to think of the instructions and sort of basic introduction to it all as well. So"
+    },
+    "tasks": [
+      {
+        "task": "Remind her about the voice over",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "I'll I'll I better I'll I'll remind her yeah, I'll I'll I'll do that.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 123,
+          "end": 192,
+          "text": "I'll I'll I better I'll I'll remind her yeah, I'll I'll I'll do that."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Agreed action; 'her' is unidentified, so the task keeps the pronoun rather than 'the woman'. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-016",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2009c",
+      "transcript": "Right, yeah. Well I'll make sure I make a I'll make sure of I got the f the phone number in my phone so I can call them."
+    },
+    "tasks": [
+      {
+        "task": "Make sure the phone number is saved in the phone so they can be called",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "I'll make sure of I got the f the phone number in my phone so I can call them.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 42,
+          "end": 120,
+          "text": "I'll make sure of I got the f the phone number in my phone so I can call them."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Agreed action; 'them' is unidentified and the later call may be external, but the explicit action is saving the number. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-017",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2002c",
+      "transcript": "That for uh this to be a high-tech thing it's gonna have to have something high-tech about it and that's gonna take battery power, and to make that to make that a realistic goal I think one of the issues that will come up later is, can the battery power it?"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Question/concern, not an action."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-018",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2008c",
+      "transcript": "I think w well I think when we go on to the une userface, we're gonna have to decide the interface we're gonna have to decide um whether we're gonna have a scroll or not."
+    },
+    "tasks": [
+      {
+        "task": "Decide whether to have a scroll",
+        "owner": "Not specified",
+        "deadline": "when we go on to the une userface",
+        "evidence": "we're gonna have to decide um whether we're gonna have a scroll or not.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "explicit",
+        "evidenceSpan": {
+          "start": 99,
+          "end": 170,
+          "text": "we're gonna have to decide um whether we're gonna have a scroll or not."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Agreed action; deadline kept verbatim even though garbled. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-019",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2008c",
+      "transcript": "Yeah. And let's like see if we get anything else. I mean I'm not like hard-sold on the scroll wheel, it's more just to give it a different kind of look, but if it's gonna be in a latex type thing and that's gonna look cool, then that's probably gonna have a bigger impact than the scroll wheel."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Opinion and tentative suggestion; conditional ('if it's gonna be in a latex type thing'). || Second-pass review: Kept as no. Opinion plus tentative 'let's see if we get anything else'; no commitment."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-020",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2010b",
+      "transcript": "fulfil the role of secretary, take the meeting minutes. And we're gonna have three presentations, one from each of you. Then we're gonna discuss some new project requirements. Um gonna come to a decision on the functions of the remote control. And then we're gonna close up the meeting. And we're gonna do this all in about forty minutes."
+    },
+    "tasks": [
+      {
+        "task": "Take the meeting minutes",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "fulfil the role of secretary, take the meeting minutes.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 0,
+          "end": 55,
+          "text": "fulfil the role of secretary, take the meeting minutes."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Transcript starts mid-sentence, so the subject is unknown; 'during the meeting' is not stated. The rest is agenda. Confirmation no (annotator 2 yes unsupported). Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-021",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1001a",
+      "transcript": "So I will first start with a warm welcome opening stuff, then uh we will uh see what will be uh our product and what will be the different step we will have to design it."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Agenda for the meeting, not a discrete task."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-022",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1002b",
+      "transcript": "what I can do is I can d look into ho well Pedro and I can look into how much this might increase our our costs and you can look into what kind of effect an increased cost is gonna have on our on our final numbers."
+    },
+    "tasks": [
+      {
+        "task": "Look into how much this might increase costs",
+        "owner": "Pedro",
+        "deadline": "Not specified",
+        "evidence": "Pedro and I can look into how much this might increase our our costs and you can look into what kind of effect an increased cost is gonna have on our on our final numbers.",
+        "ownerStatus": "explicit",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 43,
+          "end": 214,
+          "text": "Pedro and I can look into how much this might increase our our costs and you can look into what kind of effect an increased cost is gonna have on our on our final numbers."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Two actions with different owners: (1) cost increase, Pedro and the unnamed speaker; (2) effect on final numbers, 'you' (unnamed). One row can hold only one owner set, so only (1) is captured with the one named owner; (2) needs a separate row. Phrased as an offer ('can'). Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-023",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1002b",
+      "transcript": "Well, see I I see I I'm an advocate to make this an exclusive product. You know, let's let's sell this wholesale for for fifty Euros, sixty Euros. Let's make this thing really exclusive, environmentally sensitive, uh high-tech design, uh ergonomics, all of this. Just make this thing uh, yeah, the the the Rolls Royce of of remote controls."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Opinion/proposal about pricing; not agreed. Contains money figures but no transfer or commitment. || Second-pass review: Kept as no. Pricing opinion/proposal; no agreement or assignment."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-024",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1003c",
+      "transcript": "So let's start our second me meeting on conceptual design. So, as the previous meeting I will be the secretary and we will have three presentations and we'll have to decide on the remote control concept and finally we'll close the decision. So I will first uh"
+    },
+    "tasks": [
+      {
+        "task": "Act as secretary",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "as the previous meeting I will be the secretary",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 63,
+          "end": 110,
+          "text": "as the previous meeting I will be the secretary"
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Adopted yes: 'I will be the secretary' is a role commitment. Three presentations and the concept decision are agenda items, not captured. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-025",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1004c",
+      "transcript": "to building a prototype, based on this, okay? So next meeting you guys have to prepare the followi things. You have to uh work on the look and feel uh design and you have to work on the user interface, in fact you two you have to work together to model the first uh f first prototype."
+    },
+    "tasks": [
+      {
+        "task": "Prepare look-and-feel design and user interface work, and model the first prototype together",
+        "owner": "you guys",
+        "deadline": "next meeting",
+        "evidence": "So next meeting you guys have to prepare the followi things. You have to uh work on the look and feel uh design and you have to work on the user interface, in fact you two you have to work together to model the first uh f first prototype.",
+        "ownerStatus": "explicit",
+        "deadlineStatus": "explicit",
+        "evidenceSpan": {
+          "start": 46,
+          "end": 284,
+          "text": "So next meeting you guys have to prepare the followi things. You have to uh work on the look and feel uh design and you have to work on the user interface, in fact you two you have to work together to model the first uh f first prototype."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Owner 'you guys' is the addressed group; 'you two' applies to the prototype modelling and is not separately representable. Unclear who takes which part. Contains three sub-actions. HIGH risk is not supported: no money, deletion, credentials or security. Confirmation no."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-026",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1004d",
+      "transcript": "Okay. So let's move uh let's move on. Okay, now now we have to mm to estimate uh the cost okay. So I prepare an Excel sh uh an Excel sheet. Um well we are going to calculate the production costs. We should we should be below twelve point five."
+    },
+    "tasks": [
+      {
+        "task": "Calculate the production costs",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "we are going to calculate the production costs.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 148,
+          "end": 195,
+          "text": "we are going to calculate the production costs."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "'I prepare an Excel sheet' may be done or ongoing and is not an action here; 'below twelve point five' is a constraint with no unit. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-027",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3003c",
+      "transcript": "And then we're going to uh try to finish our project, and uh make a good design for all the grandfathers and grandmothers, I think. Which are Uh let's see. I'm not sure if you're going to start right away to work together or I think you're going to fill in the questionnaires first. And then you'll get a message."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Classified no: hedged prediction ('I'm not sure', 'I think') about what will happen next, not an assignment. Annotator 2's questionnaire task is an over-reading."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-028",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3007c",
+      "transcript": "Yeah, the disadvantage vantage is that someone will has to send all the show-view numbers of the programs that they remotes and edit it all, will have to decide uh"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Unassigned need described as a disadvantage; truncated mid-sentence. || Second-pass review: Kept as no. Unassigned disadvantage statement; truncated."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-029",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3009b",
+      "transcript": "smart uh to uh to include some things uh we can't, because of the new requirements. Well um then we can make some decisions about our remote control functions. We have to deb we have to decide it in this meeting what our function will be."
+    },
+    "tasks": [
+      {
+        "task": "Decide the remote control functions",
+        "owner": "Not specified",
+        "deadline": "in this meeting",
+        "evidence": "We have to deb we have to decide it in this meeting what our function will be.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "explicit",
+        "evidenceSpan": {
+          "start": 160,
+          "end": 238,
+          "text": "We have to deb we have to decide it in this meeting what our function will be."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Agreed action with deadline stated in the transcript. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-030",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3010a",
+      "transcript": "First we have a look at. So first to we have to make a small painting. What have do we have to do. First you can save the documents. We have to do that every time we make something. You can print it. No. And we have to use the pen and the eraser."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Classified no: explanation of how to use a drawing tool in an exercise ('you can save', 'you can print it. No.'); no discrete assigned task. The rejected print suggestion is not an action. Borderline."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-031",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3012a",
+      "transcript": "So it should be really easy. This is to take the just take a new slide and back again. We're just gonna keep using this board all the time, so I think it will be it's very clear for everyone, I suppose. So I'll take this out."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Immediate in-meeting step with unclear referent ('take this out'). Policy for immediate in-meeting mechanics (031, 033, 048, 050): classified no because they are not follow-up tasks; PI should confirm this policy."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-032",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3012b",
+      "transcript": "So you have to come up with a components concept, yeah. I want some you should do some trend-watching, because even if we're if we're gonna do those covers and everything, what people really want, that's what we need to know in this phase, because that's gonna be the essential final design that we're gonna come up with."
+    },
+    "tasks": [
+      {
+        "task": "Come up with a components concept and do some trend-watching",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "So you have to come up with a components concept, yeah.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 0,
+          "end": 55,
+          "text": "So you have to come up with a components concept, yeah."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Same unnamed addressee ('you') for both, so merged; the second is phrased as a recommendation ('should'). 'in this phase' describes why, not a deadline. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-033",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3012b",
+      "transcript": "So let's say that people would want an L_C_D_ thing. Let's take take the basic design again, what we oh, crap uh came up with. I'll just make it a little bigger now."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Immediate drawing step ('make it a little bigger now'). Policy for immediate in-meeting mechanics (031, 033, 048, 050): classified no because they are not follow-up tasks; PI should confirm this policy."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-034",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001e",
+      "transcript": "Yeah, and I think like I'll just I'll just kick in full time for N_L_S_S_D_ next week, 'cause there's nothing I have to do then. Apart from Cognitive Modelling, which I think I'll just do in five hours, three hours. you take a look at that?"
+    },
+    "tasks": [
+      {
+        "task": "Work full time on N_L_S_S_D_",
+        "owner": "Not specified",
+        "deadline": "next week",
+        "evidence": "I'll just I'll just kick in full time for N_L_S_S_D_ next week",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "explicit",
+        "evidenceSpan": {
+          "start": 23,
+          "end": 85,
+          "text": "I'll just I'll just kick in full time for N_L_S_S_D_ next week"
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Agreed action. Trailing 'you take a look at that?' is a truncated question. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-035",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2008c",
+      "transcript": "Um I'm very excited by this one actually guys I uh had a lot of fun doing it. Components design. This is where you look at what does it take to make a remote control and what should we make our specific remote control out of."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Presentation intro, not an action."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-036",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2009c",
+      "transcript": "Okay. Um, basically what I'm gonna have to talk to you about today is um component design and it's been brought to my attention that we may be somewhat limited as to what we can do because of what our manufacturer offers, so Basically what I'm gonna be doing is talking to you about that."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Presentation topic announcement; also states a manufacturer limitation (constraint)."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-037",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2011b",
+      "transcript": "Um, yeah, let's think about it 'cause we need to wrap up. Um let's see. Um so everyone's gonna go finish their questionnaire, uh then when we come back after lunch we'll have thirty minutes of individual work, um yeah, so think about the things we've discussed and bring some new ideas to our next meeting. See you soon."
+    },
+    "tasks": [
+      {
+        "task": "Think about the things discussed and bring new ideas",
+        "owner": "Not specified",
+        "deadline": "next meeting",
+        "evidence": "so think about the things we've discussed and bring some new ideas to our next meeting.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "explicit",
+        "evidenceSpan": {
+          "start": 219,
+          "end": 306,
+          "text": "so think about the things we've discussed and bring some new ideas to our next meeting."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Primary action chosen from several: finishing the questionnaire ('everyone') and 30 minutes of individual work are further actions that cannot share one deadline, so are not captured and need separate rows. Owner of the primary is an addressed but unnamed group. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-038",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1001a",
+      "transcript": "And uh then we will uh discuss if we have few ideas and we will uh end uh by uh dispatching the different task you will be you will have to fulfil to complete this process."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Classified no: agenda announcement ('we will end by dispatching the different task'); no task is named. Consistent with other agenda statements."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-039",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "IS1002b",
+      "transcript": "And and we're gonna make it we're gonna win mind-share by uh either being a fantastic product or for it working, it just being good, reasonable-priced, and solid. So if we can make if we can put an emphasis here on it not breaking I think that's in itself an extremely big thing."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Conditional/opinion about strategy. || Second-pass review: Kept as no. Strategy opinion with a conditional."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-040",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3003d",
+      "transcript": "Okay this our last meeting. In this meeting we will discuss our final design. And we will do some evaluation about the, not only the product, but also the project. And then we're going to close the project today as well. So after this you will be uh free to go and uh spend all your money."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Agenda announcement."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-041",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "TS3007a",
+      "transcript": "Yeah. Um one thing uh, we must first agree on uh what we're going to m going to make. Do we Are we going to use um it it for multiple systems? Or uh We should have some agreement on that before we"
+    },
+    "tasks": [
+      {
+        "task": "Agree on what to make",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "we must first agree on uh what we're going to m going to make.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 23,
+          "end": 85,
+          "text": "we must first agree on uh what we're going to m going to make."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Deadline stays Not specified: 'first' is an ordering word and the 'before we' clause is truncated; annotator 2's 'before the meeting ends' is an inference. Task is not narrowed to 'multiple systems' since that is posed as a question. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-042",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001a",
+      "transcript": "Yeah. I I'll I'll check if I understand how it works. I mean otherwise I can give you the code for loading a dictionary. Give you my my it's just it's it's sort of it's a line break separated file, you know."
+    },
+    "tasks": [
+      {
+        "task": "Check whether I understand how it works",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "I'll I'll check if I understand how it works.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 8,
+          "end": 53,
+          "text": "I'll I'll check if I understand how it works."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "The conditional offer to give the dictionary code is secondary and not captured. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-043",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001d",
+      "transcript": "Yeah. Yeah, so we can meet in five in Apple at five in Appleton tower and just work on so I'll I'll have my displ I'll make sure that my display does all the stuff we've been talking about un until then."
+    },
+    "tasks": [
+      {
+        "task": "Make sure the display does all the stuff discussed",
+        "owner": "Not specified",
+        "deadline": "until then",
+        "evidence": "I'll make sure that my display does all the stuff we've been talking about un until then.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "explicit",
+        "evidenceSpan": {
+          "start": 114,
+          "end": 203,
+          "text": "I'll make sure that my display does all the stuff we've been talking about un until then."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "'until then' is kept verbatim; it refers to the proposed meeting at five in Appleton tower, which is a separate proposal not captured. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-044",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002a",
+      "transcript": "Maybe you should decide pretty pretty early what kind of things you wanna be able to search for. And then if you want, you can give that to me and I'll I'll build a u nice, you know, a few tick-boxes and drop-down menus."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Classified no: offer conditional on the other person ('if you want, you can give that to me') with no acceptance in the record. 'Maybe you should decide' is a recommendation. Could be reinstated as a conditional action."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-045",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002c",
+      "transcript": "Right. I'll write um I'll write this meeting up and I'll send it to Pernilla as well."
+    },
+    "tasks": [
+      {
+        "task": "Write up the meeting and send it to Pernilla",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "I'll write um I'll write this meeting up and I'll send it to Pernilla as well.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 7,
+          "end": 85,
+          "text": "I'll write um I'll write this meeting up and I'll send it to Pernilla as well."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "communication"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Two steps merged. Risk LOW/no because the transcript does not say Pernilla is external; the rule is MEDIUM only for external communication. PI should decide whether sending to a named recipient who is not a participant should be MEDIUM/yes (primary's label). Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-046",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2003a",
+      "transcript": "we've got an idea. I think there's thirty talks and and say six, ten posters, whatever we can manage to fit in the room. Um so we need to look at we need to look at where we're gonna ho hold it. We could have it in B_ nine, but there's things all over the wall."
+    },
+    "tasks": [
+      {
+        "task": "Decide where to hold the talks and posters",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "we need to look at where we're gonna ho hold it.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 146,
+          "end": 194,
+          "text": "we need to look at where we're gonna ho hold it."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "'We could have it in B_ nine' is only a proposal. 'event' in annotator 2's task is not in the transcript. Owner kept as Not specified: a bare 'I', 'you' or 'we' is not a named owner, so annotator 2's 'Speaker'/'Group' is not adopted. Risk LOW/no confirmation: ordinary design/planning work; annotator 2's MEDIUM/yes is not supported by the risk definitions."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-047",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2002c",
+      "transcript": "Okay I'm gonna have to I'm gonna have to call this to a close 'cause we're way over time. So um that's really good, like we've s had much to talk about that um pretty much run out of time to do so. So off you go and design stuff wooh."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Meeting closing; 'design stuff' is a vague send-off with no specific task. || Second-pass review: Kept as no. Closing remark with a vague send-off; no specific task."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-048",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2002d",
+      "transcript": "Yeah okay. Well well there we go. So I'm just gonna have to redraw this now. So we're not gonna have the L_C_D_ anymore, and we'll just gonna have an on t on the T_V_ it'll show you what you're doing, which I think is fair enough, and so this is gonna be one big thing here."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Immediate redraw during the meeting; the LCD removal is a design statement, not an assigned task. Policy for immediate in-meeting mechanics (031, 033, 048, 050): classified no because they are not follow-up tasks; PI should confirm this policy."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-049",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2004b",
+      "transcript": "I think we have to design one product and then the company can take it wherever they want to uh in the sense that they can make it smaller, or they can make it bigger or they can change the features slightly, um."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Opinion about design approach; hedged ('I think'). || Second-pass review: Kept as no. Hedged opinion ('I think') about design scope."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-action-pilot-050",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "ES2004d",
+      "transcript": "Yeah, shall I show? I'll show. Though do you do you wanna do you wanna sh do you wanna hold it and I'll I'll show you the presentation. Can I just nick your"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human",
+        "independent-human-2"
+      ],
+      "adjudicated": true,
+      "notes": "Immediate in-meeting offer, partly a question; truncated. Policy for immediate in-meeting mechanics (031, 033, 048, 050): classified no because they are not follow-up tasks; PI should confirm this policy."
+    }
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "dataset": "AMI Meeting Corpus",
+  "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+  "source": "https://groups.inf.ed.ac.uk/ami/download/",
+  "annotationSchema": "1.0",
+  "recordCount": 50,
+  "actionRecordCount": 2,
+  "meetingCount": 13,
+  "splits": {
+    "train": [
+      "EN2002a",
+      "EN2002b",
+      "EN2002c",
+      "EN2002d",
+      "EN2003a",
+      "EN2004a",
+      "EN2005a",
+      "EN2006a",
+      "EN2006b"
+    ],
+    "validation": [
+      "EN2001d",
+      "EN2001e"
+    ],
+    "test": [
+      "EN2001a",
+      "EN2001b"
+    ]
+  },
+  "warning": "Pilot has only two positive action records; do not report final model performance from this pilot."
+}

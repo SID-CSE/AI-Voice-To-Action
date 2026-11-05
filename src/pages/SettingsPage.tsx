@@ -82,12 +82,16 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           <div>
             <label className="text-slate-300 font-medium block mb-1">AI Processing Model</label>
             <select
-              value={localSettings.model || 'gemini-3.6-flash'}
+              value={localSettings.model || 'gemini-flash-lite-latest'}
               onChange={(e) => setLocalSettings({ ...localSettings, model: e.target.value, modelName: e.target.value })}
               className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-indigo-500"
             >
+              <option value="gemini-flash-lite-latest">Fast Lite</option>
+              <option value="gemini-3.5-flash-lite">Balanced Lite</option>
+              <option value="gemini-3.1-flash-lite">Available Lite</option>
+              <option value="gemini-3.1-flash-lite-preview">Available Lite Preview</option>
               <option value="gemini-3.6-flash">Standard</option>
-              <option value="gemini-3.1-flash-lite">Fast</option>
+              <option value="gemini-3-flash-preview">Preview</option>
               <option value="gemini-flash-latest">Latest stable</option>
             </select>
             <p className="text-[11px] text-slate-500 mt-1">The server accepts only supported model choices and keeps safety checks enabled.</p>

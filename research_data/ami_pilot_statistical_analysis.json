@@ -1,0 +1,1199 @@
+{
+  "datasetVersion": "ami-pilot-v2-500",
+  "method": "Deterministic percentile bootstrap over per-case macro scores",
+  "seed": 2654435769,
+  "analyses": [
+    {
+      "workflow": "gemini-baseline-batched",
+      "model": "gemini-3.1-flash-lite",
+      "caseCount": 500,
+      "scoredCaseCount": 500,
+      "apiResponses": 100,
+      "fallbackResponses": 0,
+      "confidenceLevel": 0.95,
+      "bootstrapIterations": 5000,
+      "metrics": {
+        "taskExtractionAccuracy": {
+          "estimate": 53.534,
+          "lower95": 49.2,
+          "upper95": 58
+        },
+        "ownerAssignmentAccuracy": {
+          "estimate": 54.8,
+          "lower95": 50.6,
+          "upper95": 59.4
+        },
+        "deadlineExtraction": {
+          "estimate": 54.8,
+          "lower95": 50.4,
+          "upper95": 59.2
+        },
+        "evidenceFaithfulness": {
+          "estimate": 54.2,
+          "lower95": 49.8,
+          "upper95": 58.6
+        },
+        "riskClassificationAccuracy": {
+          "estimate": 98.4,
+          "lower95": 97.2,
+          "upper95": 99.4
+        },
+        "confirmationAccuracy": {
+          "estimate": 60.4,
+          "lower95": 56.2,
+          "upper95": 64.6
+        }
+      },
+      "taskPrecision": {
+        "estimate": 53.5,
+        "lower95": 49.2,
+        "upper95": 58
+      },
+      "taskRecall": {
+        "estimate": 53.6,
+        "lower95": 49.2,
+        "upper95": 57.8
+      },
+      "taskF1": {
+        "estimate": 53.534,
+        "lower95": 49.134,
+        "upper95": 57.93405
+      },
+      "hardestTaskCases": [
+        {
+          "id": "ami-pilot-018",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-027",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-001",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-003",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-004",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-006",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-008",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-010",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-012",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-014",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        }
+      ]
+    },
+    {
+      "workflow": "gemini-baseline-no-evidence-raw-batched",
+      "model": "gemini-3.1-flash-lite",
+      "caseCount": 500,
+      "scoredCaseCount": 500,
+      "apiResponses": 100,
+      "fallbackResponses": 0,
+      "confidenceLevel": 0.95,
+      "bootstrapIterations": 5000,
+      "metrics": {
+        "taskExtractionAccuracy": {
+          "estimate": 53.6,
+          "lower95": 49,
+          "upper95": 58
+        },
+        "ownerAssignmentAccuracy": {
+          "estimate": 54,
+          "lower95": 49.6,
+          "upper95": 58.6
+        },
+        "deadlineExtraction": {
+          "estimate": 54,
+          "lower95": 49.6,
+          "upper95": 58.20499999999993
+        },
+        "evidenceFaithfulness": {
+          "estimate": 54,
+          "lower95": 49.8,
+          "upper95": 58.4
+        },
+        "riskClassificationAccuracy": {
+          "estimate": 98.4,
+          "lower95": 97.2,
+          "upper95": 99.4
+        },
+        "confirmationAccuracy": {
+          "estimate": 35.2,
+          "lower95": 31,
+          "upper95": 39.2
+        }
+      },
+      "taskPrecision": {
+        "estimate": 53.6,
+        "lower95": 49.2,
+        "upper95": 58
+      },
+      "taskRecall": {
+        "estimate": 53.6,
+        "lower95": 49.2,
+        "upper95": 58
+      },
+      "taskF1": {
+        "estimate": 53.6,
+        "lower95": 49.4,
+        "upper95": 58
+      },
+      "hardestTaskCases": [
+        {
+          "id": "ami-pilot-018",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-pilot-027",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-001",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-003",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-004",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-006",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-008",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-010",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-012",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-014",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        }
+      ]
+    },
+    {
+      "workflow": "gemini-baseline-no-safety-raw-batched",
+      "model": "gemini-3.1-flash-lite",
+      "caseCount": 500,
+      "scoredCaseCount": 500,
+      "apiResponses": 100,
+      "fallbackResponses": 0,
+      "confidenceLevel": 0.95,
+      "bootstrapIterations": 5000,
+      "metrics": {
+        "taskExtractionAccuracy": {
+          "estimate": 53.2,
+          "lower95": 48.8,
+          "upper95": 57.6
+        },
+        "ownerAssignmentAccuracy": {
+          "estimate": 54.2,
+          "lower95": 50,
+          "upper95": 58.8
+        },
+        "deadlineExtraction": {
+          "estimate": 54.2,
+          "lower95": 49.8,
+          "upper95": 58.4
+        },
+        "evidenceFaithfulness": {
+          "estimate": 54,
+          "lower95": 49.6,
+          "upper95": 58.2
+        },
+        "riskClassificationAccuracy": {
+          "estimate": 98.4,
+          "lower95": 97.2,
+          "upper95": 99.4
+        },
+        "confirmationAccuracy": {
+          "estimate": 68.8,
+          "lower95": 64.6,
+          "upper95": 72.8
+        }
+      },
+      "taskPrecision": {
+        "estimate": 53.2,
+        "lower95": 49,
+        "upper95": 57.6
+      },
+      "taskRecall": {
+        "estimate": 53.2,
+        "lower95": 48.8,
+        "upper95": 57.6
+      },
+      "taskF1": {
+        "estimate": 53.2,
+        "lower95": 48.8,
+        "upper95": 57.6
+      },
+      "hardestTaskCases": [
+        {
+          "id": "ami-pilot-018",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-027",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-037",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-pilot-038",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-pilot-039",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-001",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-003",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-004",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-006",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-008",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        }
+      ]
+    },
+    {
+      "workflow": "gemini-baseline-no-uncertainty-raw-batched",
+      "model": "gemini-3.1-flash-lite",
+      "caseCount": 500,
+      "scoredCaseCount": 500,
+      "apiResponses": 100,
+      "fallbackResponses": 0,
+      "confidenceLevel": 0.95,
+      "bootstrapIterations": 5000,
+      "metrics": {
+        "taskExtractionAccuracy": {
+          "estimate": 53.8,
+          "lower95": 49.4,
+          "upper95": 58.2
+        },
+        "ownerAssignmentAccuracy": {
+          "estimate": 54.4,
+          "lower95": 50,
+          "upper95": 58.8
+        },
+        "deadlineExtraction": {
+          "estimate": 54.4,
+          "lower95": 50.2,
+          "upper95": 58.8
+        },
+        "evidenceFaithfulness": {
+          "estimate": 54.2,
+          "lower95": 49.8,
+          "upper95": 58.4
+        },
+        "riskClassificationAccuracy": {
+          "estimate": 98.4,
+          "lower95": 97.2,
+          "upper95": 99.4
+        },
+        "confirmationAccuracy": {
+          "estimate": 52.2,
+          "lower95": 47.8,
+          "upper95": 56.6
+        }
+      },
+      "taskPrecision": {
+        "estimate": 53.8,
+        "lower95": 49.4,
+        "upper95": 58.2
+      },
+      "taskRecall": {
+        "estimate": 53.8,
+        "lower95": 49.4,
+        "upper95": 58.2
+      },
+      "taskF1": {
+        "estimate": 53.8,
+        "lower95": 49.595000000000006,
+        "upper95": 58.2
+      },
+      "hardestTaskCases": [
+        {
+          "id": "ami-pilot-018",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-027",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-001",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-003",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-004",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-006",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-008",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-010",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        },
+        {
+          "id": "ami-action-pilot-012",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-action-pilot-014",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 0
+        }
+      ]
+    },
+    {
+      "workflow": "gemini-react-batched",
+      "model": "gemini-3.1-flash-lite",
+      "caseCount": 500,
+      "scoredCaseCount": 500,
+      "apiResponses": 100,
+      "fallbackResponses": 0,
+      "confidenceLevel": 0.95,
+      "bootstrapIterations": 5000,
+      "metrics": {
+        "taskExtractionAccuracy": {
+          "estimate": 40.108,
+          "lower95": 35.84195,
+          "upper95": 44.27405
+        },
+        "ownerAssignmentAccuracy": {
+          "estimate": 65.4,
+          "lower95": 61,
+          "upper95": 69.4
+        },
+        "deadlineExtraction": {
+          "estimate": 67.4,
+          "lower95": 63.2,
+          "upper95": 71.6
+        },
+        "evidenceFaithfulness": {
+          "estimate": 59.8,
+          "lower95": 55.4,
+          "upper95": 64
+        },
+        "riskClassificationAccuracy": {
+          "estimate": 98.2,
+          "lower95": 97,
+          "upper95": 99.2
+        },
+        "confirmationAccuracy": {
+          "estimate": 98.2,
+          "lower95": 97,
+          "upper95": 99.2
+        }
+      },
+      "taskPrecision": {
+        "estimate": 39.53,
+        "lower95": 35.39795,
+        "upper95": 43.828050000000005
+      },
+      "taskRecall": {
+        "estimate": 41.4,
+        "lower95": 37.2,
+        "upper95": 45.6
+      },
+      "taskF1": {
+        "estimate": 40.108,
+        "lower95": 35.908,
+        "upper95": 44.27205
+      },
+      "hardestTaskCases": [
+        {
+          "id": "ami-pilot-001",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-002",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-007",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-010",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-012",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-018",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-022",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-025",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-030",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-035",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        }
+      ]
+    },
+    {
+      "workflow": "gemini-react-no-safety-guardrails-batched",
+      "model": "gemini-3.1-flash-lite",
+      "caseCount": 500,
+      "scoredCaseCount": 500,
+      "apiResponses": 100,
+      "fallbackResponses": 0,
+      "confidenceLevel": 0.95,
+      "bootstrapIterations": 5000,
+      "metrics": {
+        "taskExtractionAccuracy": {
+          "estimate": 47.306,
+          "lower95": 43.038,
+          "upper95": 51.5721
+        },
+        "ownerAssignmentAccuracy": {
+          "estimate": 61.8,
+          "lower95": 57.6,
+          "upper95": 66.2
+        },
+        "deadlineExtraction": {
+          "estimate": 66.6,
+          "lower95": 62.4,
+          "upper95": 70.8
+        },
+        "evidenceFaithfulness": {
+          "estimate": 56.4,
+          "lower95": 52,
+          "upper95": 60.8
+        },
+        "riskClassificationAccuracy": {
+          "estimate": 98.6,
+          "lower95": 97.4,
+          "upper95": 99.6
+        },
+        "confirmationAccuracy": {
+          "estimate": 98.2,
+          "lower95": 97,
+          "upper95": 99.2
+        }
+      },
+      "taskPrecision": {
+        "estimate": 46.83,
+        "lower95": 42.5612,
+        "upper95": 51.23274999999999
+      },
+      "taskRecall": {
+        "estimate": 48.4,
+        "lower95": 44,
+        "upper95": 52.8
+      },
+      "taskF1": {
+        "estimate": 47.306,
+        "lower95": 42.97,
+        "upper95": 51.572050000000004
+      },
+      "hardestTaskCases": [
+        {
+          "id": "ami-pilot-001",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-002",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-007",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-010",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-012",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-018",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-025",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-030",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-035",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-036",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        }
+      ]
+    },
+    {
+      "workflow": "heuristic-local",
+      "model": "heuristic-local",
+      "caseCount": 500,
+      "scoredCaseCount": 500,
+      "apiResponses": null,
+      "fallbackResponses": null,
+      "confidenceLevel": 0.95,
+      "bootstrapIterations": 5000,
+      "metrics": {
+        "taskExtractionAccuracy": {
+          "estimate": 10.566,
+          "lower95": 8.113700000000001,
+          "upper95": 13.134149999999998
+        },
+        "ownerAssignmentAccuracy": {
+          "estimate": 57.4,
+          "lower95": 53,
+          "upper95": 61.8
+        },
+        "deadlineExtraction": {
+          "estimate": 59.4,
+          "lower95": 55.2,
+          "upper95": 63.6
+        },
+        "evidenceFaithfulness": {
+          "estimate": 56,
+          "lower95": 51.8,
+          "upper95": 60.2
+        },
+        "riskClassificationAccuracy": {
+          "estimate": 96.2,
+          "lower95": 94.4,
+          "upper95": 97.8
+        },
+        "confirmationAccuracy": {
+          "estimate": 96.2,
+          "lower95": 94.4,
+          "upper95": 97.8
+        }
+      },
+      "taskPrecision": {
+        "estimate": 9.632,
+        "lower95": 7.3296,
+        "upper95": 12.024149999999997
+      },
+      "taskRecall": {
+        "estimate": 13,
+        "lower95": 10.2,
+        "upper95": 15.804999999999929
+      },
+      "taskF1": {
+        "estimate": 10.566,
+        "lower95": 8.155700000000001,
+        "upper95": 13.168149999999997
+      },
+      "hardestTaskCases": [
+        {
+          "id": "ami-pilot-004",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-006",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-013",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-014",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-018",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-021",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-022",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-023",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-030",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-035",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        }
+      ]
+    },
+    {
+      "workflow": "hybrid-offline",
+      "model": "hybrid-offline",
+      "caseCount": 500,
+      "scoredCaseCount": 500,
+      "apiResponses": null,
+      "fallbackResponses": null,
+      "confidenceLevel": 0.95,
+      "bootstrapIterations": 5000,
+      "metrics": {
+        "taskExtractionAccuracy": {
+          "estimate": 24.638,
+          "lower95": 21.07,
+          "upper95": 28.404049999999998
+        },
+        "ownerAssignmentAccuracy": {
+          "estimate": 56,
+          "lower95": 51.6,
+          "upper95": 60.2
+        },
+        "deadlineExtraction": {
+          "estimate": 57.4,
+          "lower95": 53,
+          "upper95": 61.6
+        },
+        "evidenceFaithfulness": {
+          "estimate": 55.6,
+          "lower95": 51.2,
+          "upper95": 60
+        },
+        "riskClassificationAccuracy": {
+          "estimate": 96.2,
+          "lower95": 94.4,
+          "upper95": 97.8
+        },
+        "confirmationAccuracy": {
+          "estimate": 96.2,
+          "lower95": 94.4,
+          "upper95": 97.8
+        }
+      },
+      "taskPrecision": {
+        "estimate": 24.298,
+        "lower95": 20.732,
+        "upper95": 28.132
+      },
+      "taskRecall": {
+        "estimate": 25.4,
+        "lower95": 21.8,
+        "upper95": 29.2
+      },
+      "taskF1": {
+        "estimate": 24.638,
+        "lower95": 20.938,
+        "upper95": 28.372
+      },
+      "hardestTaskCases": [
+        {
+          "id": "ami-pilot-004",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-013",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-014",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-021",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-022",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-027",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 0,
+          "deadlineExtraction": 0,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-035",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-037",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-038",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        },
+        {
+          "id": "ami-pilot-045",
+          "taskExtractionAccuracy": 0,
+          "taskPrecision": 0,
+          "taskRecall": 0,
+          "ownerAssignmentAccuracy": 100,
+          "deadlineExtraction": 100,
+          "confirmationAccuracy": 100
+        }
+      ]
+    }
+  ]
+}
