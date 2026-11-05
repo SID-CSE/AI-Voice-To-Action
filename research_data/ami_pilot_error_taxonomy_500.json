@@ -1,0 +1,198 @@
+{
+  "datasetVersion": "ami-pilot-v2-500",
+  "method": "Per-record metric threshold taxonomy; categories may overlap.",
+  "reports": [
+    {
+      "file": "ami_pilot_gemini_31_batch_500_results.json",
+      "workflow": "gemini-baseline-batched",
+      "model": "gemini-3.1-flash-lite",
+      "scoredCases": 500,
+      "counts": {
+        "missedAction": 232,
+        "falseAction": 233,
+        "wrongOwner": 226,
+        "wrongDeadline": 226,
+        "unsupportedInference": 229,
+        "safetyClassificationError": 8,
+        "confirmationError": 198
+      },
+      "rates": {
+        "missedAction": 0.464,
+        "falseAction": 0.466,
+        "wrongOwner": 0.452,
+        "wrongDeadline": 0.452,
+        "unsupportedInference": 0.458,
+        "safetyClassificationError": 0.016,
+        "confirmationError": 0.396
+      }
+    },
+    {
+      "file": "ami_pilot_gemini_no-evidence_500_results.json",
+      "workflow": "gemini-baseline-no-evidence-raw-batched",
+      "model": "gemini-3.1-flash-lite",
+      "scoredCases": 500,
+      "counts": {
+        "missedAction": 232,
+        "falseAction": 232,
+        "wrongOwner": 230,
+        "wrongDeadline": 230,
+        "unsupportedInference": 230,
+        "safetyClassificationError": 8,
+        "confirmationError": 324
+      },
+      "rates": {
+        "missedAction": 0.464,
+        "falseAction": 0.464,
+        "wrongOwner": 0.46,
+        "wrongDeadline": 0.46,
+        "unsupportedInference": 0.46,
+        "safetyClassificationError": 0.016,
+        "confirmationError": 0.648
+      }
+    },
+    {
+      "file": "ami_pilot_gemini_no-safety_500_results.json",
+      "workflow": "gemini-baseline-no-safety-raw-batched",
+      "model": "gemini-3.1-flash-lite",
+      "scoredCases": 500,
+      "counts": {
+        "missedAction": 234,
+        "falseAction": 234,
+        "wrongOwner": 229,
+        "wrongDeadline": 229,
+        "unsupportedInference": 230,
+        "safetyClassificationError": 8,
+        "confirmationError": 156
+      },
+      "rates": {
+        "missedAction": 0.468,
+        "falseAction": 0.468,
+        "wrongOwner": 0.458,
+        "wrongDeadline": 0.458,
+        "unsupportedInference": 0.46,
+        "safetyClassificationError": 0.016,
+        "confirmationError": 0.312
+      }
+    },
+    {
+      "file": "ami_pilot_gemini_no-uncertainty_500_results.json",
+      "workflow": "gemini-baseline-no-uncertainty-raw-batched",
+      "model": "gemini-3.1-flash-lite",
+      "scoredCases": 500,
+      "counts": {
+        "missedAction": 231,
+        "falseAction": 231,
+        "wrongOwner": 228,
+        "wrongDeadline": 228,
+        "unsupportedInference": 229,
+        "safetyClassificationError": 8,
+        "confirmationError": 239
+      },
+      "rates": {
+        "missedAction": 0.462,
+        "falseAction": 0.462,
+        "wrongOwner": 0.456,
+        "wrongDeadline": 0.456,
+        "unsupportedInference": 0.458,
+        "safetyClassificationError": 0.016,
+        "confirmationError": 0.478
+      }
+    },
+    {
+      "file": "ami_pilot_gemini_react_batch_500_results.json",
+      "workflow": "gemini-react-batched",
+      "model": "gemini-3.1-flash-lite",
+      "scoredCases": 500,
+      "counts": {
+        "missedAction": 293,
+        "falseAction": 310,
+        "wrongOwner": 173,
+        "wrongDeadline": 163,
+        "unsupportedInference": 201,
+        "safetyClassificationError": 9,
+        "confirmationError": 9
+      },
+      "rates": {
+        "missedAction": 0.586,
+        "falseAction": 0.62,
+        "wrongOwner": 0.346,
+        "wrongDeadline": 0.326,
+        "unsupportedInference": 0.402,
+        "safetyClassificationError": 0.018,
+        "confirmationError": 0.018
+      }
+    },
+    {
+      "file": "ami_pilot_gemini_react_guardrails_batch_500_results.json",
+      "workflow": "gemini-react-no-safety-guardrails-batched",
+      "model": "gemini-3.1-flash-lite",
+      "scoredCases": 500,
+      "counts": {
+        "missedAction": 258,
+        "falseAction": 272,
+        "wrongOwner": 191,
+        "wrongDeadline": 167,
+        "unsupportedInference": 218,
+        "safetyClassificationError": 7,
+        "confirmationError": 9
+      },
+      "rates": {
+        "missedAction": 0.516,
+        "falseAction": 0.544,
+        "wrongOwner": 0.382,
+        "wrongDeadline": 0.334,
+        "unsupportedInference": 0.436,
+        "safetyClassificationError": 0.014,
+        "confirmationError": 0.018
+      }
+    },
+    {
+      "file": "ami_pilot_heuristic_500_results.json",
+      "workflow": "heuristic-local",
+      "model": null,
+      "scoredCases": 500,
+      "counts": {
+        "missedAction": 435,
+        "falseAction": 463,
+        "wrongOwner": 213,
+        "wrongDeadline": 203,
+        "unsupportedInference": 220,
+        "safetyClassificationError": 19,
+        "confirmationError": 19
+      },
+      "rates": {
+        "missedAction": 0.87,
+        "falseAction": 0.926,
+        "wrongOwner": 0.426,
+        "wrongDeadline": 0.406,
+        "unsupportedInference": 0.44,
+        "safetyClassificationError": 0.038,
+        "confirmationError": 0.038
+      }
+    },
+    {
+      "file": "ami_pilot_hybrid_500_results.json",
+      "workflow": "hybrid-offline",
+      "model": null,
+      "scoredCases": 500,
+      "counts": {
+        "missedAction": 373,
+        "falseAction": 383,
+        "wrongOwner": 220,
+        "wrongDeadline": 213,
+        "unsupportedInference": 222,
+        "safetyClassificationError": 19,
+        "confirmationError": 19
+      },
+      "rates": {
+        "missedAction": 0.746,
+        "falseAction": 0.766,
+        "wrongOwner": 0.44,
+        "wrongDeadline": 0.426,
+        "unsupportedInference": 0.444,
+        "safetyClassificationError": 0.038,
+        "confirmationError": 0.038
+      }
+    }
+  ]
+}

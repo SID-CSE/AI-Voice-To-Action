@@ -32,6 +32,11 @@ TRANSCRIPT:
 ${transcript}
 """
 
+ACTION CANDIDATE SENTENCES:
+"""
+${transcript.split(/(?<=[.!?])\s+|\r?\n+/).filter(sentence => /\b(?:will|should|needs?\s+to|need\s+to|must|has\s+to|have\s+to|review|send|finish|complete|prepare|update|fix|test|deliver|create|implement|schedule|document|email|call|transfer|wire)\b/i.test(sentence)).join('\n')}
+"""
+
 GROUNDED CONTEXT FROM KNOWLEDGE BASE:
 """
 ${contextString}
@@ -91,13 +96,23 @@ Return ONLY a JSON object with this exact structure:
 }
 `;
 
-export const BUILD_BASELINE_PROMPT = (transcript: string) => `
+export const BUILD_BASELINE_PROMPT = (transcript: string, candidates = transcript) => `
 TRANSCRIPT:
 """
 ${transcript}
 """
 
+ACTION CANDIDATE SENTENCES:
+"""
+${candidates}
+"""
+
 Extract tasks and summary from this transcript into JSON format:
+Extract only explicit commitments, assignments, or agreed next steps. Do not extract questions,
+hypotheticals, completed actions, background discussion, or suggestions without agreement.
+For every task, copy exact transcript evidence. Only assign an owner or deadline when it is
+explicitly supported by that evidence; otherwise use "Not specified". Omit a task when it has
+no valid evidence.
 {
   "summary": "Summary of transcript",
   "intent": "Intent",

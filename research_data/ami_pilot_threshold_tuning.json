@@ -1,0 +1,219 @@
+{
+  "datasetVersion": "ami-pilot-v2-500",
+  "split": "validation",
+  "method": "Grid search over evidence and task overlap thresholds; test split untouched.",
+  "best": {
+    "evidenceOverlapThreshold": 0.7,
+    "taskOverlapThreshold": 0.25,
+    "scoredCases": 91,
+    "taskF1": 53,
+    "precision": 53,
+    "recall": 53
+  },
+  "results": [
+    {
+      "evidenceOverlapThreshold": 0.7,
+      "taskOverlapThreshold": 0.25,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.7,
+      "taskOverlapThreshold": 0.3,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.7,
+      "taskOverlapThreshold": 0.35,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.7,
+      "taskOverlapThreshold": 0.4,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.7,
+      "taskOverlapThreshold": 0.45,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.75,
+      "taskOverlapThreshold": 0.25,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.75,
+      "taskOverlapThreshold": 0.3,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.75,
+      "taskOverlapThreshold": 0.35,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.75,
+      "taskOverlapThreshold": 0.4,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.75,
+      "taskOverlapThreshold": 0.45,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.8,
+      "taskOverlapThreshold": 0.25,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.8,
+      "taskOverlapThreshold": 0.3,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.8,
+      "taskOverlapThreshold": 0.35,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.8,
+      "taskOverlapThreshold": 0.4,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.8,
+      "taskOverlapThreshold": 0.45,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.85,
+      "taskOverlapThreshold": 0.25,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.85,
+      "taskOverlapThreshold": 0.3,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.85,
+      "taskOverlapThreshold": 0.35,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.85,
+      "taskOverlapThreshold": 0.4,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.85,
+      "taskOverlapThreshold": 0.45,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.9,
+      "taskOverlapThreshold": 0.25,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.9,
+      "taskOverlapThreshold": 0.3,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.9,
+      "taskOverlapThreshold": 0.35,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.9,
+      "taskOverlapThreshold": 0.4,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    },
+    {
+      "evidenceOverlapThreshold": 0.9,
+      "taskOverlapThreshold": 0.45,
+      "scoredCases": 91,
+      "taskF1": 53,
+      "precision": 53,
+      "recall": 53
+    }
+  ],
+  "recommendedEnvironment": {
+    "GEMINI_EVIDENCE_OVERLAP": 0.7,
+    "GEMINI_TASK_OVERLAP": 0.25
+  }
+}

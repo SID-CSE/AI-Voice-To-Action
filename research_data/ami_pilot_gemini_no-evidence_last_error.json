@@ -1,0 +1,16 @@
+{
+  "model": "gemini-3.1-flash-lite",
+  "batchSize": 5,
+  "completed": 490,
+  "remaining": 10,
+  "failedCaseIds": [
+    "ami-expansion-391",
+    "ami-expansion-392",
+    "ami-expansion-393",
+    "ami-expansion-394",
+    "ami-expansion-395"
+  ],
+  "error": "fetch failed",
+  "timestamp": "2026-11-05T05:49:32.934Z",
+  "resumeCommand": "Use the same model, checkpoint, batch size, and pacing values."
+}

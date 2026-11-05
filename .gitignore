@@ -2,7 +2,6 @@ node_modules/
 build/
 dist/
 coverage/
-node_modules/
 .vercel/
 data/users/
 data/local-store.json
@@ -12,6 +11,17 @@ data/*.backup.json
 *.log
 .env*
 !.env.example
+
+# Local and generated research material
+ICSI_original_transcripts.zip
+gemini.txt
+research_data/source/
+research_data/*checkpoint*.json
+research_data/*_annotator*.csv
+research_data/*_disagreements*.csv
+research_data/*.csv
+research_data/*.pyc
+evaluation/__pycache__/
 
 # Local project explanation and presentation materials
 PROJECT_GUIDE.md

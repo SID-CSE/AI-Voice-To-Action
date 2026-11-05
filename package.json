@@ -14,7 +14,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "test": "tsx --test server/guardrails.test.ts server/db.test.ts server/validation.test.ts"
+    "test": "tsx --test server/guardrails.test.ts server/db.test.ts server/validation.test.ts server/action-extraction.test.ts server/evaluation.test.ts evaluation/annotation.test.ts evaluation/dataset.test.ts evaluation/runner.test.ts"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.45.0",

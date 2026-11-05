@@ -55,6 +55,7 @@ This document lists the technologies used by ActionFlow AI, why each one is used
 | Server-side guardrails | `server/guardrails.ts` | Risk detection and confirmation requirements | Ensures high-risk financial, destructive, credential, permission, and communication requests cannot silently become approved actions. |
 | Human confirmation workflow | Confirmation API and UI | Recording confirm/cancel decisions | Keeps consequential actions human-reviewed; the current application records safe simulations rather than executing real external actions. |
 | Lightweight RAG | `server/rag.ts` | Workspace knowledge retrieval | Adds relevant team or project context to analysis without requiring a separate vector database. |
+| Research evaluation tooling | `evaluation/`, `server/evaluation.ts` | Annotation validation, gold scoring, calibration, and offline experiments | Keeps research measurement reproducible and separate from production request handling. |
 
 ## 6. Authentication and authorization
 
@@ -130,6 +131,10 @@ Never commit real values. Use [.env.example](.env.example) as the safe configura
 5. The API retrieves workspace context from Neon and calls Gemini only when configured and within the weighted usage budget.
 6. Gemini output is normalized and saved to Neon. If Gemini is unavailable, the deterministic fallback returns a safe local result.
 7. Vercel Blob is used only for the optional public guest-original upload path.
+
+## 13. Research reproducibility boundary
+
+The production application and research tooling are deliberately separated. Production evaluation routes use the 10 synthetic regression cases and server-side gold labels. The offline `evaluation/` modules support future licensed or de-identified datasets, validate transcript evidence and offsets, and compute macro/per-case metrics. No sensitive research records belong in the repository.
 
 ## 12. Important boundaries
 

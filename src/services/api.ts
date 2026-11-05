@@ -341,7 +341,7 @@ export const api = {
       throw new Error(error.error || 'Unable to load settings');
     }
     const data = await res.json();
-    const model = data.model || 'gemini-3.6-flash';
+    const model = data.model || 'gemini-flash-lite-latest';
     return {
       model,
       modelName: model,
@@ -366,7 +366,7 @@ export const api = {
       throw new Error(error.error || 'Unable to save settings');
     }
     const data = await res.json();
-    const model = data.model || 'gemini-3.6-flash';
+    const model = data.model || 'gemini-flash-lite-latest';
     return {
       model,
       modelName: model,

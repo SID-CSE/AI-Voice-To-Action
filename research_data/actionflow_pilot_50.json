@@ -1,0 +1,1382 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-001",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001a",
+      "transcript": "Does anyone want to see uh Steve's feedback from the specification?"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-002",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001a",
+      "transcript": "Yeah, I mean if we just want to have um some data for the user face, could even be random data. Uh mm mm"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-003",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001a",
+      "transcript": "The basic word importance is off-line as well. The combined measure might not be if we want to wait what the user has typed in into the search."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-004",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001a",
+      "transcript": "Uh mine's gonna be mostly using the off-line. But the actual stuff it's doing will be on-line. But it won't be very um processor intensive or memory intensive, I don't think."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-005",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001a",
+      "transcript": "Is there much more in it than he d"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-006",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001b",
+      "transcript": "You look quite funny at the moment, Tim."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-007",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001b",
+      "transcript": "It's yeah, I never get this, so what's the point of if this is strapless if this strap's supposed to go behind m I obviously doing this wrong. Obviously failing this like whatev calling centre and tra"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-008",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001b",
+      "transcript": "You you have this going behind your ears, the yeah. Yeah."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-009",
+    "split": "test",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001b",
+      "transcript": "Yeah, we haven't got that much to talk about, I don't think."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-010",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001d",
+      "transcript": "So uh which version of my data was that, the very first one? Yeah. Okay."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-011",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001d",
+      "transcript": "I'm not even sure why I'm making loud. It's just"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-012",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001d",
+      "transcript": "How y how do you do the summary? Is it"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-013",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001d",
+      "transcript": "Did I tell you that we've got kind of two-way interaction? If you control click an utterance, it will play where it should be in the file."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-014",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001d",
+      "transcript": "Mm, I suppose it should depend on the length of the segment."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-015",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001e",
+      "transcript": "Yeah, I just wanted to uh um why do you think it's necessary at all to do that?"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-016",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001e",
+      "transcript": "In the end we did get it working before."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-017",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001e",
+      "transcript": "It might be a problem for me at the stage right now because I based everything on not having those um"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Statement of a constraint/concern; not an instruction. Transcript truncated mid-sentence."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-018",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001e",
+      "transcript": "Does it? I have to check that out."
+    },
+    "tasks": [
+      {
+        "task": "Check that out",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "I have to check that out.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 9,
+          "end": 34,
+          "text": "I have to check that out."
+        }
+      }
+    ],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Speaker commits to checking, but 'that' has no referent in this record and the speaker is not named. Owner not inferred."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-019",
+    "split": "validation",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2001e",
+      "transcript": "Yeah there is there's index files already. Yeah."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-020",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002a",
+      "transcript": "Wonder how much of the meetings is talking about the stuff at the meetings. Yeah."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-021",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002a",
+      "transcript": "So what do we need to talk about?"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-022",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002a",
+      "transcript": "Well should we just go around and everyone says what they d what they've been doing, how far they've got. Well I hope so."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Proposal phrased as a question ('should we'); no agreement visible beyond 'Well I hope so.' Treated as not an action; reviewer may reclassify as proposed action."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-023",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002a",
+      "transcript": "Yeah. Yeah. Look at all this stuff man. Okay. Right."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-024",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002b",
+      "transcript": "Very interesting start of the meeting. Everyone's looking down reading."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-025",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002b",
+      "transcript": "Yeah, we could because this could be just some uh a little just just describe some screen-shots or something."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Conditional/tentative suggestion ('could'); no owner, no agreement. Treated as not an action."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-026",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002b",
+      "transcript": "Uh, b Let me see it. Oh, that's the same. Oh. Very good."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-027",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002b",
+      "transcript": "Mm 'kay. L I could take notes this time, I guess. I'll takes notes this time, I guess."
+    },
+    "tasks": [
+      {
+        "task": "Take notes this time",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "evidence": "I'll takes notes this time, I guess.",
+        "ownerStatus": "unknown",
+        "deadlineStatus": "unknown",
+        "evidenceSpan": {
+          "start": 50,
+          "end": 86,
+          "text": "I'll takes notes this time, I guess."
+        }
+      }
+    ],
+    "uncertaintyLabels": [
+      "hedged commitment"
+    ],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Self-volunteered and hedged ('I guess'); speaker is first person, no name in record so owner not inferred. 'this time' is not a deadline. Repeated twice in the utterance (one action)."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-028",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002c",
+      "transcript": "Did we get seven out of ten for the other one?"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-029",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002c",
+      "transcript": "Oops. Does it squeeze in, aye, like that? Yeah."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-030",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002c",
+      "transcript": "Hmm. Did you wanna take a look at comments. There's more uh"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Question/offer, no answer in record. Treated as not an action; could be a request."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-031",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002d",
+      "transcript": "Where did my oh, it's it's stuck here."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-032",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002d",
+      "transcript": "What Rena. What, this bit or this b"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-033",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002d",
+      "transcript": "Doesn't st have anything in it, Oh, it does, it has about three lines of X_M_L_ that didn't do much, I think. Yeah. What's that?"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-034",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2002d",
+      "transcript": "Um no. No, just the summary. No, that was just summary. No. Um no um okay."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-035",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2003a",
+      "transcript": "Can you just remind me, I don't have to tick the no n okay thing until I finish writing, but it's only if I go back to it I tick okay again."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Procedural statement/question about tool use, not an action; also a constraint ('don't have to')."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-036",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2003a",
+      "transcript": "So if you've um if you're back to a page, then you tick it again to leave it for the second time."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Procedure explanation; generic 'you', not an assignment."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-037",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2003a",
+      "transcript": "Yeah, right. Where should we start? What have we got?"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-038",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2004a",
+      "transcript": "How much should you want um I had a few times where I thought well, it could be this, but if you're not entirely sure that it could be, 'cause it c it could be a combination of something else, like put the guess down or leave it as ambiguous in some way."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "General annotation guidance/advice with two alternatives, not an assigned task."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-039",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2004a",
+      "transcript": "So it it takes a little time. But um Alternatively, I you you could just listen to the speech segments again and make sure everything is correct for those, and so you could just hit um"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Suggested alternative ('Alternatively ... could'); not agreed. Transcript truncated."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-040",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2004a",
+      "transcript": "Oh, never I I don't wanna interrupt it. Uh uh when I did my masters um I took uh S_P_ one and S_P_ two with Simon King."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-041",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2004a",
+      "transcript": "So we so are we checking what's actually been transcribed already as well as the silences? Yeah."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-042",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2005a",
+      "transcript": "Yeah, yeah a very or a quick uh slides. So um I've been here for fourteen month, I think. Yeah, so I've a accustomed to the environment here and enjoy staying here. So mm uh"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-043",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2005a",
+      "transcript": "Five years just because of the floods bringing the ceilings down. So On its great joy."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-044",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2005a",
+      "transcript": "They just mention that they want decision um for issues, action items. I think they are more talking about um user requirement for the meeting than soft text, they want to know"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Reported requirements of others; not an assigned action. Transcript truncated."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-045",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2005a",
+      "transcript": "Are we supposed to count to ten or something? We don't have to do all that?"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-046",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2006a",
+      "transcript": "He has had it certainly. Yeah. Yeah, he's been emailed it while ago."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "Completed past action (email). Not converted to a future task; recipient 'he' and sender unspecified."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-047",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2006a",
+      "transcript": "Such a long time since I've done these."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-048",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2006a",
+      "transcript": "Yeah, we did two of those, didn't we?"
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-049",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2006a",
+      "transcript": "Did did you guys actually had sort of um the interaction or discussions while you we doing the annotation, did you have had stages of clarification or I suppose you did, right? Mm-hmm."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  },
+  {
+    "schemaVersion": "1.0",
+    "caseId": "ami-pilot-050",
+    "split": "train",
+    "source": {
+      "dataset": "AMI Meeting Corpus",
+      "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+      "meetingId": "EN2006b",
+      "transcript": "Uh yes, course, of course it is, yeah."
+    },
+    "tasks": [],
+    "uncertaintyLabels": [],
+    "risk": {
+      "level": "LOW",
+      "confirmationRequired": false,
+      "categories": [
+        "general"
+      ]
+    },
+    "annotation": {
+      "annotatorIds": [
+        "primary-human"
+      ],
+      "adjudicated": false,
+      "notes": "No actionable content: discussion, question, statement or chatter."
+    }
+  }
+]

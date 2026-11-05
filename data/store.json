@@ -4,7 +4,7 @@
   "auditLogs": [],
   "knowledgeDocuments": [],
   "settings": {
-    "model": "gemini-3.6-flash",
+    "model": "gemini-flash-lite-latest",
     "promptVersion": "v1.0-react",
     "groundingEnabled": true,
     "defaultWorkflow": "react",

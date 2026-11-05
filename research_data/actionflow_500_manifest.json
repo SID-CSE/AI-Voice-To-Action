@@ -1,0 +1,15 @@
+{
+  "dataset": "AMI Meeting Corpus",
+  "license": "CC BY 4.0 (AMI manual annotations release 1.6.2)",
+  "recordCount": 400,
+  "actionRecordCount": 203,
+  "meetingCount": 142,
+  "mergedRecordCount": 500,
+  "mergedActionRecordCount": 230,
+  "annotators": [
+    "independent-human-1",
+    "independent-human-2"
+  ],
+  "adjudicatedDisagreementCount": 244,
+  "warning": "500-record dataset is independently annotated and disagreement-adjudicated, but should still be expanded/quality-reviewed before definitive publication claims."
+}

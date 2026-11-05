@@ -40,12 +40,22 @@ const DATABASE_URL = process.env.DATABASE_URL;
 const scopeStorage = new AsyncLocalStorage<ScopeContext>();
 
 const INITIAL_SETTINGS: AppSettings = {
-  model: 'gemini-3.6-flash',
+  model: process.env.GEMINI_MODEL?.trim() || 'gemini-flash-lite-latest',
   promptVersion: 'v1.0-react',
   groundingEnabled: true,
   defaultWorkflow: 'react',
   demoModeEnabled: true,
 };
+
+const SUPPORTED_GEMINI_MODELS = new Set([
+  'gemini-flash-lite-latest',
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-flash-lite',
+  'gemini-3.1-flash-lite-preview',
+  'gemini-3.6-flash',
+  'gemini-3-flash-preview',
+  'gemini-flash-latest',
+]);
 
 const DEMO_TASKS: (StructuredTask & { createdAt: string; updatedAt: string })[] = [
   {
@@ -607,7 +617,11 @@ export class DatabaseService {
   }
 
   getSettings(): AppSettings {
-    return clone(this.data.settings);
+    const settings = clone(this.data.settings);
+    if (!SUPPORTED_GEMINI_MODELS.has(settings.model)) {
+      settings.model = INITIAL_SETTINGS.model;
+    }
+    return settings;
   }
 
   async updateSettings(updates: Partial<AppSettings>): Promise<AppSettings> {

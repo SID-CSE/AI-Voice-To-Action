@@ -1,0 +1,698 @@
+{
+  "annotatorTypes": [
+    "primary human",
+    "independent human annotator 2"
+  ],
+  "recordCount": 50,
+  "fields": {
+    "isAction": {
+      "agreement": 0.72,
+      "kappa": 0.4462025316455696
+    },
+    "owner": {
+      "agreement": 0.48,
+      "kappa": 0.035608308605341234
+    },
+    "deadline": {
+      "agreement": 0.62,
+      "kappa": 0.22701383238405212
+    },
+    "riskLevel": {
+      "agreement": 0.62,
+      "kappa": -0.038251366120218615
+    },
+    "confirmationRequired": {
+      "agreement": 0.58,
+      "kappa": -0.03960396039603964
+    }
+  },
+  "taskExactAgreement": 0.3,
+  "disagreements": [
+    {
+      "recordId": "ami-action-pilot-001",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Complete the functional design, then the conceptual design, followed by the detailed design.",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-003",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Design a custom circuit board and send the design to the circuit people for printing.",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-004",
+      "primary": {
+        "isAction": "yes",
+        "task": "Decide what to do with the remote",
+        "owner": "Not specified",
+        "deadline": "Before we leave this meeting",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Decide exactly what the remote will be and agree on the design direction and differentiating features.",
+        "owner": "Group",
+        "deadline": "Before the meeting ends",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-005",
+      "primary": {
+        "isAction": "yes",
+        "task": "Try processing on the fly and observe whether it takes too long",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-006",
+      "primary": {
+        "isAction": "yes",
+        "task": "Make sure they can pick up the audio signal",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Make sure the audio signal can be picked up.",
+        "owner": "Speaker",
+        "deadline": "Not specified",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-008",
+      "primary": {
+        "isAction": "yes",
+        "task": "Take notes",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Take notes during the meeting.",
+        "owner": "Speaker",
+        "deadline": "During the meeting",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-009",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Each participant works individually on their specific design tasks, then meets to discuss results and next steps.",
+        "owner": "Each participant",
+        "deadline": "During each design step",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-010",
+      "primary": {
+        "isAction": "yes",
+        "task": "Look at the look-and-feel design",
+        "owner": "Not specified",
+        "deadline": "next meeting",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Review the corporate website for design-image guidance for the remote.",
+        "owner": "Not specified",
+        "deadline": "By the next meeting",
+        "riskLevel": "LOW",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-012",
+      "primary": {
+        "isAction": "yes",
+        "task": "Decide on a movie to project at the end of the month",
+        "owner": "Not specified",
+        "deadline": "today",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Present three design options for the advertising posters and participate in selecting a movie.",
+        "owner": "Speaker (for presenting); group (for movie decision)",
+        "deadline": "End of April",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-014",
+      "primary": {
+        "isAction": "yes",
+        "task": "Ask Jonathan about it",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-015",
+      "primary": {
+        "isAction": "yes",
+        "task": "Remind her about the voice over",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Remind the woman referred to as 'her' about the voice-over.",
+        "owner": "Speaker",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-016",
+      "primary": {
+        "isAction": "yes",
+        "task": "Make sure the phone number is saved in the phone so they can be called",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Make sure the phone number is saved in the speaker's phone so they can call the relevant people.",
+        "owner": "Speaker",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-018",
+      "primary": {
+        "isAction": "yes",
+        "task": "Decide whether to have a scroll",
+        "owner": "Not specified",
+        "deadline": "when we go on to the une userface",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Decide whether the user interface will include a scroll feature.",
+        "owner": "Group",
+        "deadline": "When the project moves to the user-interface stage",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-020",
+      "primary": {
+        "isAction": "yes",
+        "task": "Take the meeting minutes",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Act as secretary and take the meeting minutes.",
+        "owner": "Not specified",
+        "deadline": "During the meeting",
+        "riskLevel": "LOW",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-022",
+      "primary": {
+        "isAction": "yes",
+        "task": "Look into how much this might increase costs",
+        "owner": "Pedro",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Investigate how the proposed change may affect costs, and assess the effect of increased cost on final numbers.",
+        "owner": "Speaker and Pedro (cost investigation); 'you' (impact assessment)",
+        "deadline": "Not specified",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-024",
+      "primary": {
+        "isAction": "yes",
+        "task": "Act as secretary",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-025",
+      "primary": {
+        "isAction": "yes",
+        "task": "Prepare look-and-feel design and user interface work, and model the first prototype together",
+        "owner": "you guys",
+        "deadline": "next meeting",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Prepare the look-and-feel design and user-interface design, and work together to model the first prototype.",
+        "owner": "The two participants addressed as 'you two'",
+        "deadline": "By the next meeting",
+        "riskLevel": "HIGH",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-026",
+      "primary": {
+        "isAction": "yes",
+        "task": "Calculate the production costs",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Estimate and calculate the production costs using the prepared Excel sheet, aiming to stay below 12.5.",
+        "owner": "Group (specific individual owner not stated)",
+        "deadline": "Not specified",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-027",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Complete the questionnaires before beginning the subsequent work.",
+        "owner": "Everyone addressed as 'you'",
+        "deadline": "Before the subsequent work; exact time not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-029",
+      "primary": {
+        "isAction": "yes",
+        "task": "Decide the remote control functions",
+        "owner": "Not specified",
+        "deadline": "in this meeting",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Decide which functions the remote control will have.",
+        "owner": "Group",
+        "deadline": "During this meeting",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-030",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Save the documents and use the pen and eraser while working on the board; printing is raised but rejected.",
+        "owner": "Not specified",
+        "deadline": "Every time something is created (for saving)",
+        "riskLevel": "LOW",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-031",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Take the current item out of the board/presentation setup.",
+        "owner": "Speaker",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-032",
+      "primary": {
+        "isAction": "yes",
+        "task": "Come up with a components concept",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Develop a components concept and conduct trend-watching to understand what customers want.",
+        "owner": "Person or people addressed as 'you' (not individually identified)",
+        "deadline": "During this phase",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-033",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Enlarge the basic design in the current presentation/drawing.",
+        "owner": "Speaker",
+        "deadline": "Now",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-034",
+      "primary": {
+        "isAction": "yes",
+        "task": "Work full time on N_L_S_S_D_",
+        "owner": "Not specified",
+        "deadline": "next week",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Work full time on NLSSD.",
+        "owner": "Speaker",
+        "deadline": "Next week",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-037",
+      "primary": {
+        "isAction": "yes",
+        "task": "Think about the things discussed and bring new ideas",
+        "owner": "Not specified",
+        "deadline": "next meeting",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Complete the questionnaire, do individual work, and bring new ideas to the next meeting.",
+        "owner": "Everyone",
+        "deadline": "Questionnaire before returning after lunch; individual work after lunch; ideas by the next meeting",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-038",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Distribute/assign the different tasks needed to complete the process.",
+        "owner": "Group (specific assigner not stated)",
+        "deadline": "Not specified",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-041",
+      "primary": {
+        "isAction": "yes",
+        "task": "Agree on what to make",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Agree whether the product will be designed for multiple systems.",
+        "owner": "Group",
+        "deadline": "Before the meeting/conversation ends (the utterance is incomplete)",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-042",
+      "primary": {
+        "isAction": "yes",
+        "task": "Check whether I understand how it works",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Check and understand how the system works; if necessary, provide code for loading a dictionary.",
+        "owner": "Speaker",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-043",
+      "primary": {
+        "isAction": "yes",
+        "task": "Make sure the display does all the stuff discussed",
+        "owner": "Not specified",
+        "deadline": "until then",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Ensure the display supports all the discussed functionality.",
+        "owner": "Speaker",
+        "deadline": "By the planned meeting at five in Appleton Tower (as transcribed)",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-044",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Build search interface controls",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-045",
+      "primary": {
+        "isAction": "yes",
+        "task": "Write up the meeting and send it to Pernilla",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Write up the meeting and send the meeting notes to Pernilla.",
+        "owner": "Speaker",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-046",
+      "primary": {
+        "isAction": "yes",
+        "task": "Decide where to hold the talks and posters",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Find and decide on a suitable venue for the event.",
+        "owner": "Group",
+        "deadline": "Not specified",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "yes"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-048",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Redraw the design to remove the LCD and show the function on the television instead.",
+        "owner": "Speaker",
+        "deadline": "Now",
+        "riskLevel": "MEDIUM",
+        "confirmationRequired": "no"
+      }
+    },
+    {
+      "recordId": "ami-action-pilot-050",
+      "primary": {
+        "isAction": "no",
+        "task": "Not specified",
+        "owner": "Not specified",
+        "deadline": "Not specified",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      },
+      "annotator2": {
+        "isAction": "yes",
+        "task": "Show the presentation.",
+        "owner": "Speaker",
+        "deadline": "Now / during the current interaction",
+        "riskLevel": "LOW",
+        "confirmationRequired": "no"
+      }
+    }
+  ],
+  "limitation": "This is independent human-human agreement before adjudication. It should be reported with the adjudication protocol and disagreement resolution."
+}

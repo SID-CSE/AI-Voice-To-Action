@@ -1,0 +1,31 @@
+{
+  "annotatorTypes": [
+    "independent human annotator 1",
+    "independent human annotator 2"
+  ],
+  "recordCount": 400,
+  "fields": {
+    "isAction": {
+      "agreement": 0.795,
+      "kappa": 0.5909816440542698
+    },
+    "owner": {
+      "agreement": 0.74,
+      "kappa": 0.0452803341518831
+    },
+    "deadline": {
+      "agreement": 0.9475,
+      "kappa": 0.4048462519484203
+    },
+    "riskLevel": {
+      "agreement": 0.9325,
+      "kappa": 0.30412371134020677
+    },
+    "confirmationRequired": {
+      "agreement": 0.935,
+      "kappa": 0.3285123966942154
+    }
+  },
+  "taskExactAgreement": 0.4025,
+  "limitation": "Agreement is calculated before adjudication; task wording uses exact normalized equality."
+}

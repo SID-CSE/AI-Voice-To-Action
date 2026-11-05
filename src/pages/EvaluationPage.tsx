@@ -85,7 +85,7 @@ export const EvaluationPage: React.FC<EvaluationPageProps> = ({
           ) : (
             <>
               <Play className="w-3.5 h-3.5 fill-current" />
-              <span>Run All 5 Test Cases</span>
+              <span>Run All {evalTestCases.length} Test Cases</span>
             </>
           )}
         </button>
